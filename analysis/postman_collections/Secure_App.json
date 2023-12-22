@@ -1,0 +1,666 @@
+{
+	"info": {
+		"_postman_id": "ddaf8714-30e2-4859-a314-c6e4239edb00",
+		"name": "Proj1_SIO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28375958"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Add User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "img",
+									"type": "file",
+									"src": "/home/frostywolf/Pictures/index.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/user/add?name=Joana Jacinto&email=jo@ana.com&password=mysecretpass&cartao=123212331233&role=user",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"add"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Joana Jacinto"
+								},
+								{
+									"key": "email",
+									"value": "jo@ana.com"
+								},
+								{
+									"key": "password",
+									"value": "mysecretpass"
+								},
+								{
+									"key": "cartao",
+									"value": "123212331233"
+								},
+								{
+									"key": "role",
+									"value": "user"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View User By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/view?id=7&token=hIJa5W1N7u0Yveql85klPe_4LgHeEHJQ0C_0UtfvzHQKWj_JRQJHf61tHOO5d3onW4US0ApltPs_DpYVHOANLA",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"view"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "7"
+								},
+								{
+									"key": "token",
+									"value": "hIJa5W1N7u0Yveql85klPe_4LgHeEHJQ0C_0UtfvzHQKWj_JRQJHf61tHOO5d3onW4US0ApltPs_DpYVHOANLA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/list",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Users By Role",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/listByRole?role=admin",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"listByRole"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "admin"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Number of Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/number",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"number"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check User Login",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/checkLogin?email=jose@fino.com&password=123",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"checkLogin"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "jose@fino.com"
+								},
+								{
+									"key": "password",
+									"value": "123"
+								},
+								{
+									"key": "",
+									"value": " ",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/updatePassword?id=2&token=AlU2UDEy6Bsjb7Xek7MKz1x4yT1rWqDkr7FE68xZeErL6FUoYl14PYb4qIX7qDcdJp0y0QNlW8RrjnA2snHiPg&newPassword=newpass&oldPassword=123",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"updatePassword"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								},
+								{
+									"key": "token",
+									"value": "AlU2UDEy6Bsjb7Xek7MKz1x4yT1rWqDkr7FE68xZeErL6FUoYl14PYb4qIX7qDcdJp0y0QNlW8RrjnA2snHiPg"
+								},
+								{
+									"key": "newPassword",
+									"value": "newpass"
+								},
+								{
+									"key": "oldPassword",
+									"value": "123"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Product To Cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/addToCart?prod=11&userID=2&quantity=2&token=_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"addToCart"
+							],
+							"query": [
+								{
+									"key": "prod",
+									"value": "11"
+								},
+								{
+									"key": "userID",
+									"value": "2"
+								},
+								{
+									"key": "quantity",
+									"value": "2"
+								},
+								{
+									"key": "token",
+									"value": "_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove From Cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/removeFromCart?userID=2&token=_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA&prod=11",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"removeFromCart"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "2"
+								},
+								{
+									"key": "token",
+									"value": "_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA"
+								},
+								{
+									"key": "prod",
+									"value": "11"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request Current Cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/requestCurrentCart?userID=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"requestCurrentCart"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Add Products",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/product/add?name=TestProd1&description=produto de testes&img=../resources/images/test.png&origin=Portugal&price=123.99&in_stock=3&category=1&userID=2&token=_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"product",
+								"add"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "TestProd1"
+								},
+								{
+									"key": "description",
+									"value": "produto de testes"
+								},
+								{
+									"key": "img",
+									"value": "../resources/images/test.png"
+								},
+								{
+									"key": "origin",
+									"value": "Portugal"
+								},
+								{
+									"key": "price",
+									"value": "123.99"
+								},
+								{
+									"key": "in_stock",
+									"value": "3"
+								},
+								{
+									"key": "category",
+									"value": "1"
+								},
+								{
+									"key": "userID",
+									"value": "2"
+								},
+								{
+									"key": "token",
+									"value": "_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/product/view?id=11",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"product",
+								"view"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "11"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/product/list",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"product",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Products By Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/product/listByCategory?categoryID=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"product",
+								"listByCategory"
+							],
+							"query": [
+								{
+									"key": "categoryID",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Hot Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/product/listHotDeals",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"product",
+								"listHotDeals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Products By Name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/product/listByName?name=Wiza",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"product",
+								"listByName"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Wiza"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product Stock",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/product/updateStock?id=11&stock=25&userID=1&token=_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"product",
+								"updateStock"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "11"
+								},
+								{
+									"key": "stock",
+									"value": "25"
+								},
+								{
+									"key": "userID",
+									"value": "1"
+								},
+								{
+									"key": "token",
+									"value": "_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Product Review",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/product/addReview?productID=11&userID=1&header=Adorei o Produto&description=Completamente mudou a minha vida!&stars=4",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"product",
+								"addReview"
+							],
+							"query": [
+								{
+									"key": "productID",
+									"value": "11"
+								},
+								{
+									"key": "userID",
+									"value": "1"
+								},
+								{
+									"key": "header",
+									"value": "Adorei o Produto"
+								},
+								{
+									"key": "description",
+									"value": "Completamente mudou a minha vida!"
+								},
+								{
+									"key": "stars",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Add Category",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/product/category/add?name=Portateis&description=PCs portateis&userID=2&token=j-i6SxyNr-HWIShpqpaZazWZ7C0GVLoOLDMisy2Zpcppu8D4m5viH-te61T_VcSCFhOv6Hs0421v8HOhnnKsWg",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"product",
+								"category",
+								"add"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Portateis"
+								},
+								{
+									"key": "description",
+									"value": "PCs portateis"
+								},
+								{
+									"key": "userID",
+									"value": "2"
+								},
+								{
+									"key": "token",
+									"value": "j-i6SxyNr-HWIShpqpaZazWZ7C0GVLoOLDMisy2Zpcppu8D4m5viH-te61T_VcSCFhOv6Hs0421v8HOhnnKsWg"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/product/category/view?id=1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"product",
+								"category",
+								"view"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/product/category/list",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"product",
+								"category",
+								"list"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
