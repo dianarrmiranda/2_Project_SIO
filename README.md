@@ -1,18 +1,19 @@
-# Assignment 1 - <i>Vulnerabilities in software products</i>
+# Assignment 2 - <i>Vulnerabilities in software products</i>
 
 This document provides an overview of the project, its structure, vulnerabilities, and execution commands.
 
 
 **Version Log**
-- 2.0: Final version
+- 1.0: Initial version
 
 ## Index
 
-- [Assignment 1 - Vulnerabilities in software products](#assignment-1---vulnerabilities-in-software-products)
+- [Assignment 2 - Vulnerabilities in software products](#assignment-2---vulnerabilities-in-software-products)
   - [Index](#index)
   - [1. Project Description](#1-project-description)
-    - [Project specifications](#project-specifications)
-    - [Technology Stack](#technology-stack)
+    - [Audited Issues](#audited-issues)
+    - [Implemented improvements and fixes](#implemented-improvements-and-fixes)
+    - [Aditional Improvements](#aditional-improvements)
     - [Repository stucture](#repository-stucture)
   - [Run the project](#run-the-project)
     - [Run FrontEnd](#run-frontend)
@@ -20,77 +21,65 @@ This document provides an overview of the project, its structure, vulnerabilitie
     - [Run backend](#run-backend)
     - [Run backend inside a docker](#run-backend-inside-a-docker)
     - [Setting up Postman (To Test API Endpoints](#setting-up-postman-to-test-api-endpoints)
-  - [Vulnerabilities implemented](#vulnerabilities-implemented)
 - [Authors](#authors)
 
 
 ## 1. Project Description
 
-This project involves the development of a merchandising website for DETI (Department of Electronics, Telecommunications, and Informatics), specializing in the sale of stickers, mugs, mousepads, wearables like t-shirts, and pen-drives.
+The first iteration of this project involved the development of a merchandising website for DETI (Department of Electronics, Telecommunications, and Informatics), specializing in the sale of stickers, mugs, mousepads, wearables like t-shirts, and pen-drives.
+
+For this delivery, we will coduct a moderatly in-depth ASVS Security Audit, specifically the OWASP ASVS checklist for audits, and identify high relevance issues from the last project's application.
+After this audit, we must select the eight most critical issues and implement fixes for them, explaining in depth why we chose the specific issue and how the final fix was implemented.
+
+After this eigth issues are dealt with, we must implement two of the following features:
+ - Password strength requirements;
+ - Two-Factor authentication using either a OAuth2 system, TOTP one time password system or a FIDO2 challenge response system;
+ - Critical data encryption in the Database layer of the original application.
 
 
 The project comprises two versions:
 
-- **app**: This version contains hidden vulnerabilities that may not be easily detectable by casual users due to coding errors and improper practices, posing a risk to the overall app's security and user privacy.
-- **app_sec**: The secure version, where identified vulnerabilities have been corrected, and the overall app security is enhanced.
+- **app**: This version is the same as the "app_sec" version of the original delivery, that being the secure version of the initial website where then found vulnerabilites where fixed;
+- **app_sec**: The secure more version, where the eight most critical identified vulnerabilities from the security audithave been corrected and two of the chosen features have been implemented, and the overall app security is enhanced.
 
 
-### Project specifications
+### Audited Issues
 
-Our e-commerce store offers a comprehensive range of functionalities, including:
+After a comprehensive security audit we have found these critical issues:
+
+- **Issue 1 Name:**
+
+  - Issue 1 description
+  - Issue 1 relevance score
+
+- **Issue 2 Name:**     
+
+  - Issue 2 description        
+  - Issue 2 relevance score
 
 
-- **User Management:**
 
-  - User registration and login
-  - User profiles
-  - Password management (reset, change)
-  - User roles and permissions (admin, customer)
 
-- **Product Catalog:**
-
-  - Product listings with details (name, description, price, images)
-  - Product categories and filters
-  - Product search functionality
-
-- **Shopping Cart:**
-
-  - Cart management (add, remove, update items)
-  - Cart total calculation
-  - Saved cart
-
-- **Checkout Process:**
-
-  - Shipping and billing information collection
-  - Payment processing
-  - Order confirmation and receipt generation
-
-- **Inventory Management:**
-
-  - Tracking product availability (in-stock, out-of-stock)
-  - Managing product quantities
-
-- **Order History:**
-
-  - View and track past orders
-
-- **Reviews and Ratings:**
-  - Allow customers to rate and review products
-  - Display average ratings and reviews
-
-### Technology Stack
+### Implemented improvements and fixes
 
 We have carefully selected a technology stack for our project:
 
 
-| Project Component          | Technology Stack                                                              |
+| Issue          | How we fixed/mitigated the problem                              
 | ----------------------- | ---------------------------------------------------------------------- |
-| FrontEnd Framework      | [React](https://react.dev/)                                            |
-| CSS Framework           | [Tailwind](https://tailwindcss.com/) + [DaisyUI](https://daisyui.com/) |
-| Component Framework     | [MUI](https://mui.com/)                                                |
-| API connection and call | [Axios](https://axios-http.com/)                                       |
-| Backend API             | [SpringBoot](https://spring.io/projects/spring-boot)                   |
-| Backend Database        | [H2](https://h2database.com/html/main.html)                            |
+| Issue 1 name | Light fix 1 description|
+| Issue 2 name | Light fix 2 description|
+|...|...       |
+
+
+### Aditional Improvements
+These are the two aditional imprvements we implemented to further extend the security level of our service implementatin:
+ - **Improvement name 1**
+   - Improvement 1 description.
+
+ - **Improvement name 2** 
+   - Improvement 2 description.  
+
 
 ### Repository stucture
 
@@ -155,7 +144,7 @@ Our repository is organized as follows:
 Clone the repository locally:
 
 ```bash
-git clone git@github.com:detiuaveiro/1st-project-group_02.git
+git clone git@github.com:detiuaveiro/2st-project-group_02.git
 ```
 
 As per the assignment, our project has two versions. Their run commands are the same but executed in their respective directories.
@@ -237,22 +226,6 @@ If you are using Linux, you can search for it in package managers like [snap](ht
 
 After installing, log in and follow this [tutorial](https://apidog.com/blog/how-to-import-export-postman-collection-data/) to import `/analysis/postman_collections/col.json` collection for each project version (*app* or *app_sec*).
 To test the endpoints, make sure you have **Spring-Boot running**.
-
-## Vulnerabilities implemented
-
-In the insecure version of our project, we have intentionally implemented various vulnerabilities for demonstration purposes. To maintain simplicity, we list them in the following table:
-
-| Vulnerability Code | Description                                       |
-| ------------------ | --------------------------------------------------|
-| **CWE-79**         | Cross-Site Scripting                              |
-| **CWE-89**         | SQL Injection                                     |
-| **CWE-20**         | Improper Input Validation                         |
-| **CWE-521**        | Weak Password Requirements                        |
-| **CWE-434**        | Unrestricted Upload of File with Dangerous Type   |
-| **CWE-862**        | Missing Authorization                             |
-| **CWE-256**        | Plaintext Storage of a Password                   |
-| **CWE-287**        | Improper Authentication                           |
-| **CWE-201**        | Insertion of sensitive information into sent data |
 
 # Authors
 
