@@ -266,7 +266,7 @@ const StorePage = () => {
         <div className="alert alert-success">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="stroke-current shrink-0 h-6 w-6"
+            className="w-6 h-6 stroke-current shrink-0"
             fill="none"
             viewBox="0 0 24 24"
           >
@@ -320,10 +320,10 @@ const StorePage = () => {
           </div>
         ) : notFound ? (
           <div className="justify-center w-full h-full m-48">
-            <h1 className="text-center text-xl font-bold">No products found</h1>
+            <h1 className="text-xl font-bold text-center">No products found</h1>
           </div>
         ) : (
-          <div className="flex flex-wrap justify-items-start h-full mb-4">
+          <div className="flex flex-wrap h-full mb-4 justify-items-start">
             {products
               .filter((product) => {
                 if (search_query) {
@@ -364,7 +364,7 @@ const StorePage = () => {
       <Footer />
       <dialog id="modal_AddProduct" className="modal">
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Add Product!</h3>
+          <h3 className="text-lg font-bold">Add Product!</h3>
           <div className="form-control">
             <label className="label">
               <span className="label-text">Name</span>
@@ -382,7 +382,7 @@ const StorePage = () => {
             <div className="alert alert-warning">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-6 w-6"
+                className="w-6 h-6 stroke-current shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -412,7 +412,7 @@ const StorePage = () => {
             <div className="alert alert-warning">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-6 w-6"
+                className="w-6 h-6 stroke-current shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -455,7 +455,7 @@ const StorePage = () => {
             <div className="alert alert-warning">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-6 w-6"
+                className="w-6 h-6 stroke-current shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -485,7 +485,7 @@ const StorePage = () => {
             <div className="alert alert-warning">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-6 w-6"
+                className="w-6 h-6 stroke-current shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -503,7 +503,7 @@ const StorePage = () => {
               <span className="label-text">Category</span>
             </label>
             <select
-              className="select select-bordered w-full"
+              className="w-full select select-bordered"
               onChange={handleCategoryChange}
               defaultValue={-1}
             >
@@ -527,7 +527,7 @@ const StorePage = () => {
               <div className="alert alert-warning">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="stroke-current shrink-0 h-6 w-6"
+                  className="w-6 h-6 stroke-current shrink-0"
                   fill="none"
                   viewBox="0 0 24 24"
                 >
@@ -570,7 +570,7 @@ const StorePage = () => {
                   <div className="alert alert-warning">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="stroke-current shrink-0 h-6 w-6"
+                      className="w-6 h-6 stroke-current shrink-0"
                       fill="none"
                       viewBox="0 0 24 24"
                     >
@@ -602,7 +602,7 @@ const StorePage = () => {
             <div className="alert alert-error">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-6 w-6"
+                className="w-6 h-6 stroke-current shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -618,7 +618,7 @@ const StorePage = () => {
               </span>
             </div>
           )}
-          <div className="flex flex-wrap mt-4 justify-between">
+          <div className="flex flex-wrap justify-between mt-4">
             <button
               type="submit"
               className="btn btn-accent btn-md w-[48%]"

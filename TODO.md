@@ -1,15 +1,15 @@
 TODO da segunda entrega do projeto:
 
-[]-Analisar a app segura anterior (pasta app aqui);
-[]-Comparar os nossos resultados;
-[]-Escolher 8 dos issues não implementados até agora;
-[]-Dividir os issues em partes do frontend e backend;
-[]-Escrever a parte destes issues no relatório;
-[]-Escolher duas das trẽs funcionalidades extra;
-[]-Dividir em partes frontend e backend;
-[]-Implementar a feature 1;
-[]-Implementar a feature 2;
-[]-Atualizar o relatório com as duas features implementadas.
+- [ ] Analisar a app segura anterior (pasta app aqui);
+- [ ] Comparar os nossos resultados;
+- [ ] Escolher 8 dos issues não implementados até agora;
+- [ ] Dividir os issues em partes do frontend e backend;
+- [ ] Escrever a parte destes issues no relatório;
+- [ ] Escolher duas das trẽs funcionalidades extra;
+- [ ] Dividir em partes frontend e backend;
+- [ ] Implementar a feature 1;
+- [ ] Implementar a feature 2;
+- [ ] Atualizar o relatório com as duas features implementadas.
 
 Para analisar a app com a OWASP ASVS Checklist:
  - Copiar o ficheiro excel (deixar um não modificado na pasta de analysis);

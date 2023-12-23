@@ -50,8 +50,8 @@ const LoginPage = () => {
     <div>
       <Navbar />
       <div className="hero min-h-screen bg-[url('/src/assets/shopping2.jpg')]">
-        <div className="hero-content flex-col w-full lg:flex-row-reverse justify-center items-center">
-          <div className="text-center bg:text-left bg-secondary bg-opacity-80 p-2 rounded-md">
+        <div className="flex-col items-center justify-center w-full hero-content lg:flex-row-reverse">
+          <div className="p-2 text-center rounded-md bg:text-left bg-secondary bg-opacity-80">
             <h1 className="text-5xl font-bold">Login now!</h1>
             <p className="py-6">
               New here?{' '}
@@ -65,7 +65,7 @@ const LoginPage = () => {
               for an account to get started.
             </p>
           </div>
-          <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+          <div className="flex-shrink-0 w-full max-w-sm shadow-2xl card bg-base-100">
             <form className="card-body">
               <div className="form-control">
                 <label className="label">
@@ -84,11 +84,11 @@ const LoginPage = () => {
                 <label className="label">
                   <span className="label-text">Password</span>
                 </label>
-                <div className="join w-full">
+                <div className="w-full join">
                   <input
                     type={showPassword ? 'text' : 'password'}
                     placeholder="password"
-                    className="input input-bordered join-item "
+                    className="w-full input input-bordered join-item "
                     required
                     value={password}
                     onChange={handlePasswordChange}
@@ -102,7 +102,7 @@ const LoginPage = () => {
                   </button>
                 </div>
               </div>
-              <div className="form-control mt-6">
+              <div className="mt-6 form-control">
                 <button
                   className="btn btn-primary"
                   onClick={handleLogin}
