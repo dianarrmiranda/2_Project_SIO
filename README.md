@@ -201,7 +201,7 @@ cd <app | app_sec>
 Navigate to the root of the backend project:
 
 ```bash
-cd backend/Backend
+cd backend
 ```
 
 Run Spring-Boot:

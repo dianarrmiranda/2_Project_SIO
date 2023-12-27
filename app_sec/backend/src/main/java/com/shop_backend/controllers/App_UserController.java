@@ -89,14 +89,6 @@ public class App_UserController {
           "The provided Email must be valid!");
     }
 
-    String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*()_+]).{8,}$";
-    pat = Pattern.compile(passwordRegex); 
-    // Check if the password is valid
-    if (!pat.matcher(password).matches()) {
-      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
-          "The provided Password must have more than 8 characters, 1 lowercase, 1 uppercase, 1 number and 1 special character!");
-    }
-
     // Check if the card number has 12 characters in lenght
     if (cartao.length() != 12) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
@@ -132,7 +124,7 @@ public class App_UserController {
       usr.setCredit_Card(cartao);
       usr.setRole(role);
 
-      String folder = "../../frontendSecure/src/assets/prod_images/";
+      String folder = "../frontend/src/assets/prod_images/";
       String filename = usr.getName().replace("\s", "") + ".jpg";
 
       Path path = Paths.get(folder + filename);

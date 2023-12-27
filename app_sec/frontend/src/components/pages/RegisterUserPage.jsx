@@ -3,6 +3,7 @@ import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { RiEyeCloseLine, RiEyeLine } from "react-icons/ri";
 
 function RegisterUserPage() {
   const [username, setUsername] = useState("");
@@ -17,6 +18,9 @@ function RegisterUserPage() {
   const [showAlertEmail, setShowAlertEmail] = useState(false);
   const [showAlertNumberCard, setShowAlertNumberCard] = useState(false);
   const [showAlertImage, setShowAlertImage] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+
 
   const navigate = useNavigate();
 
@@ -29,11 +33,11 @@ function RegisterUserPage() {
   };
 
   const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
+    setPassword(event.target.value.replace(/\s+/g, ' '));
   };
 
   const handleNewPasswordChange = (event) => {
-    setnewPassword(event.target.value);
+    setnewPassword(event.target.value.replace(/\s+/g, ' '));
   };
 
   const handleCardNumberChange = (event) => {
@@ -46,8 +50,9 @@ function RegisterUserPage() {
 
   const handleRegister = async (event) => {
     event.preventDefault();
-    const passwordRegex =
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*()_+]).{8,}$/;
+
+    const lengthRegex = /^.{12,128}$/u;
+    const charRegex = /^[\p{L}\p{N}\p{S}\p{P}]+$/u;
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -55,7 +60,7 @@ function RegisterUserPage() {
 
     const imageRegex = /\.(jpe?g|tiff?|png|webp)$/i;
 
-    if (!passwordRegex.test(password)) {
+    if (!lengthRegex.test(password) || !charRegex.test(password)) {
       setShowAlertPass(true);
     } else {
       setShowAlertPass(false);
@@ -107,16 +112,14 @@ function RegisterUserPage() {
       formData.append("img", image);
 
       axios.post("http://localhost:8080/user/add", formData).then((res) => {
-        const data = res.text();
-        console.log(data);
-        if (res.ok) {
+        if (res && res.status === 200) {
           console.log("Register successful");
           setUsername("");
           setEmail("");
           setPassword("");
           setCardNumber("");
           setImage("");
-          localStorage.setItem("user", data);
+          localStorage.setItem("user", JSON.stringify(res.data));
           navigate("/");
         } else {
           console.error("Register failed");
@@ -198,14 +201,23 @@ function RegisterUserPage() {
                 <label className="label">
                   <span className="label-text">Password</span>
                 </label>
-                <input
-                  type="password"
-                  placeholder="password"
-                  className="input input-bordered"
-                  required
-                  value={password}
-                  onChange={handlePasswordChange}
-                />
+                <div className="w-full join">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="password"
+                    className="w-full input input-bordered join-item"
+                    required
+                    value={password}
+                    onChange={handlePasswordChange}
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-bordered join-item"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <RiEyeCloseLine /> : <RiEyeLine />}
+                  </button>
+                </div>
               </div>
               {showAlertPass && (
                 <div className="alert alert-warning">
@@ -222,8 +234,7 @@ function RegisterUserPage() {
                     />
                   </svg>
                   <span>
-                    Warning: Password must have at least 8 characters, 1
-                    uppercase, 1 lowercase, 1 number and 1 special character!
+                    Warning: Password must have beetwen 12 and 128 characters. It can contain letters, numbers and symbols!
                   </span>
                 </div>
               )}
@@ -231,14 +242,23 @@ function RegisterUserPage() {
                 <label className="label">
                   <span className="label-text">Confirm Password</span>
                 </label>
-                <input
-                  type="password"
-                  placeholder="password"
-                  className="input input-bordered"
-                  required
-                  value={newPassword}
-                  onChange={handleNewPasswordChange}
-                />
+                <div className="w-full join">
+                  <input
+                    type={showNewPassword ? 'text' : 'password'}
+                    placeholder="password"
+                    className="w-full input input-bordered join-item"
+                    required
+                    value={newPassword}
+                    onChange={handleNewPasswordChange}
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-bordered join-item"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                  >
+                    {showNewPassword ? <RiEyeCloseLine /> : <RiEyeLine />}
+                  </button>
+                </div>
               </div>
               {showAlertSamePass && (
                 <div className="alert alert-error">
