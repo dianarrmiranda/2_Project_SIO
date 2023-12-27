@@ -100,7 +100,7 @@ public class ProductController {
       prod.setIn_Stock(in_stock);
       prod.setCategory(category);
 
-      String folder = "../../frontendSecure/src/assets/prod_images/";
+      String folder = "../frontend/src/assets/prod_images/";
       String filename = prod.getName().replace("\s", "") + "Prod.webp";
 
       Path path = Paths.get(folder + filename);

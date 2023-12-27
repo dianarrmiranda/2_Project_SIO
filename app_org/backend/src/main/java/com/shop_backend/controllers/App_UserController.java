@@ -132,7 +132,7 @@ public class App_UserController {
       usr.setCredit_Card(cartao);
       usr.setRole(role);
 
-      String folder = "../../frontendSecure/src/assets/prod_images/";
+      String folder = "../frontend/src/assets/prod_images/";
       String filename = usr.getName().replace("\s", "") + ".jpg";
 
       Path path = Paths.get(folder + filename);
