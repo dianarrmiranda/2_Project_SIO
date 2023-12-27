@@ -18,3 +18,11 @@ Para analisar a app com a OWASP ASVS Checklist:
  - Colocar também a source code reference onde está implementada a resolução (mais importante) do issue com o ficheiro onde está a resolução e a linha se aplicável e um comentário com a descrição de como foi resolvido;
  - A coluna "tool used" não é caso usem uma ferramenta para analisar automáticamente as issues;
  - Ir tirando screenshots de cada issue a comprovar que foi resolvido e colocar na pasta analysis/screenshots.
+
+
+
+Coisas a melhorer v2:
+ - CWE 434 de url parameters na webservices
+ - As cenas de data protection de certeza que certeza que são boas para o frontend fazer
+ - Session management é parecido à linha antes desta
+ - Tbm em session management, dar logout e após algum tempo devia expirar o token
