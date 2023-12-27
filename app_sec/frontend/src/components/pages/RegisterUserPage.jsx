@@ -21,6 +21,7 @@ function RegisterUserPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
 
+  const [score, setScore] = useState(0);
 
   const navigate = useNavigate();
 
@@ -34,6 +35,25 @@ function RegisterUserPage() {
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value.replace(/\s+/g, ' '));
+    const password = event.target.value.replace(/\s+/g, ' ');
+    const checks = [
+      {regex: /^.{12,128}$/u, points: 1},
+      {regex: /[a-z]/, points: 1},
+      {regex: /[A-Z]/, points: 1},
+      {regex: /[0-9]/, points: 1},
+      {regex: /[\p{S}\p{P}]/u, points: 1},
+      { regex: /[^a-zA-Z0-9]/, points: 1 },
+    ];
+
+    let s = 0;
+    checks.forEach((check) => {
+      if (check.regex.test(password)) {
+        s += check.points;
+      }
+    });
+
+    setScore(s);
+    
   };
 
   const handleNewPasswordChange = (event) => {
@@ -221,6 +241,24 @@ function RegisterUserPage() {
                   </button>
                 </div>
               </div>
+              {password.length > 0 && score < 3 &&  (
+                <div>
+                  <span className="text-error">Password is too weak!</span>
+                  <progress className="progress progress-error " value={score} max="6"></progress>
+                </div>
+              )}
+              {password.length > 0 && score >= 3 && score < 5 && (
+                <div>
+                  <span className="text-warning">Password is medium!</span>
+                  <progress className="progress progress-warning " value={score} max="6"></progress>
+                </div>
+              )}
+              {password.length > 0 && score >= 5 && (
+                <div>
+                  <span className="text-success">Password is strong!</span>
+                  <progress className="progress progress-success " value={score} max="6"></progress>
+                </div>
+              )}
               {showAlertPass && (
                 <div className="alert alert-warning">
                   <svg

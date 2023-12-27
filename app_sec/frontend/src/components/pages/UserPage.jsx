@@ -25,6 +25,8 @@ const ProductPage = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showAtualPassword, setShowAtualPassword] = useState(false);
 
+  const [score, setScore] = useState(0);
+
   useEffect(() => {
     const initialize = async () => {
       const data = await fetchData(`/user/view?id=${id}&token=${token}`);
@@ -38,6 +40,29 @@ const ProductPage = () => {
   const handleLogout = () => {
     localStorage.removeItem('user');
     navigate('/login');
+  };
+
+  const handleChangePassword = (event) => {
+    setPassword(event.target.value.replace(/\s+/g, ' '));
+    const password = event.target.value.replace(/\s+/g, ' ');
+    const checks = [
+      {regex: /^.{12,128}$/u, points: 1},
+      {regex: /[a-z]/, points: 1},
+      {regex: /[A-Z]/, points: 1},
+      {regex: /[0-9]/, points: 1},
+      {regex: /[\p{S}\p{P}]/u, points: 1},
+      { regex: /[^a-zA-Z0-9]/, points: 1 },
+    ];
+
+    let s = 0;
+    checks.forEach((check) => {
+      if (check.regex.test(password)) {
+        s += check.points;
+      }
+    });
+
+    setScore(s);
+    
   };
 
   const handleChangePass = async (event) => {
@@ -229,7 +254,7 @@ const ProductPage = () => {
                 className="w-full input input-bordered join-item"
                 required
                 value={password}
-                onChange={(e) => setPassword(e.target.value.replace(/\s+/g, ' '))}
+                onChange={handleChangePassword}
               />
               <button
                 type="button"
@@ -240,6 +265,24 @@ const ProductPage = () => {
               </button>
             </div>
           </div>
+          {password.length > 0 && score < 3 &&  (
+            <div>
+              <span className="text-error">Password is too weak!</span>
+              <progress className="progress progress-error " value={score} max="6"></progress>
+            </div>
+          )}
+          {password.length > 0 && score >= 3 && score < 5 && (
+            <div>
+              <span className="text-warning">Password is medium!</span>
+              <progress className="progress progress-warning " value={score} max="6"></progress>
+            </div>
+          )}
+          {password.length > 0 && score >= 5 && (
+            <div>
+              <span className="text-success">Password is strong!</span>
+              <progress className="progress progress-success " value={score} max="6"></progress>
+            </div>
+          )}
           {showAlertPass && (
             <div className="alert alert-warning">
               <svg
