@@ -165,13 +165,14 @@ public class App_UserController {
       //  Generate the salt
       byte[] salt = new byte[16];
       random.nextBytes(salt);
+      String saltStr = encoder.encodeToString(salt);
       //  Generate the salted key
-      KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+      KeySpec spec = new PBEKeySpec(password.toCharArray(), saltStr.getBytes(), 65536, 128);
       //  Generate the final hashed + salted key
       SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
       byte[] hash = factory.generateSecret(spec).getEncoded();
 
-      usr.setSalt(encoder.encodeToString(salt));
+      usr.setSalt(saltStr);
       usr.setPassword(encoder.encodeToString(hash));
 
       // Generate the token
@@ -323,7 +324,8 @@ public class App_UserController {
       SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
       byte[] hash = factory.generateSecret(spec).getEncoded();
       hashedPassToCheck = encoder.encodeToString(hash);
-    } catch (Exception e) {
+    } 
+    catch (Exception e) {
       e.printStackTrace();
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal processing error!");
     }
