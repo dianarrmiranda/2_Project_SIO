@@ -52,7 +52,7 @@ function RegisterUserPage() {
     event.preventDefault();
 
     const lengthRegex = /^.{12,128}$/u;
-    const charRegex = /^[\p{L}\p{N}\p{S}\p{P}]+$/u;
+    const charRegex = /^[\p{L}\p{N}\p{S}\p{P} ]+$/u;
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -92,12 +92,14 @@ function RegisterUserPage() {
     }
 
     if (
-      showAlertPass ||
-      showAlertName ||
-      showAlertSamePass ||
-      showAlertEmail ||
-      showAlertNumberCard ||
-      showAlertImage
+      !lengthRegex.test(password) ||
+      !charRegex.test(password) ||
+      username.length < 3 ||
+      password !== newPassword ||
+      !emailRegex.test(email) ||
+      !cardNumberRegex.test(cardNumber) ||
+      !imageRegex.test(image.name) ||
+      image.size > 5000000
     ) {
       return;
     }

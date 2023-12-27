@@ -38,11 +38,11 @@ const HomePage = () => {
         setLoading(false);
       }
     };
-
     initialize();
+    console.log("products -> ", products);
   }, []);
 
-  console.log("products -> ", products);
+  
 
   return (
     <div>

@@ -4,14 +4,13 @@ import Navbar from '../layout/Navbar';
 
 import { fetchData } from '../../utils';
 import Footer from '../layout/Footer';
+import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
 
 const ProductPage = () => {
   const { id } = JSON.parse(localStorage.getItem('user'));
   const { token } = JSON.parse(localStorage.getItem('user'));
   const navigate = useNavigate();
-
-  console.log('id -> ', id);
-
+  
   const [user, setUser] = useState({});
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -22,10 +21,16 @@ const ProductPage = () => {
   const [showChangeFail, setShowChangeFail] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showAtualPassword, setShowAtualPassword] = useState(false);
+
   useEffect(() => {
     const initialize = async () => {
       const data = await fetchData(`/user/view?id=${id}&token=${token}`);
       setUser(data);
+      console.log('User ->', data);
+
     };
     initialize();
   }, []);
@@ -38,10 +43,10 @@ const ProductPage = () => {
   const handleChangePass = async (event) => {
     event.preventDefault();
 
-    const passwordRegex =
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*()_+]).{8,}$/;
+    const lengthRegex = /^.{12,128}$/u;
+    const charRegex = /^[\p{L}\p{N}\p{S}\p{P} ]+$/u;
 
-    if (!passwordRegex.test(password)) {
+    if (!lengthRegex.test(password) || !charRegex.test(password)) {
       setShowAlertPass(true);
     } else {
       setShowAlertPass(false);
@@ -52,7 +57,7 @@ const ProductPage = () => {
       setShowAlertSamePass(false);
     }
 
-    if (showAlertPass || showAlertSamePass) {
+    if (!lengthRegex.test(password) || !charRegex.test(password) || password !== newPassword) {
       return;
     }
 
@@ -91,7 +96,6 @@ const ProductPage = () => {
     document.getElementById('modal_viewDetails').showModal();
   };
 
-  console.log('User ->', user);
 
   return (
     <div className="bg-base-200">
@@ -179,14 +183,23 @@ const ProductPage = () => {
             <label className="label">
               <span className="label-text">Actual Password</span>
             </label>
-            <input
-              type="password"
-              placeholder="password"
-              className="input input-bordered"
-              required
-              value={actualPassword}
-              onChange={(e) => setActualPassword(e.target.value)}
-            />
+            <div className="w-full join">
+              <input
+                type={showAtualPassword ? 'text' : 'password'}
+                placeholder="password"
+                className="w-full input input-bordered join-item"
+                required
+                value={actualPassword}
+                onChange={(e) => setActualPassword(e.target.value.replace(/\s+/g, ' '))}
+              />
+              <button
+                type="button"
+                className="btn btn-bordered join-item"
+                onClick={() => setShowAtualPassword(!showAtualPassword)}
+              >
+                {showAtualPassword ? <RiEyeCloseLine /> : <RiEyeLine />}
+              </button>
+            </div>
           </div>
           {showChangeFail && (
             <div className="alert alert-error">
@@ -209,14 +222,23 @@ const ProductPage = () => {
             <label className="label">
               <span className="label-text">New Password</span>
             </label>
-            <input
-              type="password"
-              placeholder="password"
-              className="input input-bordered"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="w-full join">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="password"
+                className="w-full input input-bordered join-item"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value.replace(/\s+/g, ' '))}
+              />
+              <button
+                type="button"
+                className="btn btn-bordered join-item"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <RiEyeCloseLine /> : <RiEyeLine />}
+              </button>
+            </div>
           </div>
           {showAlertPass && (
             <div className="alert alert-warning">
@@ -233,8 +255,7 @@ const ProductPage = () => {
                 />
               </svg>
               <span>
-                Warning: Password must have at least 8 characters, 1 uppercase,
-                1 lowercase, 1 number and 1 special character!
+                Warning: Password must have beetwen 12 and 128 characters. It can contain letters, numbers and symbols!
               </span>
             </div>
           )}
@@ -242,14 +263,23 @@ const ProductPage = () => {
             <label className="label">
               <span className="label-text">Confirm New Password</span>
             </label>
-            <input
-              type="password"
-              placeholder="password"
-              className="input input-bordered"
-              required
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
+            <div className="w-full join">
+              <input
+                type={showNewPassword ? 'text' : 'password'}
+                placeholder="password"
+                className="w-full input input-bordered join-item"
+                required
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value.replace(/\s+/g, ' '))}
+              />
+              <button
+                type="button"
+                className="btn btn-bordered join-item"
+                onClick={() => setShowNewPassword(!showNewPassword)}
+              >
+                {showNewPassword ? <RiEyeCloseLine /> : <RiEyeLine />}
+              </button>
+            </div>
           </div>
           {showAlertSamePass && (
             <div className="alert alert-error">

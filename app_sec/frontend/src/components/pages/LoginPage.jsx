@@ -43,7 +43,7 @@ const LoginPage = () => {
   };
 
   const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+    setPassword(e.target.value.replace(/\s+/g, ' '));
   };
 
   return (
