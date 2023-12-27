@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Footer from '../layout/Footer';
 import Navbar from '../layout/Navbar';
 import { useNavigate } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 
 import { RiEyeLine, RiEyeCloseLine } from 'react-icons/ri';
+import { jwtDecode } from 'jwt-decode';
 
 import { fetchData } from '../../utils';
+import { CLIENT_ID, API_BASE_URL } from '../../constants';
+
+import axios from 'axios';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -14,6 +19,27 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
+
+  function handleGoogleResponse(response) {
+    console.log('google response -> ', response.credential);
+    const user = jwtDecode(response.credential);
+    console.log('user -> ', user);
+    axios
+      .post(`${API_BASE_URL}/user/add`, {
+        name: user.name,
+        email: user.email,
+        image: user.picture,
+        password: user.sub,
+      })
+      .then((res) => {
+        console.log('res -> ', res);
+        localStorage.setItem('user', JSON.stringify(res.data));
+        navigate('/');
+      })
+      .catch((err) => {
+        console.log('err -> ', err);
+      });
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -102,13 +128,14 @@ const LoginPage = () => {
                   </button>
                 </div>
               </div>
-              <div className="mt-6 form-control">
+              <div className="flex mt-6 form-control justify-evenly">
                 <button
                   className="btn btn-primary"
                   onClick={handleLogin}
                 >
                   Login
                 </button>
+                <GoogleLogin onSuccess={handleGoogleResponse} />
               </div>
             </form>
           </div>
