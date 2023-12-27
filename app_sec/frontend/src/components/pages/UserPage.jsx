@@ -29,13 +29,18 @@ const ProductPage = () => {
 
   useEffect(() => {
     const initialize = async () => {
-      const data = await fetchData(`/user/view?id=${id}&token=${token}`);
-      setUser(data);
-      console.log('User ->', data);
-
+      try {
+        const data = await fetchData(`/user/view?id=${id}&token=${token}`);
+        setUser(data);
+        console.log('User ->', data);
+      } catch (error) {
+        console.error('Failed to fetch data: ', error);
+      }
     };
+   
     initialize();
-  }, []);
+   }, []);
+   
 
   const handleLogout = () => {
     localStorage.removeItem('user');
