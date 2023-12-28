@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -589,5 +591,37 @@ public class App_UserController {
     app_userRepository.save(usr);
 
     return receipt;
+  }
+
+  //Mark user for deletion by ID
+  @Transactional
+  @PutMapping(path = "/deleteUserData")
+  public @ResponseBody String deleteUserData(@RequestParam Integer id, @RequestParam String token) {
+    App_User usr;
+
+    // Check if a User with this ID exists
+    try {
+      usr = app_userRepository.findapp_userByID(id);
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal processing error!");
+    }
+
+    if (usr == null) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The specified User does not exist!");
+    }
+
+    if (!usr.getActive_Token().equals(token)) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Token does not match the given user ID!");
+    }
+
+    // Mark user data as deleted
+    try {
+      app_userRepository.delapp_user(id);
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal processing error!");
+    }
+
+    return "SUCCESS: User data successfully marked as deleted!";
   }
 }

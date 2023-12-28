@@ -20,6 +20,7 @@ public class App_User {
     private String Password;
     private String Credit_Card;
     private String Role;
+    private boolean Deleted = false;
 
     private String Active_Token;
     private String Salt;
@@ -145,5 +146,13 @@ public class App_User {
 
     public void setSalt(String salt) {
         Salt = salt;
+    }
+
+    public boolean isDeleted() {
+        return Deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        Deleted = deleted;
     }
 }
