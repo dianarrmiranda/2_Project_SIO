@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Footer from '../layout/Footer';
 import Navbar from '../layout/Navbar';
 import { useNavigate } from 'react-router-dom';
@@ -6,11 +6,9 @@ import { GoogleLogin } from '@react-oauth/google';
 
 import { RiEyeLine, RiEyeCloseLine } from 'react-icons/ri';
 import { jwtDecode } from 'jwt-decode';
+import  useAuth from '../../hooks/useAuth';
 
 import { fetchData } from '../../utils';
-import { CLIENT_ID, API_BASE_URL } from '../../constants';
-
-import axios from 'axios';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -19,26 +17,27 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
+  const { setAuth } = useAuth();
 
   function handleGoogleResponse(response) {
     console.log('google response -> ', response.credential);
     const user = jwtDecode(response.credential);
     console.log('user -> ', user);
-    axios
-      .post(`${API_BASE_URL}/user/add`, {
-        name: user.name,
+    const id = parseInt(user.sub);    
+    
+    setAuth({
+      isAuthenticated: true,
+      user: {
+        id: id,
         email: user.email,
+        name: user.name,
         image: user.picture,
-        password: user.sub,
-      })
-      .then((res) => {
-        console.log('res -> ', res);
-        localStorage.setItem('user', JSON.stringify(res.data));
-        navigate('/');
-      })
-      .catch((err) => {
-        console.log('err -> ', err);
-      });
+        shopping_Cart: [],
+        request_History: [],
+      },
+      acessToken: response.credential,
+    });
+    navigate('/');
   }
 
   const handleLogin = async (event) => {
@@ -53,7 +52,19 @@ const LoginPage = () => {
         setEmail('');
         setPassword('');
         setFailed(false);
-        localStorage.setItem('user', JSON.stringify(response));
+        console.log('response -> ', response);
+        setAuth({
+          isAuthenticated: true,
+          user: {
+            id: response.id,
+            email: response.email,
+            name: response.name,
+            image: response.image,
+            shopping_Cart: response.shopping_Cart,
+            request_History: response.request_History,
+          },
+          acessToken: response.token,
+        });
         navigate('/');
       } else {
         console.error('Login failed');

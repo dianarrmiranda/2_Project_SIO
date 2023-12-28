@@ -9,6 +9,7 @@ import Rating from '@mui/material/Rating';
 
 import axios from 'axios';
 import { API_BASE_URL } from '../../constants';
+import useAuth from '../../hooks/useAuth';
 
 import {
   RiFlashlightLine,
@@ -21,30 +22,31 @@ const ProductPage = () => {
   const navigate = useNavigate();
 
   const [product, setProduct] = useState({});
-  const [user_id, setUser_id] = useState('');
+  const [user_id, setUser_id] = useState(0);
   const [token, setToken] = useState('');
   const [comments, setComments] = useState([]);
   const [stock, setStock] = useState(product.in_stock);
   const [role, setRole] = useState('');
   const [toggleResponse, setToggleResponse] = useState(false);
+  const { auth, setAuth } = useAuth();
 
-  const username = JSON.parse(localStorage.getItem('user'));
+  const { user } = auth;
+  const acessToken = auth?.acessToken;
 
   useEffect(() => {
     const initialize = async () => {
       const data = await fetchData(`/product/view?id=${id}`);
-      if (username) {
+      if (user) {
         const dataUser = await fetchData(
-          `/user/view?id=${username.id}&token=${username.token}`
+          `/user/view?id=${parseInt(user.id)}&token=${acessToken}`
         );
-        setUser_id(username.id);
-        setToken(username.token);
+        setUser_id(user.id);
+        setToken(acessToken);
         setRole(dataUser.role);
-      }
-      else {
+      } else {
         setUser_id(null);
       }
-      if(data) {
+      if (data) {
         setProduct(data);
         setComments(data.reviews);
       }
@@ -59,10 +61,18 @@ const ProductPage = () => {
           product.id
         }&userID=${user_id}&quantity=${
           document.getElementById('qty').value
-        }&token=${username.token}`
+        }&token=${acessToken}`
       )
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
+        console.log('Added to cart');
+        setAuth({
+          ...auth,
+          user: {
+            ...auth.user,
+            shopping_Cart: res.data,
+          },
+        });
       });
   };
 
@@ -89,18 +99,18 @@ const ProductPage = () => {
         className="mx-[10%] bg-base-100 p-4"
       >
         <div className="flex flex-row">
-          <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/2 mb-4">
+          <div className="w-full mb-4 sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/2">
             <img
               src={'../../' + product.imgSource}
               alt={`${product.name}-from-deti-store`}
               className="w-[30vw]  object-cover mx-[10%] rounded-xl"
             />
           </div>
-          <div className="w-full sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/2 left-2 my-4 flex flex-col justify-between">
+          <div className="flex flex-col justify-between w-full my-4 sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/2 left-2">
             <h1 className="text-2xl font-extrabold ">{product.name}</h1>
-            <span className="divider my-0" />
+            <span className="my-0 divider" />
             <button
-              className="text-lg font-bold my-2 badge badge-outline p-3"
+              className="p-3 my-2 text-lg font-bold badge badge-outline"
               onClick={() => {
                 navigate(`/store?category=${product.category?.id}`);
               }}
@@ -114,14 +124,14 @@ const ProductPage = () => {
             </h2>
             <div>
               <h2 className="text-lg text-accent-focus">Score</h2>
-              <div className="flex flex-row justify-items-center mb-2">
+              <div className="flex flex-row mb-2 justify-items-center">
                 <Rating
                   precision={0.1}
                   value={parseFloat(product.average_Stars).toFixed(2)}
                   readOnly
                   size="small"
                 />
-                <span className="text-accent-focus ml-2">
+                <span className="ml-2 text-accent-focus">
                   (
                   {product.average_Stars
                     ? parseFloat(product.average_Stars).toFixed(1)
@@ -132,10 +142,10 @@ const ProductPage = () => {
             </div>
 
             <div className="flex flex-wrap justify-start align-items-bottom">
-              <p className="font-extrabold text-primary-focus text-2xl mb-2">
+              <p className="mb-2 text-2xl font-extrabold text-primary-focus">
                 {product.price}€
               </p>
-              <span className="text-lg text-accent mx-10 flex-row ">
+              <span className="flex-row mx-10 text-lg text-accent ">
                 qty:{' '}
                 <input
                   type="number"
@@ -146,7 +156,7 @@ const ProductPage = () => {
                 />
               </span>
             </div>
-            <div className="text-accent flex flex-row">
+            <div className="flex flex-row text-accent">
               <RiFlashlightLine className="mx-2" />
               Free shipping for national orders
               <RiFlashlightLine className="mx-2" />
@@ -154,11 +164,11 @@ const ProductPage = () => {
             {user_id == null && (
               <label
                 htmlFor="cart_btns"
-                className="text-sm mt-4"
+                className="mt-4 text-sm"
               >
                 You have to be logged in to add products to your cart!{' '}
                 <span
-                  className="underline text-accent cursor-pointer"
+                  className="underline cursor-pointer text-accent"
                   onClick={() => navigate('/login')}
                 >
                   Log in!
@@ -170,14 +180,14 @@ const ProductPage = () => {
               className="flex flex-row"
             >
               <button
-                className="btn btn-primary mx-2"
+                className="mx-2 btn btn-primary"
                 onClick={handleAddToCart}
                 disabled={user_id == null}
               >
                 Add to cart <RiShoppingCartFill className="ml-2" />
               </button>
               <button
-                className="btn btn-accent mx-2"
+                className="mx-2 btn btn-accent"
                 onClick={() => {
                   navigate('/user/cart');
                 }}
@@ -188,7 +198,7 @@ const ProductPage = () => {
             </span>
             {role === 'admin' && (
               <button
-                className="btn btn-accent relative top-8 mb-2"
+                className="relative mb-2 btn btn-accent top-8"
                 onClick={showModal}
               >
                 Change Stock
@@ -198,7 +208,7 @@ const ProductPage = () => {
         </div>
 
         <div className="my-8 mb-16">
-          <div className="mb-4 flex flex-wrap ">
+          <div className="flex flex-wrap mb-4 ">
             <button
               className={`font-medium ${
                 toggleResponse ? 'text-accent' : 'underline underline-offset-8'
@@ -238,7 +248,7 @@ const ProductPage = () => {
         className="modal"
       >
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Change Stock</h3>
+          <h3 className="text-lg font-bold">Change Stock</h3>
           <div className="form-control">
             <label className="label">
               <span className="label-text">New Stock</span>

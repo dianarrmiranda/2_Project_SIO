@@ -10,6 +10,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 import { fetchData } from "../../utils";
 import { maskCreditCard } from "../../utils";
@@ -18,8 +19,10 @@ import Warning from "../layout/Warning";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
+  const { auth } = useAuth();
 
-  const username = JSON.parse(localStorage.getItem("user"));
+  const username = auth?.user;
+  const acessToken = auth?.acessToken;
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState([]);
   const [cards, setCards] = useState([]);
@@ -54,7 +57,7 @@ const CheckoutPage = () => {
     const initialize = async () => {
       const saved_cards = JSON.parse(localStorage.getItem("cards"));
       const data_user = await fetchData(
-        `/user/view?id=${username.id}&token=${username.token}`
+        `/user/view?id=${username.id}&token=${acessToken}`
       );
 
       if (data_user) {
@@ -243,7 +246,7 @@ const CheckoutPage = () => {
       try {
         axios
           .post(
-            `${API_BASE_URL}/user/requestCurrentCart?userID=${user.id}&token=${username.token}`
+            `${API_BASE_URL}/user/requestCurrentCart?userID=${user.id}&token=${acessToken}`
           )
           .then((res) => {
             if (res.status === 200) {
@@ -271,16 +274,16 @@ const CheckoutPage = () => {
           id="delivery-info"
           className="w-[65%] flex flex-col justify-evenly mx-4"
         >
-          <div className="flex flex-col bg-base-100 rounded-lg shadow-xl p-4 my-6">
+          <div className="flex flex-col p-4 my-6 rounded-lg shadow-xl bg-base-100">
             <span className="flex align-text-bottom">
-              <h1 className=" rounded-full h-10 w-10 bg-primary p-2 text-center">
+              <h1 className="w-10 h-10 p-2 text-center rounded-full bg-primary">
                 1
               </h1>
-              <h1 className="font-bold text-xl ml-4 align-text-bottom">
+              <h1 className="ml-4 text-xl font-bold align-text-bottom">
                 Delivery Information
               </h1>
             </span>
-            <div className="m-4 flex justify-evenly">
+            <div className="flex m-4 justify-evenly">
               <div className="flex flex-col justify-center w-1/2">
                 {delivery_dayAlert && (
                   <Warning msg="Please select a valid delivery day" />
@@ -308,12 +311,12 @@ const CheckoutPage = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col bg-base-100 rounded-lg shadow-xl p-4">
+          <div className="flex flex-col p-4 rounded-lg shadow-xl bg-base-100">
             <span className="flex align-text-bottom">
-              <h1 className=" rounded-full h-10 w-10 bg-primary p-2 text-center">
+              <h1 className="w-10 h-10 p-2 text-center rounded-full bg-primary">
                 2
               </h1>
-              <h1 className="font-bold text-xl ml-4 align-text-bottom">
+              <h1 className="ml-4 text-xl font-bold align-text-bottom">
                 Delivery Address
               </h1>
             </span>
@@ -328,7 +331,7 @@ const CheckoutPage = () => {
                   )}
                   <input
                     id="address"
-                    className="input input-bordered w-full"
+                    className="w-full input input-bordered"
                     type="text"
                     placeholder="Street address or P.O. box"
                     onChange={(e) => handleAddress(e)}
@@ -384,16 +387,16 @@ const CheckoutPage = () => {
             </div>
           </div>
 
-          <div className="flex flex-col bg-base-100 rounded-lg shadow-xl p-4 my-6">
+          <div className="flex flex-col p-4 my-6 rounded-lg shadow-xl bg-base-100">
             <span className="flex align-text-bottom">
-              <h1 className=" rounded-full h-10 w-10 bg-primary p-2 text-center">
+              <h1 className="w-10 h-10 p-2 text-center rounded-full bg-primary">
                 3
               </h1>
-              <h1 className="font-bold text-xl ml-4 align-text-bottom">
+              <h1 className="ml-4 text-xl font-bold align-text-bottom">
                 Payment Details
               </h1>
             </span>
-            <div className="flex flex-wrap justify-evenly m-2">
+            <div className="flex flex-wrap m-2 justify-evenly">
               <span className="flex flex-col my-2 w-[48%]">
                 <input
                   id="card"
@@ -453,7 +456,7 @@ const CheckoutPage = () => {
                 />
               </span>
               <button
-                className="btn btn-primary my-2 w-1/4"
+                className="w-1/4 my-2 btn btn-primary"
                 type="button"
                 onClick={() => {
                   setCards([...cards, newCard]);
@@ -480,10 +483,10 @@ const CheckoutPage = () => {
                   }`}
                   onClick={() => handleCard(idx)}
                 >
-                  <div className="card-body flex justify-between w-full ">
+                  <div className="flex justify-between w-full card-body ">
                     <h1 className="flex flex-row">
                       <RiBankCardLine className="text-2xl" />
-                      <span className="font-bold card-title mx-2">
+                      <span className="mx-2 font-bold card-title">
                         {card.card_name}
                       </span>
                     </h1>
@@ -494,7 +497,7 @@ const CheckoutPage = () => {
               ))}
             </div>
             <button
-              className="btn btn-primary my-2 w-full"
+              className="w-full my-2 btn btn-primary"
               type="submit"
               onClick={handleCheckout}
             >
@@ -504,7 +507,7 @@ const CheckoutPage = () => {
         </form>
 
         <div className="w-[35%] m-4">
-          <h1 className="font-bold text-lg">Your order </h1>
+          <h1 className="text-lg font-bold">Your order </h1>
           {cart.map((item) => (
             <div key={item.id} className="flex flex-row justify-between m-4">
               <div className="flex justify-between w-full ">

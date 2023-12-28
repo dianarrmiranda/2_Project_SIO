@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { fetchData } from "../../utils";
 
+import useAuth from "../../hooks/useAuth";
+
 import {
   RiAccountCircleLine,
   RiSunFill,
@@ -20,21 +22,22 @@ const Navbar = () => {
   );
   const [userInfo, setUserInfo] = useState([]);
   const [cartItems, setCartItems] = useState(0);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { auth } = useAuth();
+  const user = auth.user;
   
   useEffect(() => {
     const initialize = async () => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      user && fetchData(`/user/view?id=${user.id}&token=${user.token}`).then((res) => {
+      const user = auth.user;
+      const token = auth.acessToken;
+
+      user && fetchData(`/user/view?id=${user.id}&token=${token}`).then((res) => {
         setUserInfo(res);
       })
     }
     initialize();
   }, []);
   
-  useEffect(() => {
-    setCartItems(userInfo?.shopping_Cart?.length);
-  }, [userInfo]);
+  
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
@@ -53,7 +56,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar bg-secondary w-full flex justify-between items-center p-2 top-0">
+    <div className="top-0 flex items-center justify-between w-full p-2 navbar bg-secondary">
       <Link to="/" className="max-w-[5%]">
         <img src={logo}></img>
       </Link>
@@ -65,7 +68,7 @@ const Navbar = () => {
           name="search"
         />
         <button
-          className="btn btn-primary btn-sm join-item rounded-full font-bold"
+          className="font-bold rounded-full btn btn-primary btn-sm join-item"
           type="submit  "
           onClick={() => {
             navigate(
@@ -87,7 +90,7 @@ const Navbar = () => {
       )}
 
       <div className="flex">
-        <label className="swap swap-rotate m-2 p-2 ">
+        <label className="p-2 m-2 swap swap-rotate ">
           <input
             id="search-box"
             type="checkbox"
@@ -100,11 +103,11 @@ const Navbar = () => {
 
         {user && (
           <div className="indicator">
-            <span className="indicator-item badge-accent badge-sm rounded-full m-4 text-sm">
-              {cartItems}
+            <span className="m-4 text-sm rounded-full indicator-item badge-accent badge-sm">
+              {auth ? user.shopping_Cart.length : 0}
             </span>
             <button
-              className="flex items-center m-2 p-2"
+              className="flex items-center p-2 m-2"
               onClick={() => navigate('/user/cart')}
             >
               <RiShoppingBag2Line className="text-xl" />
@@ -114,7 +117,7 @@ const Navbar = () => {
 
         {true && (
           <button
-            className="flex items-center m-2 p-2"
+            className="flex items-center p-2 m-2"
             onClick={
               user
                 ? () => navigate(`/user`)
