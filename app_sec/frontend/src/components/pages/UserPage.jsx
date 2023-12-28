@@ -4,7 +4,7 @@ import Navbar from '../layout/Navbar';
 
 import { fetchData } from '../../utils';
 import Footer from '../layout/Footer';
-import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
+import { RiEyeCloseLine, RiEyeLine, RiEditLine, RiLogoutBoxLine, RiDeleteBinLine, RiFilePdf2Line } from 'react-icons/ri';
 import axios from 'axios';
 
 const ProductPage = () => {
@@ -125,6 +125,50 @@ const ProductPage = () => {
     document.getElementById('modal_viewDetails').showModal();
   };
 
+  const handleDeleteAccount = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('id', id);
+      formData.append('token', token);
+
+      const response = await axios.put('http://localhost:8080/user/deleteUserData', formData);
+      if (response.status === 200) {
+        handleLogout();
+      }
+    } catch (error) {
+      console.error('Error during API call', error);
+    }
+  };
+
+  const handleExportData = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/user/exportUserData', {
+        params: {
+          id: id,
+          token: token,
+        },
+        responseType: 'arraybuffer',
+      });
+  
+      if (response.status === 200) {
+        // Create a Blob from the PDF data
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+  
+        // Create a download link and click it
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'my_deti_store_data.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }
+    } catch (error) {
+      console.error('Error during API call', error);
+    }
+  };
+
 
   return (
     <div className="bg-base-200">
@@ -153,13 +197,29 @@ const ProductPage = () => {
                   document.getElementById('modal_ChangePass').showModal()
                 }
               >
+                <RiEditLine className="text-xl"/>
                 Change Password
               </button>
               <button
                 className="btn btn-accent mb-2"
                 onClick={handleLogout}
               >
+                <RiLogoutBoxLine className="text-xl"/>
                 Logout
+              </button>
+              <button
+                className="btn btn-accent bg-[#ce3a27] hover:bg-[#66180e] ml-2 mb-2"
+                onClick={() => document.getElementById('modal_deleteAccount').showModal()}
+              >
+                <RiDeleteBinLine className="text-xl"/>
+                Delete my account 
+              </button>
+              <button
+                className="btn btn-accent flex-right ml-2 mb-2"
+                onClick={handleExportData}
+              >
+                <RiFilePdf2Line className="text-xl"/>
+                Export my data
               </button>
             </div>
           </span>
@@ -373,6 +433,30 @@ const ProductPage = () => {
             </form>
             <form method="dialog">
               <button className="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+
+      <dialog
+        id="modal_deleteAccount"
+        className="modal"
+      >
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Delete My Account</h3>
+          <p>Are you sure you want to delete your account?</p>
+          <p>This action is irreversible!</p>
+          <div className="modal-action flex">
+            <form method="dialog">
+              <button
+                className="btn btn-primary mr-2"
+                onClick={handleDeleteAccount}
+              >
+                Confirm Deletion
+              </button>
+            </form>
+            <form method="dialog">
+              <button className="btn">Cancel</button>
             </form>
           </div>
         </div>
