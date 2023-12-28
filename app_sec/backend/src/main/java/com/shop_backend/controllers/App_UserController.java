@@ -17,6 +17,11 @@ import org.springframework.http.MediaType;
 import java.util.List;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,6 +30,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import org.json.JSONObject;
+
+import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Base64.Encoder;
@@ -115,6 +122,10 @@ public class App_UserController {
           "The role value must either be 'user' or 'admin'!");
     }
 
+    if (check_password(password)) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The password was found in a data breach! Please choose a different password.");
+    }
+
     // Register the App_User Object
     try {
       App_User usr = new App_User();
@@ -187,6 +198,30 @@ public class App_UserController {
       out.put("request_History", usr.getRequest_History());
 
       return out.toString(1);
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal processing error!");
+    }
+  }
+
+  public boolean check_password(String password) {
+    try {
+      MessageDigest md = MessageDigest.getInstance("SHA-1");
+      byte[] digest = md.digest(password.getBytes());
+      StringBuilder sb = new StringBuilder();
+      for (byte b : digest) {
+          sb.append(String.format("%02x", b));
+      }
+      String prefix = sb.substring(0, 5);
+      String suffix = sb.substring(5);
+
+      HttpClient client = HttpClient.newHttpClient();
+      HttpRequest request = HttpRequest.newBuilder()
+          .uri(new URI("https://api.pwnedpasswords.com/range/" + prefix))
+          .GET()
+          .build();
+      HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+      return response.body().contains(suffix.toUpperCase());
     } catch (Exception e) {
       e.printStackTrace();
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal processing error!");
@@ -383,6 +418,11 @@ public class App_UserController {
     if (!currentHashedPass.equals(oldHashedPassToCheck)) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "User authentication is incorrect");
     }
+
+    if (check_password(newPassword)) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The password was found in a data breach! Please choose a different password.");
+    }
+
 
     spec = new PBEKeySpec(newPassword.toCharArray(), user.getSalt().getBytes(), 65536, 128);
     try {

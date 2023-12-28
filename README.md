@@ -213,7 +213,7 @@ Run Spring-Boot:
 ### Run backend inside a docker
 
 ```bash
-cd backend/Backend
+cd backend
 ./mvnw install
 docker build --build-arg JAR_FILE=target/shop_backend-0.0.1-SNAPSHOT.jar -t com/shop_backend .
 docker run -p 8080:8080 com/shop_backend

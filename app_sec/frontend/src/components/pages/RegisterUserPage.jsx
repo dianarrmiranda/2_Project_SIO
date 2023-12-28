@@ -20,6 +20,8 @@ function RegisterUserPage() {
   const [showAlertImage, setShowAlertImage] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showAlertRegFailed, setShowAlertRegFailed] = useState(false);
+  const [messageRegFailed, setMessageRegFailed] = useState(false);
 
   const [score, setScore] = useState(0);
 
@@ -65,7 +67,14 @@ function RegisterUserPage() {
   };
 
   const handleImageChange = (event) => {
-    setImage(event.target.files[0]);
+    const file = event.target.files[0];
+    if (file.type.startsWith("image/")) {
+      setImage(file);
+      setShowAlertImage(false);
+    }
+    else {
+      setShowAlertImage(true);
+    }
   };
 
   const handleRegister = async (event) => {
@@ -76,7 +85,7 @@ function RegisterUserPage() {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-    const cardNumberRegex = /^[0-9]{12}$/;
+    const cardNumberRegex = /^[0-9]{16}$/;
 
     const imageRegex = /\.(jpe?g|tiff?|png|webp)$/i;
 
@@ -132,7 +141,6 @@ function RegisterUserPage() {
       formData.append("cartao", cardNumber);
       formData.append("role", "user");
       formData.append("img", image);
-
       axios.post("http://localhost:8080/user/add", formData).then((res) => {
         if (res && res.status === 200) {
           console.log("Register successful");
@@ -146,6 +154,9 @@ function RegisterUserPage() {
         } else {
           console.error("Register failed");
         }
+      }).catch((err) => {
+        setShowAlertRegFailed(true);
+        setMessageRegFailed(err.response.data.message);
       });
     } catch (error) {
       console.error("Error during API call", error);
@@ -375,6 +386,25 @@ function RegisterUserPage() {
                   <span>
                     Error: Image must be a .jpg, .jpeg, .png or .webp file and
                     the size should be less than 5mb!
+                  </span>
+                </div>
+              )}
+              {showAlertRegFailed && (
+                <div className="alert alert-error">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="stroke-current shrink-0 h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeWidth="2"
+                      d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span>
+                    Error: {messageRegFailed}
                   </span>
                 </div>
               )}
