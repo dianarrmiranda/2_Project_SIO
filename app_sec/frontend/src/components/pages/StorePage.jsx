@@ -115,10 +115,15 @@ const StorePage = () => {
   };
 
   const handleImageChange = (event) => {
+    const file = event.target.files[0];
+
     setImage(event.target.files[0]);
     const imageRegex = /\.(jpe?g|tiff?|png|webp)$/i;
-    if (event.target.files[0].size < 5000000 || imageRegex.test(image.name)) {
+    if (file < 5000000 || imageRegex.test(image.name) || file.type.startsWith("image/")) {
+      setImage(file);
       setShowAlertImage(false);
+    } else {
+      setShowAlertImage(true);
     }
   };
 

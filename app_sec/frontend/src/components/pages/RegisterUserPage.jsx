@@ -67,7 +67,14 @@ function RegisterUserPage() {
   };
 
   const handleImageChange = (event) => {
-    setImage(event.target.files[0]);
+    const file = event.target.files[0];
+    if (file.type.startsWith("image/")) {
+      setImage(file);
+      setShowAlertImage(false);
+    }
+    else {
+      setShowAlertImage(true);
+    }
   };
 
   const handleRegister = async (event) => {
@@ -78,7 +85,7 @@ function RegisterUserPage() {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-    const cardNumberRegex = /^[0-9]{12}$/;
+    const cardNumberRegex = /^[0-9]{16}$/;
 
     const imageRegex = /\.(jpe?g|tiff?|png|webp)$/i;
 
