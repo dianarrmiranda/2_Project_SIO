@@ -5,6 +5,7 @@ import Navbar from '../layout/Navbar';
 import { fetchData } from '../../utils';
 import Footer from '../layout/Footer';
 import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
+import axios from 'axios';
 
 const ProductPage = () => {
   const { id } = JSON.parse(localStorage.getItem('user'));
@@ -24,6 +25,9 @@ const ProductPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showAtualPassword, setShowAtualPassword] = useState(false);
+
+  const [messageChangePassFailed, setMessageChangePassFailed] = useState(false);
+
 
   const [score, setScore] = useState(0);
 
@@ -97,25 +101,20 @@ const ProductPage = () => {
       formData.append('token', token);
       formData.append('newPassword', password);
       formData.append('oldPassword', actualPassword);
-      const response = await fetch(
-        'http://localhost:8080/user/updatePassword',
-        {
-          method: 'POST',
-          body: formData,
+      
+      axios.post('http://localhost:8080/user/updatePassword', formData).then((response) => {
+        if (response.status === 200) {
+          setShowChangeFail(false);
+          setchangeSuccess(true);
+          setTimeout(() => {
+            document.getElementById('modal_ChangePass').close();
+            setchangeSuccess(false);
+          }, 2000);
         }
-      );
-      const data = await response;
-      console.log(data);
-      if (data.status === 200) {
-        setShowChangeFail(false);
-        setchangeSuccess(true);
-        setTimeout(() => {
-          document.getElementById('modal_ChangePass').close();
-          setchangeSuccess(false);
-        }, 2000);
-      } else {
+      }).catch((error) => {
         setShowChangeFail(true);
-      }
+        setMessageChangePassFailed(error.response.data.message);
+      });
     } catch (error) {
       console.error('Error during API call', error);
     }
@@ -209,6 +208,23 @@ const ProductPage = () => {
       >
         <div className="modal-box">
           <h3 className="font-bold text-lg">Change Password!</h3>
+          {showChangeFail && (
+            <div className="alert alert-error">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="stroke-current shrink-0 h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeWidth="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>{messageChangePassFailed}</span>
+            </div>
+          )}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Actual Password</span>
@@ -231,23 +247,6 @@ const ProductPage = () => {
               </button>
             </div>
           </div>
-          {showChangeFail && (
-            <div className="alert alert-error">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeWidth="2"
-                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <span>Error! Wrong Password!</span>
-            </div>
-          )}
           <div className="form-control">
             <label className="label">
               <span className="label-text">New Password</span>
