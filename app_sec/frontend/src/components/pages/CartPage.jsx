@@ -45,6 +45,7 @@ const CartPage = () => {
     };
 
     initialize();
+    console.log('Cart ->', cart);
   }, []);
 
   useEffect(() => {
@@ -57,7 +58,7 @@ const CartPage = () => {
     });
   }, [cart]);
 
-  console.log('Cart ->', cart);
+  
 
   return (
     <div className="bg-base-200">
@@ -76,6 +77,7 @@ const CartPage = () => {
               {cart.map((item, idx) => (
                 <div
                   key={item?.id}
+                  className="flex flex-wrap p-2 m-2 shadow-lg hover:bg-secondary rounded-xl bg-base-100"
                   className="flex flex-wrap p-2 m-2 shadow-lg hover:bg-secondary rounded-xl bg-base-100"
                 >
                   <div className="w-1/6 p-2 h-1/6">

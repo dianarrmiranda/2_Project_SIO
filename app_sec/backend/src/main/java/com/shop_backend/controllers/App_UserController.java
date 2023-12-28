@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.LinkedList;
 import org.json.JSONObject;
 
@@ -589,5 +590,96 @@ public class App_UserController {
     app_userRepository.save(usr);
 
     return receipt;
+  }
+
+
+
+
+  // Create and save a new app_user object to the repository (database)
+  @PostMapping(path = "/addByJWT")
+  public @ResponseBody String addUserByJWT(@RequestParam String jwtToken) {
+
+    // Check if any required value is empty
+    if (jwtToken == null || jwtToken.equals("")) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Provide all the required data fields!");
+    }
+
+    String[] chunks = jwtToken.split("\\.");
+    Base64.Decoder decoder = Base64.getUrlDecoder();
+
+    String payload = new String(decoder.decode(chunks[1]));
+    Map<String, Object> jwtVals= new JSONObject(payload).toMap();
+
+    // Check the provided JWT token belongs to a verified email
+    if (!(boolean) jwtVals.get("email_verified")) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The provided JWT token does not belong to a verified email!");
+    }
+
+    Long currentTimestamp = System.currentTimeMillis() / 1000;
+
+    // Check the provided JWT token was created in a epoch time higher than the system one
+    if (currentTimestamp < (Integer) jwtVals.get("nbf")) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The provided JWT token cannot be accepted has it appears to be created in the future!");
+    }
+
+    // Check the provided JWT token was created in a epoch time higher than the system one
+    if (currentTimestamp < (Integer) jwtVals.get("exp")) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The provided JWT token has expired and can not be accepted!");
+    }
+
+    //  Check the authenticity of whoever signed the JWT token
+    if (!((String) jwtVals.get("iss")).equals("https://accounts.google.com")) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The provided JWT token does not come from an accepted source!");
+    }
+
+
+    String email = (String) jwtVals.get("email");
+
+
+    // Register the App_User Object
+    try {    
+      App_User usr = app_userRepository.findapp_userByEmail(email);
+      // Check the given email is already associated with another user
+      if (usr == null) {
+        // A user with this email does not exist!
+  
+        String password = "1";
+
+        usr = new App_User();
+        usr.setName((String) jwtVals.get("name"));
+        usr.setEmail(email);
+        usr.setPassword(password);
+        usr.setCredit_Card((String) jwtVals.get("1"));
+        usr.setRole("user");
+  
+        String img = (String) jwtVals.get("picture");
+        if (img != null) {
+          usr.setImage(img);
+        } 
+        else {
+          usr.setImage("");
+        }
+  
+        usr.setSalt("");
+        usr.setPassword("");
+
+        usr.setActive_Token(jwtToken);
+        app_userRepository.save(usr);  
+      }
+      // Generate the output user object for the frontend
+      JSONObject out = new JSONObject();
+      out.put("id", usr.getID().toString());
+      out.put("name", usr.getName());
+      out.put("email", usr.getEmail());
+      out.put("image", usr.getImage());
+      out.put("token", usr.getActive_Token());
+      out.put("shopping_Cart", usr.getShopping_Cart());
+      out.put("request_History", usr.getRequest_History());
+
+      return out.toString(1);
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal processing error!");
+    }
   }
 }

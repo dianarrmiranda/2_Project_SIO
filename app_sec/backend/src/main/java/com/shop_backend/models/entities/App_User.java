@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Column;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -21,6 +22,7 @@ public class App_User {
     private String Credit_Card;
     private String Role;
 
+    @Column(length = 1536)
     private String Active_Token;
     private String Salt;
 

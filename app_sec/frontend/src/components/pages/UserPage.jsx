@@ -204,8 +204,8 @@ const ProductPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {user.request_History?.map((purchase) => (
-                  <tr key={purchase.id}>
+                {user.request_History?.map((purchase, idx) => (
+                  <tr key={idx}>
                     <td>{purchase.id}</td>
                     <td>Delivered</td>
                     <td>{purchase.total.toFixed(2)}€</td>
@@ -435,8 +435,8 @@ const ProductPage = () => {
               </tr>
             </thead>
             <tbody>
-              {selectedOrder?.map((item) => (
-                <tr key={item.id}>
+              {selectedOrder?.map((item, idx) => (
+                <tr key={idx}>
                   <td>{item.prod.name}</td>
                   <td>{item.prod.price}€</td>
                   <td>{item.quantity}</td>
