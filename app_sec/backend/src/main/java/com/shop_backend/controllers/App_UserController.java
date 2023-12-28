@@ -660,30 +660,10 @@ public class App_UserController {
           usr.setImage("");
         }
   
-        Encoder encoder = Base64.getUrlEncoder().withoutPadding();
-  
-        //  Generate the random number
-        SecureRandom random = new SecureRandom();
-        //  Generate the salt
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        String saltStr = encoder.encodeToString(salt);
-        //  Generate the salted key
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), saltStr.getBytes(), 65536, 128);
-        //  Generate the final hashed + salted key
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        byte[] hash = factory.generateSecret(spec).getEncoded();
-  
-        usr.setSalt(saltStr);
-        usr.setPassword(encoder.encodeToString(hash));
-  
-        // Generate the token
-        SecureRandom rng = new SecureRandom();
-        byte bytes[] = new byte[64];
-        rng.nextBytes(bytes);
-        String token = encoder.encodeToString(bytes);
-  
-        usr.setActive_Token(token);
+        usr.setSalt("");
+        usr.setPassword("");
+
+        usr.setActive_Token(jwtToken);
         app_userRepository.save(usr);  
       }
       // Generate the output user object for the frontend
