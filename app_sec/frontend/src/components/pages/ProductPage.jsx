@@ -50,6 +50,7 @@ const ProductPage = () => {
       }
     };
     initialize();
+    console.log('Product ->', product);
   }, []);
 
   const handleAddToCart = () => {
@@ -80,7 +81,7 @@ const ProductPage = () => {
       });
   };
 
-  console.log('Product ->', product);
+  
   return (
     <div className="bg-base-200">
       <Navbar />
@@ -117,7 +118,7 @@ const ProductPage = () => {
               <div className="flex flex-row justify-items-center mb-2">
                 <Rating
                   precision={0.1}
-                  value={parseFloat(product.average_Stars).toFixed(2)}
+                  value={Number(parseFloat(product.average_Stars).toFixed(2))}
                   readOnly
                   size="small"
                 />
