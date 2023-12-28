@@ -668,9 +668,6 @@ const CheckoutPage = () => {
           <h1 className="text-lg font-bold">Your order </h1>
           {cart.map((item) => (
             <div key={item.id} className="flex flex-row justify-between m-4">
-          <h1 className="text-lg font-bold">Your order </h1>
-          {cart.map((item, idx) => (
-            <div key={idx} className="flex flex-row justify-between m-4">
               <div className="flex justify-between w-full ">
                 <h1>
                   <span className="font-bold ">{item.quantity}x</span>{" "}
