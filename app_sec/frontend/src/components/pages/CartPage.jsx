@@ -18,11 +18,9 @@ const CartPage = () => {
 
   const navigate = useNavigate();
   const username = JSON.parse(localStorage.getItem('user'));
-  console.log('Username ->', username.token);
 
   useEffect(() => {
     const initialize = async () => {
-      console.log('Username ->', username.id);
 
       const user = await fetchData(
         `/user/view?id=${username.id}&token=${username.token}`
@@ -36,9 +34,10 @@ const CartPage = () => {
     };
 
     initialize();
+    console.log('Cart ->', cart);
   }, []);
 
-  console.log('Cart ->', cart);
+  
 
   return (
     <div className="bg-base-200">
@@ -56,7 +55,7 @@ const CartPage = () => {
             <div className="flex flex-col justify-evenly h-full w-3/4">
               {cart.map((item, idx) => (
                 <div
-                  key={item?.id}
+                  key={idx}
                   className="flex flex-wrap hover:bg-secondary shadow-lg m-2 p-2 rounded-xl bg-base-100"
                 >
                   <div className="w-1/6 h-1/6 p-2">
