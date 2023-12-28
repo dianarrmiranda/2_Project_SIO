@@ -124,12 +124,34 @@ public class App_User {
         Shopping_Cart.clear();
     }
 
+    public String printCart() {
+        if (Shopping_Cart.isEmpty()) {
+            return "Your cart is currently empty!";
+        }
+        String ret = "";
+        for (ShoppingCartItem item : Shopping_Cart) {
+            ret += item.toString();
+        }
+        return ret;
+    }
+
     public List<Request> getRequest_History() {
         return Request_History;
     }
 
     public void addToRequestHistory(Request Request) {
         Request_History.add(Request);
+    }
+
+    public String printRequestHistory() {
+        if (Request_History.isEmpty()) {
+            return "No requests have been made yet!";
+        }
+        String ret = "";
+        for (Request Request : Request_History) {
+            ret += Request.toString() + "\n";
+        }
+        return ret;
     }
 
     public String getActive_Token() {

@@ -35,4 +35,8 @@ public class ShoppingCartItem {
         this.quantity = quantity;
     }
 
+    @Override
+    public String toString() {
+        return "  -- '" + prod.getName() + "', quantity: " + quantity + ", price: " + prod.getPrice() + "€\n";
+    }
 }

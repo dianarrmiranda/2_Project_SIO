@@ -1,57 +1,62 @@
 package com.shop_backend.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-
-import java.util.List;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import org.json.JSONObject;
-
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.security.spec.KeySpec;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Base64.Encoder;
-import java.security.spec.KeySpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.SecretKeyFactory;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.Arrays;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.shop_backend.models.entities.App_User;
+import com.shop_backend.models.entities.Product;
+import com.shop_backend.models.entities.Request;
+import com.shop_backend.models.entities.ShoppingCartItem;
 import com.shop_backend.models.repos.App_UserRepo;
+import com.shop_backend.models.repos.ProductRepo;
 import com.shop_backend.models.repos.RequestRepo;
 import com.shop_backend.models.repos.ShoppingCartItemRepo;
-import com.shop_backend.models.repos.ProductRepo;
-
-import com.shop_backend.models.entities.App_User;
-import com.shop_backend.models.entities.Request;
-import com.shop_backend.models.entities.Product;
-import com.shop_backend.models.entities.ShoppingCartItem;
 
 @Controller
 @CrossOrigin("*")
@@ -623,5 +628,63 @@ public class App_UserController {
     }
 
     return "SUCCESS: User data successfully marked as deleted!";
+  }
+
+  // Export all user data to a file
+  @GetMapping(path = "/exportUserData", produces = MediaType.APPLICATION_PDF_VALUE)
+  public @ResponseBody ResponseEntity<byte[]> exportUserData (@RequestParam Integer id, @RequestParam String token) {
+    App_User usr;
+
+    // Check if a User with this ID exists
+    try {
+      usr = app_userRepository.findapp_userByID(id);
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal processing error!");
+    }
+
+    if (usr == null) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The specified User does not exist!");
+    }
+
+    if (!usr.getActive_Token().equals(token)) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Token does not match the given user ID!");
+    }
+
+    // Generate the output user object for the frontend
+    Document doc = new Document();
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+    try {
+      PdfWriter.getInstance(doc, out);
+      doc.open();
+
+      //Add all user data to the PDF
+      doc.add(new Paragraph("------------ My DETI Store Data ----------"));
+      doc.add(new Paragraph("\nGenerated on: " + java.time.LocalDate.now() + "\n\n"));
+      doc.add(new Paragraph("\n\n------------ Account Data ----------"));
+      doc.add(new Paragraph("\nUsername: " + usr.getName()));
+      doc.add(new Paragraph("\nEmail: " + usr.getEmail()));
+      doc.add(new Paragraph("\n\n------------ Payment Information ----------"));
+      doc.add(new Paragraph("\nCredit Card Number: " + usr.getCredit_Card()));
+      doc.add(new Paragraph("\n\n------------ Shopping Cart ----------"));
+      doc.add(new Paragraph("\n" + usr.printCart()));
+      doc.add(new Paragraph("\n\n------------ Request History ----------"));
+      doc.add(new Paragraph("\n" + usr.printRequestHistory()));
+      doc.close();
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while generating PDF");
+    }
+
+    byte[] pdfBytes = out.toByteArray();
+
+    // Set the response headers
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_PDF);
+    headers.setContentDispositionFormData("inline", "my_deti_store_data.pdf");
+
+    return ResponseEntity
+            .ok()
+            .headers(headers)
+            .body(pdfBytes);
   }
 }
