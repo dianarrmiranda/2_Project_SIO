@@ -623,7 +623,7 @@ public class App_UserController {
     }
 
     // Check the provided JWT token was created in a epoch time higher than the system one
-    if (currentTimestamp > (Integer) jwtVals.get("exp")) {
+    if (currentTimestamp < (Integer) jwtVals.get("exp")) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The provided JWT token has expired and can not be accepted!");
     }
 
@@ -635,56 +635,57 @@ public class App_UserController {
 
     String email = (String) jwtVals.get("email");
 
-    // Check the given email is already associated with another user
-    if (app_userRepository.findapp_userByEmail(email) != null) {
-      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "A user with this email already exists!");
-    }
 
     // Register the App_User Object
-    try {
-      String password = "1";
+    try {    
+      App_User usr = app_userRepository.findapp_userByEmail(email);
+      // Check the given email is already associated with another user
+      if (usr == null) {
+        // A user with this email does not exist!
+  
+        String password = "1";
 
-      App_User usr = new App_User();
-      usr.setName((String) jwtVals.get("name"));
-      usr.setEmail(email);
-      usr.setPassword(password);
-      usr.setCredit_Card((String) jwtVals.get("1"));
-      usr.setRole("user");
-
-      String img = (String) jwtVals.get("picture");
-      if (img != null) {
-        usr.setImage(img);
-      } 
-      else {
-        usr.setImage("");
+        usr = new App_User();
+        usr.setName((String) jwtVals.get("name"));
+        usr.setEmail(email);
+        usr.setPassword(password);
+        usr.setCredit_Card((String) jwtVals.get("1"));
+        usr.setRole("user");
+  
+        String img = (String) jwtVals.get("picture");
+        if (img != null) {
+          usr.setImage(img);
+        } 
+        else {
+          usr.setImage("");
+        }
+  
+        Encoder encoder = Base64.getUrlEncoder().withoutPadding();
+  
+        //  Generate the random number
+        SecureRandom random = new SecureRandom();
+        //  Generate the salt
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+        String saltStr = encoder.encodeToString(salt);
+        //  Generate the salted key
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), saltStr.getBytes(), 65536, 128);
+        //  Generate the final hashed + salted key
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        byte[] hash = factory.generateSecret(spec).getEncoded();
+  
+        usr.setSalt(saltStr);
+        usr.setPassword(encoder.encodeToString(hash));
+  
+        // Generate the token
+        SecureRandom rng = new SecureRandom();
+        byte bytes[] = new byte[64];
+        rng.nextBytes(bytes);
+        String token = encoder.encodeToString(bytes);
+  
+        usr.setActive_Token(token);
+        app_userRepository.save(usr);  
       }
-
-      Encoder encoder = Base64.getUrlEncoder().withoutPadding();
-
-      //  Generate the random number
-      SecureRandom random = new SecureRandom();
-      //  Generate the salt
-      byte[] salt = new byte[16];
-      random.nextBytes(salt);
-      String saltStr = encoder.encodeToString(salt);
-      //  Generate the salted key
-      KeySpec spec = new PBEKeySpec(password.toCharArray(), saltStr.getBytes(), 65536, 128);
-      //  Generate the final hashed + salted key
-      SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-      byte[] hash = factory.generateSecret(spec).getEncoded();
-
-      usr.setSalt(saltStr);
-      usr.setPassword(encoder.encodeToString(hash));
-
-      // Generate the token
-      SecureRandom rng = new SecureRandom();
-      byte bytes[] = new byte[64];
-      rng.nextBytes(bytes);
-      String token = encoder.encodeToString(bytes);
-
-      usr.setActive_Token(token);
-      app_userRepository.save(usr);
-
       // Generate the output user object for the frontend
       JSONObject out = new JSONObject();
       out.put("id", usr.getID().toString());
