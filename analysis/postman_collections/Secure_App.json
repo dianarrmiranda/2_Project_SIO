@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "ddaf8714-30e2-4859-a314-c6e4239edb00",
-		"name": "Proj1_SIO",
+		"_postman_id": "c5b7d5a1-eaa4-4f3e-aa43-aba57d07fdb2",
+		"name": "Proj2_SIO",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "28375958"
+		"_exporter_id": "30670219"
 	},
 	"item": [
 		{
@@ -175,11 +175,6 @@
 								{
 									"key": "password",
 									"value": "123"
-								},
-								{
-									"key": "",
-									"value": " ",
-									"disabled": true
 								}
 							]
 						}
@@ -312,6 +307,84 @@
 								{
 									"key": "userID",
 									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `",
+									"<p>Error: Internal Server Error</p>",
+									"<p>Status: {{response.status}}</p>",
+									"`;",
+									"",
+									"function constructVisualizerPayload() {",
+									"    return {response: pm.response.json()};",
+									"}",
+									"",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/deleteUserData?id=2&token=6E8MKrUDJ4MLf7dNhwQduzUcai22U_IMChddkjEOoQXwqeGlsSKU7xRm1R1naQ3ll4ICgjoLChB9VKqlr7rG9w",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"deleteUserData"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								},
+								{
+									"key": "token",
+									"value": "6E8MKrUDJ4MLf7dNhwQduzUcai22U_IMChddkjEOoQXwqeGlsSKU7xRm1R1naQ3ll4ICgjoLChB9VKqlr7rG9w"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Export User Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/exportUserData?id=2&token=b7Iel8gqTfLzQUuBmKLsa2x0jTymqLrzdoIeg1_csp5p179sVEuA-aBnLaZPhKqLe3b2LP-XLB7lHgLvaOJSpQ",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"exportUserData"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								},
+								{
+									"key": "token",
+									"value": "b7Iel8gqTfLzQUuBmKLsa2x0jTymqLrzdoIeg1_csp5p179sVEuA-aBnLaZPhKqLe3b2LP-XLB7lHgLvaOJSpQ"
 								}
 							]
 						}
