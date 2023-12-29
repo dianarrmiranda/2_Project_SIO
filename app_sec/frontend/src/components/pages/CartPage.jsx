@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-import { fetchData } from '../../utils';
+import { fetchData } from '../../utils'; //TODO:
 import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';
 import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios';
+import axios from 'axios'; // TODO:
 import { API_BASE_URL } from '../../constants';
-import useAuth from '../../hooks/useAuth';
+
+import useSessionStorage from '../../hooks/useSessionStorage';
 
 import { BsTrash } from 'react-icons/bs';
 import { RiShoppingCart2Line } from 'react-icons/ri';
@@ -17,26 +18,22 @@ const CartPage = () => {
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState({});
 
-  const { auth, setAuth } = useAuth();
+  const [item, setItem] = useSessionStorage('auth');
 
   const navigate = useNavigate();
-  const username = auth?.user;
-  const acessToken = auth?.acessToken;
-
-
+  const username = item
 
   useEffect(() => {
     const initialize = async () => {
-      if (Object.keys(auth).length === 0) {
+      if (!item) {
         navigate('/login');
       } else {
         console.log('Username ->', username.id);
 
         const user = await fetchData(
-          `/user/view?id=${username.id}&token=${acessToken}`
+          `/user/view?id=${username.id}&token=${username.token}`
         );
         setUser(user);
-        console.log('User ->', user);
 
         if (user) {
           setCart(user.shopping_Cart);
@@ -49,13 +46,10 @@ const CartPage = () => {
   }, []);
 
   useEffect(() => {
-    setAuth({
-      ...auth,
-      user: {
-        ...auth.user,
-        shopping_Cart: cart,
-      },
-    });
+    setItem({
+      ...item,
+      shopping_Cart: cart,
+    })
   }, [cart]);
 
   
@@ -78,7 +72,6 @@ const CartPage = () => {
                 <div
                   key={item?.id}
                   className="flex flex-wrap p-2 m-2 shadow-lg hover:bg-secondary rounded-xl bg-base-100"
-                  className="flex flex-wrap p-2 m-2 shadow-lg hover:bg-secondary rounded-xl bg-base-100"
                 >
                   <div className="w-1/6 p-2 h-1/6">
                     <img
@@ -99,7 +92,7 @@ const CartPage = () => {
                         className="aboslute top-1 right-1 "
                         onClick={() => {
                           axios.post(
-                            `${API_BASE_URL}/user/removeFromCart?prod=${item?.prod.ID}&userID=${user.id}&token=${acessToken}`
+                            `${API_BASE_URL}/user/removeFromCart?prod=${item?.prod.ID}&userID=${username.id}&token=${username.token}`
                           );
                           setCart((prev) => {
                             const newCart = [...prev];

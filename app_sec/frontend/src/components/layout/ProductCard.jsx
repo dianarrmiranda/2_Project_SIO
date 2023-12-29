@@ -1,22 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RiEyeLine, RiShoppingCartLine } from 'react-icons/ri';
-import axios from 'axios';
-import { API_BASE_URL } from '../../constants';
+import axios from '../../api/axios';
 
-import useAuth from '../../hooks/useAuth';
+import useSessionStorage from '../../hooks/useSessionStorage';
 
 const ProductCard = ({ product, className, isStore }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState([]);
   const [sucess, setSucess] = useState(false);
 
-  const { auth, setAuth } = useAuth();
-  const acessToken = auth?.acessToken;
-
+  const [ item, setItem ] = useSessionStorage('auth');
+  
   useEffect(() => {
-    setUser(auth.user);
-  }, [auth]);
+    setUser(item);
+  }, [item]);
 
   return (
     <div
@@ -57,7 +55,7 @@ const ProductCard = ({ product, className, isStore }) => {
                     onClick={() => {
                       axios
                         .post(
-                          `${API_BASE_URL}/user/addToCart?prod=${product.id}&userID=${user[0].id}&quantity=1`
+                          `/user/addToCart?prod=${product.id}&userID=${user.id}&quantity=1`
                         )
                         .then((res) => {
                           if (res.status === 200) {
@@ -78,7 +76,7 @@ const ProductCard = ({ product, className, isStore }) => {
                   onClick={() => {
                     axios
                       .post(
-                        `${API_BASE_URL}/user/addToCart?prod=${product.id}&userID=${user.id}&quantity=1&token=${acessToken}`
+                        `/user/addToCart?prod=${product.id}&userID=${user.id}&quantity=1&token=${user.token}`
                       )
                       .then((res) => {
                         if (res.status === 200) {
@@ -87,12 +85,9 @@ const ProductCard = ({ product, className, isStore }) => {
                             setSucess(false);
                           }, 2000);
                           console.log('Added to cart -> ', res.data);
-                          setAuth({
-                            ...auth,
-                            user: {
-                              ...auth.user,
-                              shopping_Cart: res.data,
-                            },
+                          setItem({
+                            ...item,
+                            shopping_Cart: res.data,
                           });
                             
                         }

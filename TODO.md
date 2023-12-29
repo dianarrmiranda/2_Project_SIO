@@ -12,14 +12,13 @@ TODO da segunda entrega do projeto:
 - [ ] Atualizar o relatório com as duas features implementadas.
 
 Para analisar a app com a OWASP ASVS Checklist:
- - Copiar o ficheiro excel (deixar um não modificado na pasta de analysis);
- - A cada secção, analisar todas as linhas com ASVS Level de 1 (laranja);
- - Por cada linha, inserir os valores Valid, Non-valid ou Not Applicable em cada coluna "Valid";
- - Colocar também a source code reference onde está implementada a resolução (mais importante) do issue com o ficheiro onde está a resolução e a linha se aplicável e um comentário com a descrição de como foi resolvido;
- - A coluna "tool used" não é caso usem uma ferramenta para analisar automáticamente as issues;
- - Ir tirando screenshots de cada issue a comprovar que foi resolvido e colocar na pasta analysis/screenshots.
 
-
+- Copiar o ficheiro excel (deixar um não modificado na pasta de analysis);
+- A cada secção, analisar todas as linhas com ASVS Level de 1 (laranja);
+- Por cada linha, inserir os valores Valid, Non-valid ou Not Applicable em cada coluna "Valid";
+- Colocar também a source code reference onde está implementada a resolução (mais importante) do issue com o ficheiro onde está a resolução e a linha se aplicável e um comentário com a descrição de como foi resolvido;
+- A coluna "tool used" não é caso usem uma ferramenta para analisar automáticamente as issues;
+- Ir tirando screenshots de cada issue a comprovar que foi resolvido e colocar na pasta analysis/screenshots.
 
 Coisas a melhorer v2:
  - CWE 434 de url parameters na webservices
@@ -32,7 +31,7 @@ DONE | Num     | Description
 -----------------------------------------
 | Done | Num           | Descriptio |
 | ---- | ------------- | ---------- |
-|  [x]  | 2.7.4  | TOKENS: Expiram depois de 10 minutos ou 1h para os de JWT da google |
+|  [ x ]  | 2.7.4  | TOKENS: Expiram depois de 10 minutos ou 1h para os de JWT da google |
 |  []  | 3.1.1  | RESPONSES: Remove all request parameters from the URI to the bodies or params |
 |  []  | 8.3.1  | RESPONSES: Same as above mostly |
 |  []  | 9.1.1, 2 and 3  | RESPONSES: Implementar TLS one or two way (secure sockets) |

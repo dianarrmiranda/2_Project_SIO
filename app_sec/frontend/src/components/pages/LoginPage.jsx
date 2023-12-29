@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 
 import { RiEyeLine, RiEyeCloseLine } from 'react-icons/ri';
-import { jwtDecode } from 'jwt-decode';
-import  useAuth from '../../hooks/useAuth';
+import useSessionStorage from '../../hooks/useSessionStorage';
 
+import axios from '../../api/axios';
 import { fetchData } from '../../utils';
 
 const LoginPage = () => {
@@ -17,27 +17,21 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
-  const { setAuth } = useAuth();
+  const [value, setItem] = useSessionStorage('auth');
 
   const [emailRec, setEmailRec] = useState('');
 
   function handleGoogleResponse(response) {
-    const user = jwtDecode(response.credential);
-    const id = parseInt(user.sub);    
-    
-    setAuth({
-      isAuthenticated: true,
-      user: {
-        id: id,
-        email: user.email,
-        name: user.name,
-        image: user.picture,
-        shopping_Cart: [],
-        request_History: [],
-      },
-      acessToken: response.credential,
-    });
-    navigate('/');
+    console.log('google response -> ', response.credential);
+    axios
+      .post(`user/addByJWT?jwtToken=${response.credential}`)
+      .then((res) => {
+        console.log('res -> ', res);
+        setItem(res.data);
+      })
+      .then(() => {
+        navigate('/');
+      });
   }
 
   const handleLogin = async (event) => {
@@ -51,18 +45,8 @@ const LoginPage = () => {
         setEmail('');
         setPassword('');
         setFailed(false);
-        setAuth({
-          isAuthenticated: true,
-          user: {
-            id: response.id,
-            email: response.email,
-            name: response.name,
-            image: response.image,
-            shopping_Cart: response.shopping_Cart,
-            request_History: response.request_History,
-          },
-          acessToken: response.token,
-        });
+        console.log('response -> ', response);
+        setItem(response);
         navigate('/');
       } else {
         console.error('Login failed');
@@ -174,18 +158,18 @@ const LoginPage = () => {
         </div>
         <dialog id="modal-1" className="modal">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Forgot your password?</h3>  
+            <h3 className="text-lg font-bold">Forgot your password?</h3>  
             <input
               type="email"
               placeholder="email"
-              className="input input-bordered mt-3 w-full"
+              className="w-full mt-3 input input-bordered"
               required
               onChange={handleEmailRecChange}
             />
             <div className="modal-action">
               <form method="dialog">
                 <button
-                  className="btn btn-primary mr-2"
+                  className="mr-2 btn btn-primary"
                   onClick={handleForgotPass}
                 >
                   Send

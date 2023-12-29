@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
+import useSessionStorage from "../../hooks/useSessionStorage";
 
-import { fetchData } from "../../utils";
-
+import axios from "../../api/axios";
 import "./../../utils/styles.css";
 
 import Navbar from "../layout/Navbar";
@@ -19,7 +18,7 @@ const imgs = [
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const { auth } = useAuth();
+  const [value] = useSessionStorage("auth");
 
   const [products, setProducts] = useState([]);
   const [hotDeals, setHotDeals] = useState([]);
@@ -27,8 +26,14 @@ const HomePage = () => {
 
   useEffect(() => {
     const initialize = async () => {
-      const data_products = await fetchData("/product/list");
-      const data_hot = await fetchData("/product/listHotDeals");
+      const data_products = await axios.get("/product/list").then((res) => {
+        console.log("res -> ", res.data);
+        return res.data;
+      });
+      const data_hot = await axios.get("/product/listHotDeals").then((res) => {
+        console.log("res -> ", res.data);
+        return res.data;
+      });
       setProducts(data_products);
       setHotDeals(data_hot);
       if (data_products && data_hot) {
@@ -37,7 +42,7 @@ const HomePage = () => {
     };
     initialize();
     console.log("products -> ", products);
-    console.log("auth -> ", auth)
+    console.log("value -> ", value)
   }, []);
 
   

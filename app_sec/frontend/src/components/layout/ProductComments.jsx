@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import Rating from '@mui/material/Rating';
-import useAuth from '../../hooks/useAuth';
+import useSessionStorage from '../../hooks/useSessionStorage';
+
+import axios from '../../api/axios';
 
 const ProductComments = ({ comments, user_id, product, setComments }) => {
   const [newHeader, setNewHeader] = useState('');
   const [newComment, setNewComment] = useState('');
   const [newRating, setNewRating] = useState('');
 
-  const { auth } = useAuth();
-  const username = auth?.user;
-  
+  const [user, setItem] = useSessionStorage('auth');
+
+  const username = user;
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +23,7 @@ const ProductComments = ({ comments, user_id, product, setComments }) => {
       formData.append('description', newComment);
       formData.append('stars', newRating);
 
-      const response = await fetch(
+      /* const response = await fetch(
         `http://localhost:8080/product/addReview?token=${username.token}`,
         {
           method: 'POST',
@@ -29,17 +31,24 @@ const ProductComments = ({ comments, user_id, product, setComments }) => {
         }
       );
 
-      const data = await response.text();
-      console.log(data);
-      if (response.ok) {
-        console.log('Review sucessfully added');
-        setNewHeader('');
-        setNewComment('');
-        setComments([...comments, { header: newHeader, comment: newComment }]);
-        window.location.reload(); // Atualiza a página para aparecer tudo direitinho
-      } else {
-        console.error('Review failed to be added');
-      }
+      const data = await response.text(); */
+      axios
+        .post(`product/addReview?token=${username.token}`, formData)
+        .then((res) => {
+          console.log('res -> ', res);
+          if (res.status === 200) {
+            console.log('Review sucessfully added');
+            setNewHeader('');
+            setNewComment('');
+            setComments([
+              ...comments,
+              { header: newHeader, comment: newComment },
+            ]);
+            window.location.reload(); // Atualiza a página para aparecer tudo direitinho
+          } else {
+            console.error('Review failed to be added');
+          }
+        });
     } catch (error) {
       console.error('Error during API call', error);
     }

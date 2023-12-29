@@ -7,9 +7,9 @@ import Footer from '../layout/Footer';
 import ProductComments from '../layout/ProductComments';
 import Rating from '@mui/material/Rating';
 
-import axios from 'axios';
-import { API_BASE_URL } from '../../constants';
-import useAuth from '../../hooks/useAuth';
+import axios from '../../api/axios';
+
+import useSessionStorage from '../../hooks/useSessionStorage';
 
 import {
   RiFlashlightLine,
@@ -28,20 +28,19 @@ const ProductPage = () => {
   const [stock, setStock] = useState(product.in_stock);
   const [role, setRole] = useState('');
   const [toggleResponse, setToggleResponse] = useState(false);
-  const { auth, setAuth } = useAuth();
 
-  const { user } = auth;
-  const acessToken = auth?.acessToken;
+  const [user, setUser] = useSessionStorage('auth');
 
   useEffect(() => {
     const initialize = async () => {
       const data = await fetchData(`/product/view?id=${id}`);
       if (user) {
         const dataUser = await fetchData(
-          `/user/view?id=${parseInt(user.id)}&token=${acessToken}`
+          `/user/view?id=${parseInt(user.id)}&token=${user.token}`
         );
-        setUser_id(user.id);
-        setToken(acessToken);
+        const { id, token } = user;
+        setUser_id(id);
+        setToken(token);
         setRole(dataUser.role);
       } else {
         setUser_id(null);
@@ -58,21 +57,17 @@ const ProductPage = () => {
   const handleAddToCart = () => {
     axios
       .post(
-        `${API_BASE_URL}/user/addToCart?prod=${
-          product.id
-        }&userID=${user_id}&quantity=${
+        `/user/addToCart?prod=${product.id}&userID=${user_id}&quantity=${
           document.getElementById('qty').value
-        }&token=${acessToken}`
+        }&token=${user.token}`
       )
       .then((res) => {
         console.log(res.data);
         console.log('Added to cart');
-        setAuth({
-          ...auth,
-          user: {
-            ...auth.user,
-            shopping_Cart: res.data,
-          },
+        setUser({
+          ...user,
+
+          shopping_Cart: res.data,
         });
       });
   };
@@ -84,14 +79,13 @@ const ProductPage = () => {
   const handleStock = () => {
     axios
       .post(
-        `${API_BASE_URL}/product/updateStock?id=${product.id}&stock=${stock}&userID=${user_id}&token=${token}`
+        `/product/updateStock?id=${product.id}&stock=${stock}&userID=${user_id}&token=${token}`
       )
       .then((res) => {
         console.log(res);
       });
   };
 
-  
   return (
     <div className="bg-base-200">
       <Navbar />
