@@ -5,7 +5,7 @@ import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';
 import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios'; // TODO:
+import axios from '../../api/axios';
 import { API_BASE_URL } from '../../constants';
 
 import useSessionStorage from '../../hooks/useSessionStorage';

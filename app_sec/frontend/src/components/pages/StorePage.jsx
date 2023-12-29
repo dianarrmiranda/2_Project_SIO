@@ -204,7 +204,7 @@ const StorePage = () => {
       formData.append('token', acessToken);
 
       axios
-        .post('http://localhost:8080/product/category/add', formData)
+        .post('/product/category/add', formData)
         .then((res) => {
           console.log(res);
         })
@@ -233,7 +233,7 @@ const StorePage = () => {
       formData2.append('token', acessToken);
 
       axios
-        .post('http://localhost:8080/product/add', formData2)
+        .post('/product/add', formData2)
         .then((res) => {
           console.log(res);
           setShowSuccess(true);

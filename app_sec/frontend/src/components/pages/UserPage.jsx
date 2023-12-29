@@ -124,7 +124,7 @@ const ProductPage = () => {
       formData.append('oldPassword', actualPassword);
 
       axios
-        .post('http://localhost:8080/user/updatePassword', formData)
+        .post('/user/updatePassword', formData)
         .then((response) => {
           if (response.status === 200) {
             setShowChangeFail(false);
@@ -156,7 +156,7 @@ const ProductPage = () => {
       formData.append('token', token);
 
       const response = await axios.put(
-        'http://localhost:8080/user/deleteUserData',
+        '/user/deleteUserData',
         formData
       );
       if (response.status === 200) {
@@ -170,7 +170,7 @@ const ProductPage = () => {
   const handleExportData = async () => {
     try {
       const response = await axios.get(
-        'http://localhost:8080/user/exportUserData',
+        '/user/exportUserData',
         {
           params: {
             id: id,

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../api/axios';
 import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
 
 import useSessionStorage from '../../hooks/useSessionStorage';
@@ -144,7 +144,7 @@ function RegisterUserPage() {
       formData.append('role', 'user');
       formData.append('img', image);
       axios
-        .post('http://localhost:8080/user/add', formData)
+        .post('/user/add', formData)
         .then((res) => {
           if (res && res.status === 200) {
             console.log('Register successful');
