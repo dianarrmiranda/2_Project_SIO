@@ -704,4 +704,50 @@ public class App_UserController {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal processing error!");
     }
   }
+
+
+  //  View all app_user info IF email and password check out, else return bad login
+  //  info
+  @GetMapping(path = "/reloadToken")
+  public @ResponseBody String reloadToken(@RequestParam String email, @RequestParam String oldToken) {
+    App_User user;
+
+    //  Check if a User with this login information exists or nor
+    try {
+      user = app_userRepository.findapp_userByEmail(email);
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal processing error!");
+    }
+
+    if (user == null) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "User email has no account associated!");
+    }
+
+    if (!user.getActive_Token().equals(oldToken)) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Token does not match the given user ID!");
+    }
+
+    if (user.getToken_Expiration() < (System.currentTimeMillis() / 1000)) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The provided token has expired! Please log in again.");
+    }     
+
+    //  Generate the token
+    Encoder encoder = Base64.getUrlEncoder().withoutPadding();
+    SecureRandom rng = new SecureRandom();
+    byte bytes[] = new byte[64];
+    rng.nextBytes(bytes);
+    String token = encoder.encodeToString(bytes);
+
+    user.setActive_Token(token);
+    //  Set token to expire after 10 minutes
+    user.setToken_Expiration((int)(System.currentTimeMillis() / 1000) + 600);
+    app_userRepository.save(user);
+
+    //  Generate the output object for the frontend
+    JSONObject out = new JSONObject();
+    out.put("new_token", token);
+
+    return out.toString(1);
+  }
+
 }
