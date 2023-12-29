@@ -229,6 +229,7 @@ public class App_UserController {
       out.put("name", usr.getName());
       out.put("email", usr.getEmail());
       out.put("image", usr.getImage());
+      out.put("role", usr.getRole());
       out.put("token", usr.getActive_Token());
       out.put("shopping_Cart", usr.getShopping_Cart());
       out.put("request_History", usr.getRequest_History());
@@ -355,11 +356,13 @@ public class App_UserController {
     out.put("id", user.getID().toString());
     out.put("name", user.getName());
     out.put("email", user.getEmail());
-    out.put("role", user.getRole());
     out.put("image", user.getImage());
-    out.put("credit_Card", user.getCredit_Card());
+    out.put("role", user.getRole());
+    out.put("token", user.getActive_Token());
     out.put("shopping_Cart", user.getShopping_Cart());
     out.put("request_History", user.getRequest_History());
+    out.put("credit_Card", user.getCredit_Card());
+    
 
     return out.toString(1);
   }
@@ -413,6 +416,7 @@ public class App_UserController {
     out.put("name", user.getName());
     out.put("email", user.getEmail());
     out.put("image", user.getImage());
+    out.put("role", user.getRole());
     out.put("token", user.getActive_Token());
     out.put("shopping_Cart", user.getShopping_Cart());
     out.put("request_History", user.getRequest_History());
@@ -815,6 +819,7 @@ public class App_UserController {
       out.put("name", usr.getName());
       out.put("email", usr.getEmail());
       out.put("image", usr.getImage());
+      out.put("role", usr.getRole());
       out.put("token", usr.getActive_Token());
       out.put("shopping_Cart", usr.getShopping_Cart());
       out.put("request_History", usr.getRequest_History());
