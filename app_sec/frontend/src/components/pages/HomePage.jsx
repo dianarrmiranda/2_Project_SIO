@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 import { fetchData } from "../../utils";
 
@@ -16,13 +17,9 @@ const imgs = [
   "https://i.imgur.com/ULExX9s.jpeg",
 ];
 
-window.addEventListener("beforeunload", () => {
-  sessionStorage.removeItem("username");
-  sessionStorage.removeItem("token");
-});
-
 const HomePage = () => {
   const navigate = useNavigate();
+  const { auth } = useAuth();
 
   const [products, setProducts] = useState([]);
   const [hotDeals, setHotDeals] = useState([]);
@@ -40,6 +37,7 @@ const HomePage = () => {
     };
     initialize();
     console.log("products -> ", products);
+    console.log("auth -> ", auth)
   }, []);
 
   
@@ -54,11 +52,11 @@ const HomePage = () => {
             <span className="loading loading-dots loading-lg"></span>
           </div>
         ) : (
-          <div className="rounded-xl my-4">
+          <div className="my-4 rounded-xl">
             <div className="divider">
-              <h1 className=" font-bold text-2xl m-2">🔥 HOT DEALS 🔥</h1>
+              <h1 className="m-2 text-2xl font-bold ">🔥 HOT DEALS 🔥</h1>
             </div>
-            <div className=" overflow-hidden hover:overflow-x-scroll snap-x flex flex-row ">
+            <div className="flex flex-row overflow-hidden hover:overflow-x-scroll snap-x">
               {hotDeals.map((product) => (
                 <ProductCard
                   key={product.id}
@@ -74,7 +72,7 @@ const HomePage = () => {
         <div className="divider"></div>
 
         <div className=" flex flex-col justify-center p-[10%]">
-          <h1 className="text-xl font-bold my-4">
+          <h1 className="my-4 text-xl font-bold">
             Find more products on our store page
           </h1>
           <button

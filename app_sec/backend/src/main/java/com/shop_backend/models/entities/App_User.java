@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Column;
 
 import java.util.List;
 import java.util.LinkedList;
@@ -18,12 +19,14 @@ public class App_User {
     private String Email;
     private String Image;
     private String Password;
+    private String Salt;
     private String Credit_Card;
     private String Role;
     private boolean Deleted = false;
 
+    @Column(length = 1536)
     private String Active_Token;
-    private String Salt;
+    private Integer Token_Expiration;
 
     @OneToMany
     private List<ShoppingCartItem> Shopping_Cart = new LinkedList<ShoppingCartItem>();
@@ -160,6 +163,14 @@ public class App_User {
 
     public void setActive_Token(String active_Token) {
         Active_Token = active_Token;
+    }
+    
+    public Integer getToken_Expiration() {
+        return Token_Expiration;
+    }
+
+    public void setToken_Expiration(Integer token_Expiration) {
+        Token_Expiration = token_Expiration;
     }
 
     public String getSalt() {

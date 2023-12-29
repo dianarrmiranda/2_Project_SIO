@@ -4,15 +4,19 @@ import { RiEyeLine, RiShoppingCartLine } from 'react-icons/ri';
 import axios from 'axios';
 import { API_BASE_URL } from '../../constants';
 
+import useAuth from '../../hooks/useAuth';
+
 const ProductCard = ({ product, className, isStore }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState([]);
   const [sucess, setSucess] = useState(false);
 
+  const { auth, setAuth } = useAuth();
+  const acessToken = auth?.acessToken;
+
   useEffect(() => {
-    const data_user = JSON.parse(localStorage.getItem('user'));
-    setUser(data_user);
-  }, []);
+    setUser(auth.user);
+  }, [auth]);
 
   return (
     <div
@@ -41,15 +45,15 @@ const ProductCard = ({ product, className, isStore }) => {
           </h3>
           <p>{product.description}</p>
           <div className="flex justify-between py-2 align-text-bottom">
-            <p className="text-accent font-bold">{product.price}€</p>
-            <div className="card-actions justify-end">
+            <p className="font-bold text-accent">{product.price}€</p>
+            <div className="justify-end card-actions">
               {sucess ? (
                 <div
                   className="tooltip tooltip-accent tooltip-open tooltip-bottom"
                   data-tip="Added to cart!"
                 >
                   <button
-                    className=" btn-accent p-1 rounded-md  "
+                    className="p-1 rounded-md btn-accent"
                     onClick={() => {
                       axios
                         .post(
@@ -70,11 +74,11 @@ const ProductCard = ({ product, className, isStore }) => {
                 </div>
               ) : (
                 <button
-                  className=" btn-accent p-1 rounded-md  "
+                  className="p-1 rounded-md btn-accent"
                   onClick={() => {
                     axios
                       .post(
-                        `${API_BASE_URL}/user/addToCart?prod=${product.id}&userID=${user.id}&quantity=1&token=${user.token}`
+                        `${API_BASE_URL}/user/addToCart?prod=${product.id}&userID=${user.id}&quantity=1&token=${acessToken}`
                       )
                       .then((res) => {
                         if (res.status === 200) {
@@ -82,6 +86,15 @@ const ProductCard = ({ product, className, isStore }) => {
                           setTimeout(() => {
                             setSucess(false);
                           }, 2000);
+                          console.log('Added to cart -> ', res.data);
+                          setAuth({
+                            ...auth,
+                            user: {
+                              ...auth.user,
+                              shopping_Cart: res.data,
+                            },
+                          });
+                            
                         }
                       });
                   }}
@@ -90,7 +103,7 @@ const ProductCard = ({ product, className, isStore }) => {
                 </button>
               )}
               <button
-                className=" btn-primary p-1 rounded-md "
+                className="p-1 rounded-md btn-primary"
                 onClick={() => navigate(`/store/product/${product.id}`)}
               >
                 <RiEyeLine />

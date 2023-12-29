@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import Rating from '@mui/material/Rating';
+import useAuth from '../../hooks/useAuth';
 
 const ProductComments = ({ comments, user_id, product, setComments }) => {
   const [newHeader, setNewHeader] = useState('');
   const [newComment, setNewComment] = useState('');
   const [newRating, setNewRating] = useState('');
 
-  const username = JSON.parse(localStorage.getItem('user'));
+  const { auth } = useAuth();
+  const username = auth?.user;
+  
 
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
@@ -66,7 +69,7 @@ const ProductComments = ({ comments, user_id, product, setComments }) => {
                       precision={0.5}
                       className="my-2"
                     />
-                    <h3 className="text-accent text-lg font-bold">
+                    <h3 className="text-lg font-bold text-accent">
                       {comment.header}
                     </h3>
                     <p className="font-light">{comment.description}</p>
@@ -86,7 +89,7 @@ const ProductComments = ({ comments, user_id, product, setComments }) => {
         <h2 className="font-light divider ">Let us know what you think</h2>
         {/* Formulário para adicionar comentários */}
         {user_id == null && (
-          <h3 className="font-bold my-2 text-accent divider">
+          <h3 className="my-2 font-bold text-accent divider">
             - You must be logged in to add a review -
           </h3>
         )}
@@ -96,7 +99,7 @@ const ProductComments = ({ comments, user_id, product, setComments }) => {
         >
           <span className="flex flex-col">
             <label
-              className="font-light my-2"
+              className="my-2 font-light"
               htmlFor="rating"
             >
               Your rating
@@ -114,11 +117,11 @@ const ProductComments = ({ comments, user_id, product, setComments }) => {
             />
           </span>
 
-          <div className="mt-2 flex flex-col">
-            <label className="font-light my-2">Your review</label>
+          <div className="flex flex-col mt-2">
+            <label className="my-2 font-light">Your review</label>
             <span>
               <input
-                className="p-2 input-sm rounded-lg my-2 w-full"
+                className="w-full p-2 my-2 rounded-lg input-sm"
                 type="text"
                 placeholder="Title"
                 value={newHeader}
@@ -135,7 +138,7 @@ const ProductComments = ({ comments, user_id, product, setComments }) => {
               disabled={user_id == null}
             />
           </div>
-          <div className="my-2 text-right flex">
+          <div className="flex my-2 text-right">
             <button
               type="submit"
               className="btn btn-primary"

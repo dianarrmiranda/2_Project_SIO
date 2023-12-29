@@ -7,11 +7,16 @@ import Footer from '../layout/Footer';
 import { RiEyeCloseLine, RiEyeLine, RiEditLine, RiLogoutBoxLine, RiDeleteBinLine, RiFilePdf2Line } from 'react-icons/ri';
 import axios from 'axios';
 
+import useAuth from '../../hooks/useAuth';
+
 const ProductPage = () => {
-  const { id } = JSON.parse(localStorage.getItem('user'));
-  const { token } = JSON.parse(localStorage.getItem('user'));
+  const { auth, setAuth } = useAuth();
+
+  const id = auth?.user?.id;
+
+  const token = auth?.acessToken;
   const navigate = useNavigate();
-  
+
   const [user, setUser] = useState({});
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -28,26 +33,39 @@ const ProductPage = () => {
 
   const [messageChangePassFailed, setMessageChangePassFailed] = useState(false);
 
-
   const [score, setScore] = useState(0);
 
   useEffect(() => {
     const initialize = async () => {
+      if (Object.keys(auth).length === 0) {
+        navigate('/login');
+      }
       try {
         const data = await fetchData(`/user/view?id=${id}&token=${token}`);
         setUser(data);
-        console.log('User ->', data);
+        //setUser(auth.user);
+
+        if (auth.user.request_History.length != user.request_History.length) {
+          setAuth({
+            ...auth,
+            user: {
+              ...auth.user,
+              request_History: user.request_History,
+            },
+          });
+        }
+
+        console.log('User ->', auth.user);
       } catch (error) {
         console.error('Failed to fetch data: ', error);
       }
     };
-   
+
     initialize();
-   }, []);
-   
+  }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
+    setAuth({});
     navigate('/login');
   };
 
@@ -55,11 +73,11 @@ const ProductPage = () => {
     setPassword(event.target.value.replace(/\s+/g, ' '));
     const password = event.target.value.replace(/\s+/g, ' ');
     const checks = [
-      {regex: /^.{12,128}$/u, points: 1},
-      {regex: /[a-z]/, points: 1},
-      {regex: /[A-Z]/, points: 1},
-      {regex: /[0-9]/, points: 1},
-      {regex: /[\p{S}\p{P}]/u, points: 1},
+      { regex: /^.{12,128}$/u, points: 1 },
+      { regex: /[a-z]/, points: 1 },
+      { regex: /[A-Z]/, points: 1 },
+      { regex: /[0-9]/, points: 1 },
+      { regex: /[\p{S}\p{P}]/u, points: 1 },
       { regex: /[^a-zA-Z0-9]/, points: 1 },
     ];
 
@@ -71,7 +89,6 @@ const ProductPage = () => {
     });
 
     setScore(s);
-    
   };
 
   const handleChangePass = async (event) => {
@@ -91,7 +108,11 @@ const ProductPage = () => {
       setShowAlertSamePass(false);
     }
 
-    if (!lengthRegex.test(password) || !charRegex.test(password) || password !== newPassword) {
+    if (
+      !lengthRegex.test(password) ||
+      !charRegex.test(password) ||
+      password !== newPassword
+    ) {
       return;
     }
 
@@ -101,20 +122,23 @@ const ProductPage = () => {
       formData.append('token', token);
       formData.append('newPassword', password);
       formData.append('oldPassword', actualPassword);
-      
-      axios.post('http://localhost:8080/user/updatePassword', formData).then((response) => {
-        if (response.status === 200) {
-          setShowChangeFail(false);
-          setchangeSuccess(true);
-          setTimeout(() => {
-            document.getElementById('modal_ChangePass').close();
-            setchangeSuccess(false);
-          }, 2000);
-        }
-      }).catch((error) => {
-        setShowChangeFail(true);
-        setMessageChangePassFailed(error.response.data.message);
-      });
+
+      axios
+        .post('http://localhost:8080/user/updatePassword', formData)
+        .then((response) => {
+          if (response.status === 200) {
+            setShowChangeFail(false);
+            setchangeSuccess(true);
+            setTimeout(() => {
+              document.getElementById('modal_ChangePass').close();
+              setchangeSuccess(false);
+            }, 2000);
+          }
+        })
+        .catch((error) => {
+          setShowChangeFail(true);
+          setMessageChangePassFailed(error.response.data.message);
+        });
     } catch (error) {
       console.error('Error during API call', error);
     }
@@ -169,7 +193,6 @@ const ProductPage = () => {
     }
   };
 
-
   return (
     <div className="bg-base-200">
       <Navbar />
@@ -178,21 +201,22 @@ const ProductPage = () => {
         id="body"
         className="flex flex-wrap mx-[5%]"
       >
-        <div className="w-full m-4 p-4 flex flex-row bg-base-100 rounded-xl shadow-lg">
-          <div className="avatar w-40">
+        <div className="flex flex-row w-full p-4 m-4 shadow-lg bg-base-100 rounded-xl">
+          <div className="w-40 avatar">
             <img
-              src={'../../' + user.image}
+              //src={'../../' + user.image}
+              src={user.image}
               alt="User Image"
-              className="w-full h-full object-cover rounded-xl"
+              className="object-cover w-full h-full rounded-xl"
             />
           </div>
           <span className="mx-4">
-            <h1 className="text-2xl font-bold mb-2">{user.name}</h1>
-            <p className="text-lg mb-2">{user.email}</p>
+            <h1 className="mb-2 text-2xl font-bold">{user.name}</h1>
+            <p className="mb-2 text-lg">{user.email}</p>
 
             <div className="flex">
               <button
-                className="btn btn-accent mb-2 mr-2"
+                className="mb-2 mr-2 btn btn-accent"
                 onClick={() =>
                   document.getElementById('modal_ChangePass').showModal()
                 }
@@ -201,7 +225,7 @@ const ProductPage = () => {
                 Change Password
               </button>
               <button
-                className="btn btn-accent mb-2"
+                className="mb-2 btn btn-accent"
                 onClick={handleLogout}
               >
                 <RiLogoutBoxLine className="text-xl"/>
@@ -225,8 +249,8 @@ const ProductPage = () => {
           </span>
         </div>
 
-        <div className="w-full h-full m-4 p-4 rounded-xl shadow-lg bg-base-100">
-          <h2 className="text-2xl font-bold mt-4 mb-2">My orders</h2>
+        <div className="w-full h-full p-4 m-4 shadow-lg rounded-xl bg-base-100">
+          <h2 className="mt-4 mb-2 text-2xl font-bold">My orders</h2>
           {user?.request_History?.length === 0 ? (
             <p>No purchases done yet</p>
           ) : (
@@ -240,8 +264,8 @@ const ProductPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {user.request_History?.map((purchase) => (
-                  <tr key={purchase.id}>
+                {user.request_History?.map((purchase, idx) => (
+                  <tr key={idx}>
                     <td>{purchase.id}</td>
                     <td>Delivered</td>
                     <td>{purchase.total.toFixed(2)}€</td>
@@ -267,12 +291,12 @@ const ProductPage = () => {
         className="modal"
       >
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Change Password!</h3>
+          <h3 className="text-lg font-bold">Change Password!</h3>
           {showChangeFail && (
             <div className="alert alert-error">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-6 w-6"
+                className="w-6 h-6 stroke-current shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -296,7 +320,9 @@ const ProductPage = () => {
                 className="w-full input input-bordered join-item"
                 required
                 value={actualPassword}
-                onChange={(e) => setActualPassword(e.target.value.replace(/\s+/g, ' '))}
+                onChange={(e) =>
+                  setActualPassword(e.target.value.replace(/\s+/g, ' '))
+                }
               />
               <button
                 type="button"
@@ -329,29 +355,41 @@ const ProductPage = () => {
               </button>
             </div>
           </div>
-          {password.length > 0 && score < 3 &&  (
+          {password.length > 0 && score < 3 && (
             <div>
               <span className="text-error">Password is too weak!</span>
-              <progress className="progress progress-error " value={score} max="6"></progress>
+              <progress
+                className="progress progress-error "
+                value={score}
+                max="6"
+              ></progress>
             </div>
           )}
           {password.length > 0 && score >= 3 && score < 5 && (
             <div>
               <span className="text-warning">Password is medium!</span>
-              <progress className="progress progress-warning " value={score} max="6"></progress>
+              <progress
+                className="progress progress-warning "
+                value={score}
+                max="6"
+              ></progress>
             </div>
           )}
           {password.length > 0 && score >= 5 && (
             <div>
               <span className="text-success">Password is strong!</span>
-              <progress className="progress progress-success " value={score} max="6"></progress>
+              <progress
+                className="progress progress-success "
+                value={score}
+                max="6"
+              ></progress>
             </div>
           )}
           {showAlertPass && (
             <div className="alert alert-warning">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-6 w-6"
+                className="w-6 h-6 stroke-current shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -362,7 +400,8 @@ const ProductPage = () => {
                 />
               </svg>
               <span>
-                Warning: Password must have beetwen 12 and 128 characters. It can contain letters, numbers and symbols!
+                Warning: Password must have beetwen 12 and 128 characters. It
+                can contain letters, numbers and symbols!
               </span>
             </div>
           )}
@@ -377,7 +416,9 @@ const ProductPage = () => {
                 className="w-full input input-bordered join-item"
                 required
                 value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value.replace(/\s+/g, ' '))}
+                onChange={(e) =>
+                  setNewPassword(e.target.value.replace(/\s+/g, ' '))
+                }
               />
               <button
                 type="button"
@@ -392,7 +433,7 @@ const ProductPage = () => {
             <div className="alert alert-error">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-6 w-6"
+                className="w-6 h-6 stroke-current shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -409,7 +450,7 @@ const ProductPage = () => {
             <div className="alert alert-success">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-6 w-6"
+                className="w-6 h-6 stroke-current shrink-0"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -422,10 +463,10 @@ const ProductPage = () => {
               <span>Pass Changed Successfully!</span>
             </div>
           )}
-          <div className="modal-action flex">
+          <div className="flex modal-action">
             <form method="dialog">
               <button
-                className="btn btn-primary mr-2"
+                className="mr-2 btn btn-primary"
                 onClick={handleChangePass}
               >
                 Submit
@@ -467,7 +508,7 @@ const ProductPage = () => {
         className="modal"
       >
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Order Details</h3>
+          <h3 className="text-lg font-bold">Order Details</h3>
           <table className="table w-full">
             <thead>
               <tr>
@@ -478,8 +519,8 @@ const ProductPage = () => {
               </tr>
             </thead>
             <tbody>
-              {selectedOrder?.map((item) => (
-                <tr key={item.id}>
+              {selectedOrder?.map((item, idx) => (
+                <tr key={idx}>
                   <td>{item.prod.name}</td>
                   <td>{item.prod.price}€</td>
                   <td>{item.quantity}</td>
@@ -488,7 +529,7 @@ const ProductPage = () => {
               ))}
             </tbody>
           </table>
-          <div className="modal-action flex">
+          <div className="flex modal-action">
             <form method="dialog">
               <button className="btn">Close</button>
             </form>

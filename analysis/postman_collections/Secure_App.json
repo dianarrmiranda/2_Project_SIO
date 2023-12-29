@@ -1,5 +1,6 @@
 {
 	"info": {
+
 		"_postman_id": "c5b7d5a1-eaa4-4f3e-aa43-aba57d07fdb2",
 		"name": "Proj2_SIO",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -20,12 +21,12 @@
 								{
 									"key": "img",
 									"type": "file",
-									"src": "/home/frostywolf/Pictures/index.jpg"
+									"src": "/home/frostywolf/Pictures/unknown.png"
 								}
 							]
 						},
 						"url": {
-							"raw": "localhost:8080/user/add?name=Joana Jacinto&email=jo@ana.com&password=mysecretpass&cartao=123212331233&role=user",
+							"raw": "localhost:8080/user/add?name=Joana Jacinto&email=jo@ana.com&password=Mysecretpass123_&cartao=123212331233&role=user",
 							"host": [
 								"localhost"
 							],
@@ -45,7 +46,7 @@
 								},
 								{
 									"key": "password",
-									"value": "mysecretpass"
+									"value": "Mysecretpass123_"
 								},
 								{
 									"key": "cartao",
@@ -61,12 +62,47 @@
 					"response": []
 				},
 				{
+					"name": "Add User By JWT",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "img",
+									"type": "file",
+									"src": "/home/frostywolf/Pictures/unknown.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/user/addByJWT?jwtToken=eyJhbGciOiJSUzI1NiIsImtpZCI6IjQ1NmI1MmM4MWUzNmZlYWQyNTkyMzFhNjk0N2UwNDBlMDNlYTEyNjIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI2ODE1NTE0ODg3NTYtY3E3dmVwczE3b2todmE5NGRjN2FscGRydWRtdjBiYnQuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI2ODE1NTE0ODg3NTYtY3E3dmVwczE3b2todmE5NGRjN2FscGRydWRtdjBiYnQuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDIyNjg1MjEwMzcwMTk5MzY1MTEiLCJlbWFpbCI6InhwZWRybzkwLjFAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5iZiI6MTcwMzc5MDA1OCwibmFtZSI6IkRhbmsgTWVtZXMiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jS1VabzJuUmpOb1A4TDlIZl9STjdtR1AwREdlMEotMGptN2I0OUVrMURPPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkRhbmsiLCJmYW1pbHlfbmFtZSI6Ik1lbWVzIiwibG9jYWxlIjoicHQtUFQiLCJpYXQiOjE3MDM3OTAzNTgsImV4cCI6MTcwMzc5Mzk1OCwianRpIjoiZGEzYTFmMTk0MjJiYjYzMTUwNTIwZDlkMWM5N2U2ODcwOWEzNTEzNSJ9.pOQ2UmTg8A65jZKNeJXhTQ9P_-Kn6or9x3bqxgpohUP_GGVC4TCD0oWJomsrPJV9LD1JGiBt1wFzq8x9pUx7unitwFtecV4najTbl_y0tynT-7hkv1yKal4YJKgy7y6tVF-xsDeqYve764kAqsSGJzgxpqfrfBLfeWRy-YNDZzg8nHVY80dNIg0FKU9fALEUdf2wGFXalENsK7-EOYN4mk330u2WdzqzgW-EF9StypU-RKlku7qT6oUMPg9dGaANppneRiZsPjTihuipyV0m9dCsmpruTHE5etebmHNWrFXcumzOAi35xxno8BATr21uNDByjl-joEEo3JRiwo9zjQ",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"addByJWT"
+							],
+							"query": [
+								{
+									"key": "jwtToken",
+									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjQ1NmI1MmM4MWUzNmZlYWQyNTkyMzFhNjk0N2UwNDBlMDNlYTEyNjIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI2ODE1NTE0ODg3NTYtY3E3dmVwczE3b2todmE5NGRjN2FscGRydWRtdjBiYnQuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI2ODE1NTE0ODg3NTYtY3E3dmVwczE3b2todmE5NGRjN2FscGRydWRtdjBiYnQuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDIyNjg1MjEwMzcwMTk5MzY1MTEiLCJlbWFpbCI6InhwZWRybzkwLjFAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5iZiI6MTcwMzc5MDA1OCwibmFtZSI6IkRhbmsgTWVtZXMiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jS1VabzJuUmpOb1A4TDlIZl9STjdtR1AwREdlMEotMGptN2I0OUVrMURPPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkRhbmsiLCJmYW1pbHlfbmFtZSI6Ik1lbWVzIiwibG9jYWxlIjoicHQtUFQiLCJpYXQiOjE3MDM3OTAzNTgsImV4cCI6MTcwMzc5Mzk1OCwianRpIjoiZGEzYTFmMTk0MjJiYjYzMTUwNTIwZDlkMWM5N2U2ODcwOWEzNTEzNSJ9.pOQ2UmTg8A65jZKNeJXhTQ9P_-Kn6or9x3bqxgpohUP_GGVC4TCD0oWJomsrPJV9LD1JGiBt1wFzq8x9pUx7unitwFtecV4najTbl_y0tynT-7hkv1yKal4YJKgy7y6tVF-xsDeqYve764kAqsSGJzgxpqfrfBLfeWRy-YNDZzg8nHVY80dNIg0FKU9fALEUdf2wGFXalENsK7-EOYN4mk330u2WdzqzgW-EF9StypU-RKlku7qT6oUMPg9dGaANppneRiZsPjTihuipyV0m9dCsmpruTHE5etebmHNWrFXcumzOAi35xxno8BATr21uNDByjl-joEEo3JRiwo9zjQ"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "View User By ID",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/user/view?id=7&token=hIJa5W1N7u0Yveql85klPe_4LgHeEHJQ0C_0UtfvzHQKWj_JRQJHf61tHOO5d3onW4US0ApltPs_DpYVHOANLA",
+							"raw": "localhost:8080/user/view?id=2&token=rC1E6u4neNhzQjBiZc3Dl4hVB0Wr9hsd2F7w0SjKGD8ouDxeJigp3u6xYbM1OS3W3SqEWenVgle3xddM5EwWBA",
 							"host": [
 								"localhost"
 							],
@@ -78,11 +114,11 @@
 							"query": [
 								{
 									"key": "id",
-									"value": "7"
+									"value": "2"
 								},
 								{
 									"key": "token",
-									"value": "hIJa5W1N7u0Yveql85klPe_4LgHeEHJQ0C_0UtfvzHQKWj_JRQJHf61tHOO5d3onW4US0ApltPs_DpYVHOANLA"
+									"value": "rC1E6u4neNhzQjBiZc3Dl4hVB0Wr9hsd2F7w0SjKGD8ouDxeJigp3u6xYbM1OS3W3SqEWenVgle3xddM5EwWBA"
 								}
 							]
 						}
@@ -224,7 +260,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/user/addToCart?prod=11&userID=2&quantity=2&token=_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA",
+							"raw": "localhost:8080/user/addToCart?prod=12&userID=2&quantity=7&token=FqCtfHP7zmbUP8SwKb9hk-I3jLya1l179dxURun0-BxxxYAKZjBaKsc9VI5agZnc1f6YF1-Qy2bmBGlkvSHQkQ",
 							"host": [
 								"localhost"
 							],
@@ -236,7 +272,7 @@
 							"query": [
 								{
 									"key": "prod",
-									"value": "11"
+									"value": "12"
 								},
 								{
 									"key": "userID",
@@ -244,11 +280,11 @@
 								},
 								{
 									"key": "quantity",
-									"value": "2"
+									"value": "7"
 								},
 								{
 									"key": "token",
-									"value": "_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA"
+									"value": "FqCtfHP7zmbUP8SwKb9hk-I3jLya1l179dxURun0-BxxxYAKZjBaKsc9VI5agZnc1f6YF1-Qy2bmBGlkvSHQkQ"
 								}
 							]
 						}
@@ -294,7 +330,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/user/requestCurrentCart?userID=1",
+							"raw": "localhost:8080/user/requestCurrentCart?userID=2&token=FqCtfHP7zmbUP8SwKb9hk-I3jLya1l179dxURun0-BxxxYAKZjBaKsc9VI5agZnc1f6YF1-Qy2bmBGlkvSHQkQ",
 							"host": [
 								"localhost"
 							],
@@ -306,7 +342,11 @@
 							"query": [
 								{
 									"key": "userID",
-									"value": "1"
+									"value": "2"
+								},
+								{
+									"key": "token",
+									"value": "FqCtfHP7zmbUP8SwKb9hk-I3jLya1l179dxURun0-BxxxYAKZjBaKsc9VI5agZnc1f6YF1-Qy2bmBGlkvSHQkQ"
 								}
 							]
 						}
@@ -609,7 +649,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/product/addReview?productID=11&userID=1&header=Adorei o Produto&description=Completamente mudou a minha vida!&stars=4",
+							"raw": "localhost:8080/product/addReview?productID=11&userID=2&token=_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA&header=Adorei o Produto&description=Completamente mudou a minha vida!&stars=4.5",
 							"host": [
 								"localhost"
 							],
@@ -625,7 +665,11 @@
 								},
 								{
 									"key": "userID",
-									"value": "1"
+									"value": "2"
+								},
+								{
+									"key": "token",
+									"value": "_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA"
 								},
 								{
 									"key": "header",
@@ -637,7 +681,7 @@
 								},
 								{
 									"key": "stars",
-									"value": "4"
+									"value": "4.5"
 								}
 							]
 						}
