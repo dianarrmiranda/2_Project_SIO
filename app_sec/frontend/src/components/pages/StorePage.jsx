@@ -7,9 +7,9 @@ import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';
 import ProductCard from '../layout/ProductCard';
 import Filter from '../layout/Filter';
-import axios from 'axios';
+import axios from "../../api/axios";
 
-import useAuth from '../../hooks/useAuth';
+import useSessionStorage from '../../hooks/useSessionStorage';
 
 const StorePage = () => {
   const navigate = useNavigate();
@@ -20,6 +20,7 @@ const StorePage = () => {
 
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [role, setRole] = useState('');
 
   const [isLoading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -46,21 +47,23 @@ const StorePage = () => {
 
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const { auth } = useAuth();
-  const { acessToken } = auth;
-  const { user } = auth; 
+  const [item, setItem] = useSessionStorage('auth');
+  const { id, token } = item; 
 
   useEffect(() => {
     const initialize = async () => {
       {
         const data_products = await fetchData('/product/list');
         const data_categories = await fetchData('/product/category/list');
-
-        if (data_products && data_categories) {
+        const data_roles = await fetchData(`/user/view?id=${id}&token=${token}`);
+        
+        
+        if (data_products && data_categories && data_roles) {
           setLoading(false);
         }
         setProducts(data_products);
         setCategories(data_categories);
+        setRole(data_roles.role);
       }
     };
 
@@ -77,20 +80,6 @@ const StorePage = () => {
         }
       });
     }
-  }, []);
-
-  const [role, setRole] = useState('');
-
-  useEffect(() => {
-    const initialize = async () => {
-      if (user) {
-        const { id } = user;
-        const acessToken = auth.acessToken;
-        const data = await fetchData(`/user/view?id=${id}&token=${acessToken}`);
-        setRole(data.role);
-      }
-    };
-    initialize();
   }, []);
 
   const handleNameChange = (event) => {

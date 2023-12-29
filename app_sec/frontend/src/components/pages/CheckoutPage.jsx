@@ -8,11 +8,11 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-import axios from "axios";
+import axios from "../../api/axios";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
+import useSessionStorage from "../../hooks/useSessionStorage";
 
-import { fetchData } from "../../utils";
+import { fetchData } from "../../utils"; // TODO:
 import { maskCreditCard } from "../../utils";
 import { API_BASE_URL } from "../../constants";
 import Warning from "../layout/Warning";
@@ -20,13 +20,11 @@ import { Autocomplete, TextField } from "@mui/material";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
-  const { auth } = useAuth();
-
-  const username = auth?.user;
-  const acessToken = auth?.acessToken;
+  const [item, setItem] = useSessionStorage("auth");
+  
+  const username = item;
   const [cart, setCart] = useState([]);
   const [user, setUser] = useState([]);
-  const [cards, setCards] = useState([]);
   const [newCard, setNewCard] = useState({
     card_name: "",
     card_number: "",
@@ -64,30 +62,13 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     const initialize = async () => {
-      const saved_cards = JSON.parse(localStorage.getItem("cards"));
       const data_user = await fetchData(
-        `/user/view?id=${username.id}&token=${acessToken}`
+        `/user/view?id=${username.id}&token=${username.token}`
       );
 
       if (data_user) {
         setUser(data_user);
         setCart(data_user.shopping_Cart);
-      }
-
-      const defaultCard = {
-        card_name: "Default",
-        card_number: data_user?.credit_Card,
-        expiration_date: "01/2025",
-        cvv: "123",
-      };
-
-      if (saved_cards) {
-        if (saved_cards.length == 0) setCards([defaultCard]);
-        else {
-          setCards(saved_cards);
-        }
-      } else {
-        setCards([defaultCard]);
       }
 
       fetch('https://restcountries.com/v3.1/all?fields=name')
@@ -99,17 +80,9 @@ const CheckoutPage = () => {
 
       console.log("User ->", user);
       console.log("Cart -> ", cart);
-      console.log("Cards -> ", cards);
-
     };
     initialize();
   }, []);
-
-  useEffect(() => {
-    if (cards.length > 0) {
-      localStorage.setItem("cards", JSON.stringify(cards));
-    }
-  }, [cards]);
 
   const handleDeliveryDay = (date) => {
     const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
@@ -409,7 +382,7 @@ const CheckoutPage = () => {
       try {
         axios
           .post(
-            `${API_BASE_URL}/user/requestCurrentCart?userID=${user.id}&token=${acessToken}`
+            `${API_BASE_URL}/user/requestCurrentCart?userID=${user.id}&token=${user.token}`
           )
           .then((res) => {
             if (res.status === 200) {
@@ -605,7 +578,6 @@ const CheckoutPage = () => {
                 className="w-1/4 my-2 btn btn-primary"
                 type="button"
                 onClick={() => {
-                  setCards([...cards, newCard]);
                   setNewCard({
                     card_name: "",
                     card_number: "",
@@ -629,31 +601,6 @@ const CheckoutPage = () => {
                 <Warning msg="Please enter a valid expiration date" error />
               )}
             </div>
-            {cardAlert && <Warning msg="Please select a card" error />}
-            <div className="flex flex-wrap justify-start my-2">
-              {cards?.map((card, idx) => (
-                <div
-                  key={idx}
-                  className={`card w-[30%]  flex flex-row m-2 ${
-                    form.card === idx
-                      ? "border-2 border-accent bg-secondary"
-                      : "bg-base-200"
-                  }`}
-                  onClick={() => handleCard(idx)}
-                >
-                  <div className="flex justify-between w-full card-body ">
-                    <h1 className="flex flex-row">
-                      <RiBankCardLine className="text-2xl" />
-                      <span className="mx-2 font-bold card-title">
-                        {card.card_name}
-                      </span>
-                    </h1>
-                    <span>{maskCreditCard(card.card_number)}</span>
-                    <span>{card.expiration_date}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
             <button
               className="w-full my-2 btn btn-primary"
               type="submit"
@@ -666,8 +613,8 @@ const CheckoutPage = () => {
 
         <div className="w-[35%] m-4">
           <h1 className="text-lg font-bold">Your order </h1>
-          {cart.map((item) => (
-            <div key={item.id} className="flex flex-row justify-between m-4">
+          {cart.map((item, idx) => (
+            <div key={idx} className="flex flex-row justify-between m-4">
               <div className="flex justify-between w-full ">
                 <h1>
                   <span className="font-bold ">{item.quantity}x</span>{" "}

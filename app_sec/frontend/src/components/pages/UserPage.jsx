@@ -1,20 +1,23 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import useSessionStorage from '../../hooks/useSessionStorage';
+
+import axios from '../../api/axios';
+
 import Navbar from '../layout/Navbar';
-
-import { fetchData } from '../../utils';
 import Footer from '../layout/Footer';
-import { RiEyeCloseLine, RiEyeLine, RiEditLine, RiLogoutBoxLine, RiDeleteBinLine, RiFilePdf2Line } from 'react-icons/ri';
-import axios from 'axios';
 
-import useAuth from '../../hooks/useAuth';
+import {
+  RiEyeCloseLine,
+  RiEyeLine,
+  RiEditLine,
+  RiLogoutBoxLine,
+  RiDeleteBinLine,
+  RiFilePdf2Line,
+} from 'react-icons/ri';
 
 const ProductPage = () => {
-  const { auth, setAuth } = useAuth();
-
-  const id = auth?.user?.id;
-
-  const token = auth?.acessToken;
+  const [item, setItem, removeItem] = useSessionStorage('auth');
   const navigate = useNavigate();
 
   const [user, setUser] = useState({});
@@ -37,25 +40,22 @@ const ProductPage = () => {
 
   useEffect(() => {
     const initialize = async () => {
-      if (Object.keys(auth).length === 0) {
+      if (!item) {
         navigate('/login');
       }
       try {
-        const data = await fetchData(`/user/view?id=${id}&token=${token}`);
-        setUser(data);
-        //setUser(auth.user);
-
-        if (auth.user.request_History.length != user.request_History.length) {
-          setAuth({
-            ...auth,
-            user: {
-              ...auth.user,
-              request_History: user.request_History,
-            },
+        const { id, token } = item;
+        const data = await axios
+          .get(`/user/view?id=${id}&token=${token}`)
+          .then((res) => {
+            console.log('res -> ', res.data);
+            return res.data;
           });
-        }
+        console.log('data -> ', data);
 
-        console.log('User ->', auth.user);
+        setUser(data);
+
+        console.log('User ->', item);
       } catch (error) {
         console.error('Failed to fetch data: ', error);
       }
@@ -65,7 +65,7 @@ const ProductPage = () => {
   }, []);
 
   const handleLogout = () => {
-    setAuth({});
+    removeItem();
     navigate('/login');
   };
 
@@ -155,7 +155,10 @@ const ProductPage = () => {
       formData.append('id', id);
       formData.append('token', token);
 
-      const response = await axios.put('http://localhost:8080/user/deleteUserData', formData);
+      const response = await axios.put(
+        'http://localhost:8080/user/deleteUserData',
+        formData
+      );
       if (response.status === 200) {
         handleLogout();
       }
@@ -166,18 +169,21 @@ const ProductPage = () => {
 
   const handleExportData = async () => {
     try {
-      const response = await axios.get('http://localhost:8080/user/exportUserData', {
-        params: {
-          id: id,
-          token: token,
-        },
-        responseType: 'arraybuffer',
-      });
-  
+      const response = await axios.get(
+        'http://localhost:8080/user/exportUserData',
+        {
+          params: {
+            id: id,
+            token: token,
+          },
+          responseType: 'arraybuffer',
+        }
+      );
+
       if (response.status === 200) {
         // Create a Blob from the PDF data
         const blob = new Blob([response.data], { type: 'application/pdf' });
-  
+
         // Create a download link and click it
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -221,28 +227,30 @@ const ProductPage = () => {
                   document.getElementById('modal_ChangePass').showModal()
                 }
               >
-                <RiEditLine className="text-xl"/>
+                <RiEditLine className="text-xl" />
                 Change Password
               </button>
               <button
                 className="mb-2 btn btn-accent"
                 onClick={handleLogout}
               >
-                <RiLogoutBoxLine className="text-xl"/>
+                <RiLogoutBoxLine className="text-xl" />
                 Logout
               </button>
               <button
                 className="btn btn-accent bg-[#ce3a27] hover:bg-[#66180e] ml-2 mb-2"
-                onClick={() => document.getElementById('modal_deleteAccount').showModal()}
+                onClick={() =>
+                  document.getElementById('modal_deleteAccount').showModal()
+                }
               >
-                <RiDeleteBinLine className="text-xl"/>
-                Delete my account 
+                <RiDeleteBinLine className="text-xl" />
+                Delete my account
               </button>
               <button
-                className="btn btn-accent flex-right ml-2 mb-2"
+                className="mb-2 ml-2 btn btn-accent flex-right"
                 onClick={handleExportData}
               >
-                <RiFilePdf2Line className="text-xl"/>
+                <RiFilePdf2Line className="text-xl" />
                 Export my data
               </button>
             </div>
@@ -484,13 +492,13 @@ const ProductPage = () => {
         className="modal"
       >
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Delete My Account</h3>
+          <h3 className="text-lg font-bold">Delete My Account</h3>
           <p>Are you sure you want to delete your account?</p>
           <p>This action is irreversible!</p>
-          <div className="modal-action flex">
+          <div className="flex modal-action">
             <form method="dialog">
               <button
-                className="btn btn-primary mr-2"
+                className="mr-2 btn btn-primary"
                 onClick={handleDeleteAccount}
               >
                 Confirm Deletion

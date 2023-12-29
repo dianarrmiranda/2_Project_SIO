@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 
 import { RiEyeLine, RiEyeCloseLine } from 'react-icons/ri';
-import { jwtDecode } from 'jwt-decode';
-import  useAuth from '../../hooks/useAuth';
+import useSessionStorage from '../../hooks/useSessionStorage';
 
+import axios from '../../api/axios';
 import { fetchData } from '../../utils';
 
 const LoginPage = () => {
@@ -17,27 +17,19 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
-  const { setAuth } = useAuth();
+  const [value, setItem] = useSessionStorage('auth');
 
   function handleGoogleResponse(response) {
     console.log('google response -> ', response.credential);
-    const user = jwtDecode(response.credential);
-    console.log('user -> ', user);
-    const id = parseInt(user.sub);    
-    
-    setAuth({
-      isAuthenticated: true,
-      user: {
-        id: id,
-        email: user.email,
-        name: user.name,
-        image: user.picture,
-        shopping_Cart: [],
-        request_History: [],
-      },
-      acessToken: response.credential,
-    });
-    navigate('/');
+    axios
+      .post(`user/addByJWT?jwtToken=${response.credential}`)
+      .then((res) => {
+        console.log('res -> ', res);
+        setItem(res.data);
+      })
+      .then(() => {
+        navigate('/');
+      });
   }
 
   const handleLogin = async (event) => {
@@ -53,18 +45,7 @@ const LoginPage = () => {
         setPassword('');
         setFailed(false);
         console.log('response -> ', response);
-        setAuth({
-          isAuthenticated: true,
-          user: {
-            id: response.id,
-            email: response.email,
-            name: response.name,
-            image: response.image,
-            shopping_Cart: response.shopping_Cart,
-            request_History: response.request_History,
-          },
-          acessToken: response.token,
-        });
+        setItem(response);
         navigate('/');
       } else {
         console.error('Login failed');

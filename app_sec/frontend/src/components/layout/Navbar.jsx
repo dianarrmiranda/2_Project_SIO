@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { fetchData } from "../../utils";
 
-import useAuth from "../../hooks/useAuth";
+import axios from "../../api/axios";
+
+import useSessionStorage from "../../hooks/useSessionStorage";
 
 import {
   RiAccountCircleLine,
@@ -21,23 +22,23 @@ const Navbar = () => {
     localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
   );
   const [userInfo, setUserInfo] = useState([]);
-  const [cartItems, setCartItems] = useState(0);
-  const { auth } = useAuth();
-  const user = auth.user;
+  const [noItems, setNoItems] = useState(0);
+  const [user] = useSessionStorage("auth");
   
   useEffect(() => {
     const initialize = async () => {
-      const user = auth.user;
-      const token = auth.acessToken;
-
-      user && fetchData(`/user/view?id=${user.id}&token=${token}`).then((res) => {
+      user && axios.get(`/user/view?id=${user.id}&token=${user.token}`).then((res) => {
         setUserInfo(res);
       })
     }
     initialize();
   }, []);
   
-  
+  useEffect(() => {
+    if (user) {
+      setNoItems(user.shopping_Cart.length);
+    }
+  }, [user?.shopping_Cart]);
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
@@ -85,7 +86,7 @@ const Navbar = () => {
           onClick={() => navigate(`/user`)}
           className="mr-2 cursor-grab"
         >
-          {`Hello ${user.name}!`}
+          {`Hello ${user?.name}!`}
         </p>
       )}
 
@@ -104,7 +105,7 @@ const Navbar = () => {
         {user && (
           <div className="indicator">
             <span className="m-4 text-sm rounded-full indicator-item badge-accent badge-sm">
-              {auth ? user.shopping_Cart.length : 0}
+              {user ? user.shopping_Cart.length : 0}
             </span>
             <button
               className="flex items-center p-2 m-2"

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { RiEyeCloseLine, RiEyeLine } from 'react-icons/ri';
 
-import useAuth from '../../hooks/useAuth';
+import useSessionStorage from '../../hooks/useSessionStorage';
 
 function RegisterUserPage() {
   const [username, setUsername] = useState('');
@@ -26,7 +26,8 @@ function RegisterUserPage() {
   const [messageRegFailed, setMessageRegFailed] = useState(false);
 
   const [score, setScore] = useState(0);
-  const { setAuth } = useAuth();
+
+  const [value, setItem] = useSessionStorage('auth');
 
   const navigate = useNavigate();
 
