@@ -32,12 +32,12 @@ DONE | Num     | Description
 | Done | Num           | Descriptio |
 | ---- | ------------- | ---------- |
 |  [ x ]  | 2.7.4  | TOKENS: Expiram depois de 10 minutos ou 1h para os de JWT da google |
-|  []  | 3.1.1  | RESPONSES: Remove all request parameters from the URI to the bodies or params |
-|  []  | 8.3.1  | RESPONSES: Same as above mostly |
-|  []  | 9.1.1, 2 and 3  | RESPONSES: Implementar TLS one or two way (secure sockets) |
-|  []  | 13.2.3  | RESPONSES: Origin header checks for a small improvement in request/response trust (CSRF attacks) |
-|  []  | 3.7.1  | AUTH: Reauth on sensitive transactions |
-|  []  | 14.4.3, 4, 5 and 7  | RESPONSES: Set the CSP, Content Type Options, Transport Security, Referrer and Security headers |
-|  []  | 7.1.1  | MISC: Stop saving payment information, instead request it on every transaction |
-|  []  | 12.4.2  | MISC: Check submited files for virus with a anti-virus |
-|  []  | 14.5.3  | MISC: Finally fix the CORS implementation |  
+|  [ ]  | 3.1.1  | RESPONSES: Remove all request parameters from the URI to the bodies or params |
+|  [ ]  | 8.3.1  | RESPONSES: Same as above mostly |
+|  [ ]  | 9.1.1, 2 and 3  | RESPONSES: Implementar TLS one or two way (secure sockets) |
+|  [ ]  | 13.2.3  | RESPONSES: Origin header checks for a small improvement in request/response trust (CSRF attacks) |
+|  [ ]  | 3.7.1  | AUTH: Reauth on sensitive transactions |
+|  [ ]  | 14.4.3, 4, 5 and 7  | RESPONSES: Set the CSP, Content Type Options, Transport Security, Referrer and Security headers |
+|  [ +/- ]  | 7.1.1  | MISC: Stop saving payment information, instead request it on every transaction |
+|  [ ]  | 12.4.2  | MISC: Check submited files for virus with a anti-virus |
+|  [ ]  | 14.5.3  | MISC: Finally fix the CORS implementation |  
