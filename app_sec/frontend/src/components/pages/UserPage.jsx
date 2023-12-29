@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSessionStorage from '../../hooks/useSessionStorage';
+import useRefreshToken from '../../hooks/useRefreshToken';
 
 import axios from '../../api/axios';
 
@@ -18,6 +19,8 @@ import {
 
 const ProductPage = () => {
   const [item, setItem, removeItem] = useSessionStorage('auth');
+  
+  const refreshToken = useRefreshToken();
   const navigate = useNavigate();
 
   const [user, setUser] = useState({});
@@ -173,8 +176,8 @@ const ProductPage = () => {
         '/user/exportUserData',
         {
           params: {
-            id: id,
-            token: token,
+            id: user.id,
+            token: item.token,
           },
           responseType: 'arraybuffer',
         }
@@ -256,6 +259,10 @@ const ProductPage = () => {
             </div>
           </span>
         </div>
+
+        <button className="btn btn-accent" onClick={refreshToken}>
+          Refresh Token
+        </button>
 
         <div className="w-full h-full p-4 m-4 shadow-lg rounded-xl bg-base-100">
           <h2 className="mt-4 mb-2 text-2xl font-bold">My orders</h2>
