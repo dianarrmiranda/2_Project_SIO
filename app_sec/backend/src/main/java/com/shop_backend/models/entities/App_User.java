@@ -22,6 +22,7 @@ public class App_User {
     private String Salt;
     private String Credit_Card;
     private String Role;
+    private boolean Deleted = false;
 
     @Column(length = 1536)
     private String Active_Token;
@@ -126,12 +127,34 @@ public class App_User {
         Shopping_Cart.clear();
     }
 
+    public String printCart() {
+        if (Shopping_Cart.isEmpty()) {
+            return "Your cart is currently empty!";
+        }
+        String ret = "";
+        for (ShoppingCartItem item : Shopping_Cart) {
+            ret += item.toString();
+        }
+        return ret;
+    }
+
     public List<Request> getRequest_History() {
         return Request_History;
     }
 
     public void addToRequestHistory(Request Request) {
         Request_History.add(Request);
+    }
+
+    public String printRequestHistory() {
+        if (Request_History.isEmpty()) {
+            return "No requests have been made yet!";
+        }
+        String ret = "";
+        for (Request Request : Request_History) {
+            ret += Request.toString() + "\n";
+        }
+        return ret;
     }
 
     public String getActive_Token() {
@@ -156,5 +179,13 @@ public class App_User {
 
     public void setSalt(String salt) {
         Salt = salt;
+    }
+
+    public boolean isDeleted() {
+        return Deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        Deleted = deleted;
     }
 }
