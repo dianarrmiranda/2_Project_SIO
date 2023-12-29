@@ -19,12 +19,13 @@ public class App_User {
     private String Email;
     private String Image;
     private String Password;
+    private String Salt;
     private String Credit_Card;
     private String Role;
 
     @Column(length = 1536)
     private String Active_Token;
-    private String Salt;
+    private Integer Token_Expiration;
 
     @OneToMany
     private List<ShoppingCartItem> Shopping_Cart = new LinkedList<ShoppingCartItem>();
@@ -139,6 +140,14 @@ public class App_User {
 
     public void setActive_Token(String active_Token) {
         Active_Token = active_Token;
+    }
+    
+    public Integer getToken_Expiration() {
+        return Token_Expiration;
+    }
+
+    public void setToken_Expiration(Integer token_Expiration) {
+        Token_Expiration = token_Expiration;
     }
 
     public String getSalt() {

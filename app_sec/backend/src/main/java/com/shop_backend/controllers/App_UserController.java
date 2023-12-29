@@ -21,7 +21,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -58,7 +57,7 @@ import com.shop_backend.models.entities.ShoppingCartItem;
 @RequestMapping(path = "/user")
 public class App_UserController {
 
-  // Needed repositories (database tables)
+  //  Needed repositories (database tables)
   @Autowired
   private App_UserRepo app_userRepository;
   @Autowired
@@ -68,20 +67,20 @@ public class App_UserController {
   @Autowired
   private ProductRepo productRepository;
 
-  // Create and save a new app_user object to the repository (database)
+  //  Create and save a new app_user object to the repository (database)
   @PostMapping(path = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public @ResponseBody String addapp_user(@RequestParam String name, @RequestParam String email,
       @RequestParam String password, @RequestParam String cartao,
       @RequestParam String role, @RequestParam(required = false) MultipartFile img) {
 
-    // Check if any required value is empty
+    //  Check if any required value is empty
     if (name == null || name.equals("") || email == null || email.equals("")
         || password == null || password.equals("") || cartao == null || cartao.equals("") || role == null
         || role.equals("")) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Provide all the required data fields!");
     }
 
-    // Check the given email is already associated with another user
+    //  Check the given email is already associated with another user
     if (app_userRepository.findapp_userByEmail(email) != null) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "A user with this email already exists!");
     }
@@ -91,13 +90,13 @@ public class App_UserController {
                             "(?:[a-zA-Z0-9-]+\\.)+[a-z" + 
                             "A-Z]{2,7}$"; 
     Pattern pat = Pattern.compile(emailRegex); 
-    // Check if the email is valid
+    //  Check if the email is valid
     if (!pat.matcher(email).matches()) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
           "The provided Email must be valid!");
     }
 
-    // Check if the card number has 12 characters in lenght
+    //  Check if the card number has 12 characters in lenght
     if (cartao.length() != 12) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
           "The Card number must have twelve digits!");
@@ -109,7 +108,7 @@ public class App_UserController {
       String fileExtention = OGfileName.substring(OGfileName.lastIndexOf(".") + 1);
       String[] a= {"png", "jpeg", "jpg", "tiff", "tif", "webp"};
 
-      //  Check file type
+      //   Check file type
       if (!Arrays.asList(a).contains(fileExtention)) {
         throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
             "The image file must be of the png, jpeg, jpg, tiff, tif or webp type!");
@@ -117,7 +116,7 @@ public class App_UserController {
     
     }
 
-    // Check the role is app_user or admin
+    //  Check the role is app_user or admin
     if (!role.equals("user") && !role.equals("admin")) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
           "The role value must either be 'user' or 'admin'!");
@@ -127,7 +126,7 @@ public class App_UserController {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The password was found in a data breach! Please choose a different password.");
     }
 
-    // Register the App_User Object
+    //  Register the App_User Object
     try {
       App_User usr = new App_User();
       usr.setName(name);
@@ -142,12 +141,12 @@ public class App_UserController {
       Path path = Paths.get(folder + filename);
 
       if (img != null) {
-        // Create the directory if it does not exist
+        //  Create the directory if it does not exist
         if (!Files.exists(path.getParent())) {
           Files.createDirectories(path.getParent());
         }
 
-        // Create the file if it does not exist
+        //  Create the file if it does not exist
         if (!Files.exists(path)) {
           Files.createFile(path);
         }
@@ -164,31 +163,33 @@ public class App_UserController {
 
       Encoder encoder = Base64.getUrlEncoder().withoutPadding();
 
-      //  Generate the random number
+      //   Generate the random number
       SecureRandom random = new SecureRandom();
-      //  Generate the salt
+      //   Generate the salt
       byte[] salt = new byte[16];
       random.nextBytes(salt);
       String saltStr = encoder.encodeToString(salt);
-      //  Generate the salted key
+      //   Generate the salted key
       KeySpec spec = new PBEKeySpec(password.toCharArray(), saltStr.getBytes(), 65536, 128);
-      //  Generate the final hashed + salted key
+      //   Generate the final hashed + salted key
       SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
       byte[] hash = factory.generateSecret(spec).getEncoded();
 
       usr.setSalt(saltStr);
       usr.setPassword(encoder.encodeToString(hash));
 
-      // Generate the token
+      //  Generate the token
       SecureRandom rng = new SecureRandom();
       byte bytes[] = new byte[64];
       rng.nextBytes(bytes);
       String token = encoder.encodeToString(bytes);
 
       usr.setActive_Token(token);
+      //  Set token to expire after 10 minutes
+      usr.setToken_Expiration((int)(System.currentTimeMillis() / 1000) + 600);
       app_userRepository.save(usr);
 
-      // Generate the output user object for the frontend
+      //  Generate the output user object for the frontend
       JSONObject out = new JSONObject();
       out.put("id", usr.getID().toString());
       out.put("name", usr.getName());
@@ -229,19 +230,19 @@ public class App_UserController {
     }
   }
 
-  // List produtos from the repository (database)
+  //  List produtos from the repository (database)
   @GetMapping(path = "/list")
   public @ResponseBody LinkedList<HashMap<String, String>> listapp_user() {
     LinkedList<HashMap<String, String>> data = new LinkedList<HashMap<String, String>>();
 
-    // Get all Users
+    //  Get all Users
     List<App_User> returnedVals = app_userRepository.listapp_users();
 
-    // Create an array of maps with the intended values (like a JSON object)
+    //  Create an array of maps with the intended values (like a JSON object)
     for (App_User usr : returnedVals) {
       HashMap<String, String> temp = new HashMap<String, String>();
 
-      // Select what values to give to the app_user
+      //  Select what values to give to the app_user
       temp.put("id", usr.getID().toString());
       temp.put("name", usr.getName());
       temp.put("email", usr.getEmail());
@@ -252,11 +253,11 @@ public class App_UserController {
     return data;
   }
 
-  // List produtos from the repository (database)
+  //  List produtos from the repository (database)
   @GetMapping(path = "/listByRole")
   public @ResponseBody LinkedList<HashMap<String, String>> listapp_userRole(@RequestParam String role) {
 
-    // Check the role is app_user or admin
+    //  Check the role is app_user or admin
     if (!role.equals("user") && !role.equals("admin")) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
           "The role value must either be 'user' or 'admin'!");
@@ -268,7 +269,7 @@ public class App_UserController {
     for (App_User usr : returnedVals) {
       HashMap<String, String> temp = new HashMap<String, String>();
 
-      // Select what values to give to the app_user
+      //  Select what values to give to the app_user
       temp.put("id", usr.getID().toString());
       temp.put("name", usr.getName());
       temp.put("email", usr.getEmail());
@@ -279,11 +280,11 @@ public class App_UserController {
     return data;
   }
 
-  // Get the number of total app_users in the repository (database)
+  //  Get the number of total app_users in the repository (database)
   @GetMapping(path = "/number")
   public @ResponseBody LinkedList<HashMap<String, String>> numberOfapp_users() {
 
-    // Create a "JSON"ish object
+    //  Create a "JSON"ish object
     LinkedList<HashMap<String, String>> data = new LinkedList<HashMap<String, String>>();
     HashMap<String, String> temp = new HashMap<String, String>();
 
@@ -293,12 +294,12 @@ public class App_UserController {
     return data;
   }
 
-  // View all information of a specific object based on ID
+  //  View all information of a specific object based on ID
   @GetMapping(path = "/view")
   public @ResponseBody String viewapp_userByID(@RequestParam Integer id, @RequestParam String token) {
     App_User user;
 
-    // Check if a User with this ID exists
+    //  Check if a User with this ID exists
     try {
       user = app_userRepository.findapp_userByID(id);
     } catch (Exception e) {
@@ -310,9 +311,12 @@ public class App_UserController {
     }
     if (!user.getActive_Token().equals(token)) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Token does not match the given user ID!");
-    }    
+    }
+    if (user.getToken_Expiration() < (System.currentTimeMillis() / 1000)) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The provided token has expired! Please log in again.");
+    } 
     
-    // Generate the output user object for the frontend
+    //  Generate the output user object for the frontend
     JSONObject out = new JSONObject();
     out.put("id", user.getID().toString());
     out.put("name", user.getName());
@@ -326,13 +330,13 @@ public class App_UserController {
     return out.toString(1);
   }
 
-  // View all app_user info IF email and password check out, else return bad login
-  // info
+  //  View all app_user info IF email and password check out, else return bad login
+  //  info
   @GetMapping(path = "/checkLogin")
   public @ResponseBody String checkLoginInfo(@RequestParam String email, @RequestParam String password) {
     App_User user;
 
-    // Check if a User with this login information exists or nor
+    //  Check if a User with this login information exists or nor
     try {
       user = app_userRepository.findapp_userByEmail(email);
     } catch (Exception e) {
@@ -365,9 +369,11 @@ public class App_UserController {
     rng.nextBytes(bytes);
 
     user.setActive_Token(encoder.encodeToString(bytes));
+    //  Set token to expire after 10 minutes
+    user.setToken_Expiration((int)(System.currentTimeMillis() / 1000) + 600);
     app_userRepository.save(user);
 
-    // Generate the output user object for the frontend
+    //  Generate the output user object for the frontend
     JSONObject out = new JSONObject();
     out.put("id", user.getID().toString());
     out.put("name", user.getName());
@@ -380,13 +386,13 @@ public class App_UserController {
     return out.toString(1);
   }
 
-  // Update the password of a specific object based on ID
+  //  Update the password of a specific object based on ID
   @PostMapping(path = "/updatePassword")
   public @ResponseBody String updatePassword(@RequestParam Integer id, @RequestParam String token,
       @RequestParam String oldPassword, @RequestParam String newPassword) {
     App_User user;
 
-    // Check if a User with this ID exists
+    //  Check if a User with this ID exists
     try {
       user = app_userRepository.findapp_userByID(id);
     } catch (Exception e) {
@@ -401,6 +407,9 @@ public class App_UserController {
     if (!user.getActive_Token().equals(token)) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Token does not match the given user ID!");
     }
+    if (user.getToken_Expiration() < (System.currentTimeMillis() / 1000)) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The provided token has expired! Please log in again.");
+    } 
 
     String currentHashedPass = user.getPassword();
     String oldHashedPassToCheck = "";
@@ -435,20 +444,20 @@ public class App_UserController {
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal processing error!");
     }
 
-    // Set the new password and save the User Object (overwrite old object)
+    //  Set the new password and save the User Object (overwrite old object)
     user.setPassword(newHashedPass);
     app_userRepository.save(user);
 
     return "Saved";
   }
 
-  // Add a product to this app_user's cart
+  //  Add a product to this app_user's cart
   @PostMapping(path = "/addToCart")
   public @ResponseBody List<ShoppingCartItem> addProdToCart(@RequestParam Integer userID, @RequestParam String token,
       @RequestParam Product prod, @RequestParam Integer quantity) {
     App_User usr;
 
-    // Check if a User with this ID exists
+    //  Check if a User with this ID exists
     try {
       usr = app_userRepository.findapp_userByID(userID);
     } catch (Exception e) {
@@ -463,15 +472,18 @@ public class App_UserController {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
           "Token does not match the given user ID");
     }
+    if (usr.getToken_Expiration() < (System.currentTimeMillis() / 1000)) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The provided token has expired! Please log in again.");
+    } 
 
-    // Create a new shopping cart item
+    //  Create a new shopping cart item
     try {
       ShoppingCartItem item = new ShoppingCartItem();
       item.setProd(prod);
       item.setQuantity(quantity);
       itemRepository.save(item);
 
-      // Add the item to the user's cart
+      //  Add the item to the user's cart
       usr.addProdToCart(item);
       app_userRepository.save(usr);
     } catch (Exception e) {
@@ -481,13 +493,13 @@ public class App_UserController {
     return usr.getShopping_Cart();
   }
 
-  // Remove a product from this app_user's cart
+  //  Remove a product from this app_user's cart
   @PostMapping(path = "/removeFromCart")
   public @ResponseBody List<ShoppingCartItem> removeProdFromCart(@RequestParam Integer userID,
       @RequestParam String token, @RequestParam Product prod) {
     App_User usr;
 
-    // Check if a User with this ID exists
+    //  Check if a User with this ID exists
     try {
       usr = app_userRepository.findapp_userByID(userID);
     } catch (Exception e) {
@@ -502,7 +514,11 @@ public class App_UserController {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Token does not match the given user ID!");
     }
 
-    // Remove the item from the cart
+    if (usr.getToken_Expiration() < (System.currentTimeMillis() / 1000)) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The provided token has expired! Please log in again.");
+    } 
+
+    //  Remove the item from the cart
     try {
       usr.removeProdFromCart(prod);
       app_userRepository.save(usr);
@@ -513,13 +529,13 @@ public class App_UserController {
     return usr.getShopping_Cart();
   }
 
-  // Request the current cart as an order
+  //  Request the current cart as an order
   @PostMapping(path = "/requestCurrentCart")
   public @ResponseBody String RequestCart(@RequestParam Integer userID, @RequestParam String token) {
     App_User usr;
     String receipt = "";
 
-    // Check if a User with this ID exists
+    //  Check if a User with this ID exists
     try {
       usr = app_userRepository.findapp_userByID(userID);
     } catch (Exception e) {
@@ -534,7 +550,11 @@ public class App_UserController {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Token does not match the given user ID!");
     }
 
-    // Create the receipt String object
+    if (usr.getToken_Expiration() < (System.currentTimeMillis() / 1000)) {
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The provided token has expired! Please log in again.");
+    } 
+
+    //  Create the receipt String object
     receipt += "------------ Client ----------\n";
     receipt += "Client Name: " + usr.getName() + "\n";
     receipt += "Client Email: " + usr.getEmail() + "\n";
@@ -545,20 +565,20 @@ public class App_UserController {
     double total = 0;
     int i = 0;
 
-    // Check if the user has any items in its cart
+    //  Check if the user has any items in its cart
     if (currentCart.size() < 1) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
           "The current shopping cart of this user is empty!");
     }
 
-    // Add the current items in the shopping cart to an order object
+    //  Add the current items in the shopping cart to an order object
     receipt += "------------ Products ----------\n";
     for (ShoppingCartItem item : currentCart) {
       ShoppingCartItem orderItem = item;
       orderCart.add(orderItem);
       total += item.getProd().getPrice() * item.getQuantity();
 
-      // Check if requested item quantity is available
+      //  Check if requested item quantity is available
       if (item.getProd().getIn_Stock() < item.getQuantity()) {
         throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
             "Only " + item.getProd().getIn_Stock() + " items of type " + item.getProd().getName()
@@ -578,8 +598,8 @@ public class App_UserController {
     receipt += "\n------------ Total ----------\n";
     receipt += "Total: " + total + "€\n";
 
-    // Save the new order request and update the user's shopping history and clear
-    // the shopping cart
+    //  Save the new order request and update the user's shopping history and clear
+    //  the shopping cart
     Request ord = new Request();
     ord.setItem(orderCart);
     ord.setTotal(total);
@@ -595,11 +615,11 @@ public class App_UserController {
 
 
 
-  // Create and save a new app_user object to the repository (database)
+  //  Create and save a new app_user object to the repository (database)
   @PostMapping(path = "/addByJWT")
   public @ResponseBody String addUserByJWT(@RequestParam String jwtToken) {
 
-    // Check if any required value is empty
+    //  Check if any required value is empty
     if (jwtToken == null || jwtToken.equals("")) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Provide all the required data fields!");
     }
@@ -610,20 +630,21 @@ public class App_UserController {
     String payload = new String(decoder.decode(chunks[1]));
     Map<String, Object> jwtVals= new JSONObject(payload).toMap();
 
-    // Check the provided JWT token belongs to a verified email
+    //  Check the provided JWT token belongs to a verified email
     if (!(boolean) jwtVals.get("email_verified")) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The provided JWT token does not belong to a verified email!");
     }
 
     Long currentTimestamp = System.currentTimeMillis() / 1000;
 
-    // Check the provided JWT token was created in a epoch time higher than the system one
+    //  Check the provided JWT token was created in a epoch time higher than the system one
     if (currentTimestamp < (Integer) jwtVals.get("nbf")) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The provided JWT token cannot be accepted has it appears to be created in the future!");
     }
 
-    // Check the provided JWT token was created in a epoch time higher than the system one
-    if (currentTimestamp < (Integer) jwtVals.get("exp")) {
+    Integer jwtExpiration =  (Integer) jwtVals.get("exp");
+    //  Check the provided JWT token was created in a epoch time higher than the system one
+    if (currentTimestamp > jwtExpiration) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The provided JWT token has expired and can not be accepted!");
     }
 
@@ -636,12 +657,12 @@ public class App_UserController {
     String email = (String) jwtVals.get("email");
 
 
-    // Register the App_User Object
+    //  Register the App_User Object
     try {    
       App_User usr = app_userRepository.findapp_userByEmail(email);
-      // Check the given email is already associated with another user
+      //  Check the given email is already associated with another user
       if (usr == null) {
-        // A user with this email does not exist!
+        //  A user with this email does not exist!
   
         String password = "1";
 
@@ -664,9 +685,10 @@ public class App_UserController {
         usr.setPassword("");
 
         usr.setActive_Token(jwtToken);
+        usr.setToken_Expiration(jwtExpiration);
         app_userRepository.save(usr);  
       }
-      // Generate the output user object for the frontend
+      //  Generate the output user object for the frontend
       JSONObject out = new JSONObject();
       out.put("id", usr.getID().toString());
       out.put("name", usr.getName());
