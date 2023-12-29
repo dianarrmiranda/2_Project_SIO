@@ -222,6 +222,40 @@
 					"response": []
 				},
 				{
+					"name": "Reload Token",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/reloadToken?email=jo@ana.com&oldToken=hTCThm-f99Pmx02EHqsFOT7C2ZWvg2K28QYRKyt7E1ARsig2Fi_WgmSCWqbdu9LQF0LnBHxKCyygK-lZNQh4_w",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"reloadToken"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "jo@ana.com"
+								},
+								{
+									"key": "oldToken",
+									"value": "hTCThm-f99Pmx02EHqsFOT7C2ZWvg2K28QYRKyt7E1ARsig2Fi_WgmSCWqbdu9LQF0LnBHxKCyygK-lZNQh4_w"
+								},
+								{
+									"key": "",
+									"value": " ",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update User Password",
 					"request": {
 						"method": "POST",
@@ -351,6 +385,84 @@
 								{
 									"key": "token",
 									"value": "FqCtfHP7zmbUP8SwKb9hk-I3jLya1l179dxURun0-BxxxYAKZjBaKsc9VI5agZnc1f6YF1-Qy2bmBGlkvSHQkQ"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `",
+									"<p>Error: Internal Server Error</p>",
+									"<p>Status: {{response.status}}</p>",
+									"`;",
+									"",
+									"function constructVisualizerPayload() {",
+									"    return {response: pm.response.json()};",
+									"}",
+									"",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/deleteUserData?id=2&token=6E8MKrUDJ4MLf7dNhwQduzUcai22U_IMChddkjEOoQXwqeGlsSKU7xRm1R1naQ3ll4ICgjoLChB9VKqlr7rG9w",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"deleteUserData"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								},
+								{
+									"key": "token",
+									"value": "6E8MKrUDJ4MLf7dNhwQduzUcai22U_IMChddkjEOoQXwqeGlsSKU7xRm1R1naQ3ll4ICgjoLChB9VKqlr7rG9w"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Export User Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/user/exportUserData?id=2&token=b7Iel8gqTfLzQUuBmKLsa2x0jTymqLrzdoIeg1_csp5p179sVEuA-aBnLaZPhKqLe3b2LP-XLB7lHgLvaOJSpQ",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"exportUserData"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								},
+								{
+									"key": "token",
+									"value": "b7Iel8gqTfLzQUuBmKLsa2x0jTymqLrzdoIeg1_csp5p179sVEuA-aBnLaZPhKqLe3b2LP-XLB7lHgLvaOJSpQ"
 								}
 							]
 						}

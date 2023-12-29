@@ -19,12 +19,14 @@ public class App_User {
     private String Email;
     private String Image;
     private String Password;
+    private String Salt;
     private String Credit_Card;
     private String Role;
+    private boolean Deleted = false;
 
     @Column(length = 1536)
     private String Active_Token;
-    private String Salt;
+    private Integer Token_Expiration;
 
     @OneToMany
     private List<ShoppingCartItem> Shopping_Cart = new LinkedList<ShoppingCartItem>();
@@ -125,12 +127,34 @@ public class App_User {
         Shopping_Cart.clear();
     }
 
+    public String printCart() {
+        if (Shopping_Cart.isEmpty()) {
+            return "Your cart is currently empty!";
+        }
+        String ret = "";
+        for (ShoppingCartItem item : Shopping_Cart) {
+            ret += item.toString();
+        }
+        return ret;
+    }
+
     public List<Request> getRequest_History() {
         return Request_History;
     }
 
     public void addToRequestHistory(Request Request) {
         Request_History.add(Request);
+    }
+
+    public String printRequestHistory() {
+        if (Request_History.isEmpty()) {
+            return "No requests have been made yet!";
+        }
+        String ret = "";
+        for (Request Request : Request_History) {
+            ret += Request.toString() + "\n";
+        }
+        return ret;
     }
 
     public String getActive_Token() {
@@ -140,6 +164,14 @@ public class App_User {
     public void setActive_Token(String active_Token) {
         Active_Token = active_Token;
     }
+    
+    public Integer getToken_Expiration() {
+        return Token_Expiration;
+    }
+
+    public void setToken_Expiration(Integer token_Expiration) {
+        Token_Expiration = token_Expiration;
+    }
 
     public String getSalt() {
         return Salt;
@@ -147,5 +179,13 @@ public class App_User {
 
     public void setSalt(String salt) {
         Salt = salt;
+    }
+
+    public boolean isDeleted() {
+        return Deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        Deleted = deleted;
     }
 }
