@@ -707,6 +707,7 @@ public class App_UserController {
             .ok()
             .headers(headers)
             .body(pdfBytes);
+    }
 
   //  Create and save a new app_user object to the repository (database)
   @PostMapping(path = "/addByJWT")
