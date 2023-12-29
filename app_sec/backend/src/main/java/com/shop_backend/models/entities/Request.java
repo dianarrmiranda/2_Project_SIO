@@ -41,4 +41,15 @@ public class Request {
     public void setTotal(Double total) {
         Total = total;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("Request totaling [" + Total + "€] with items:\n");
+        for (ShoppingCartItem item : Items) {
+            result.append(item.toString());
+        }
+        result.append("\n");
+        return result.toString();
+    }
 }
