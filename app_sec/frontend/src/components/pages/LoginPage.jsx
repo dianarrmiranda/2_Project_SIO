@@ -19,10 +19,10 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { setAuth } = useAuth();
 
+  const [emailRec, setEmailRec] = useState('');
+
   function handleGoogleResponse(response) {
-    console.log('google response -> ', response.credential);
     const user = jwtDecode(response.credential);
-    console.log('user -> ', user);
     const id = parseInt(user.sub);    
     
     setAuth({
@@ -46,13 +46,11 @@ const LoginPage = () => {
       const response = await fetchData(
         `/user/checkLogin?email=${email}&password=${password}`
       );
-      console.log('res - ', response);
       if (response.length != 0) {
         console.log('Login successful');
         setEmail('');
         setPassword('');
         setFailed(false);
-        console.log('response -> ', response);
         setAuth({
           isAuthenticated: true,
           user: {
@@ -82,6 +80,28 @@ const LoginPage = () => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value.replace(/\s+/g, ' '));
   };
+
+
+  const handleEmailRecChange = (e) => {
+    setEmailRec(e.target.value);
+  };
+
+  const handleForgotPass = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetchData(
+        `/user/forgotPassword?email=${emailRec}`
+      );
+      if (response === 'Email sent') {
+        setEmailRec('');
+        document.getElementById('modal-1').close();
+      } else {
+        console.error('Send failed');
+      }
+    } catch (error) {
+      console.error('Error during API call', error);
+    }
+  }
 
   return (
     <div>
@@ -146,11 +166,36 @@ const LoginPage = () => {
                 >
                   Login
                 </button>
+                <button className='mt-3 mb-3' onClick={()=>document.getElementById('modal-1').showModal()}>Forgot your password?</button>
                 <GoogleLogin onSuccess={handleGoogleResponse} />
               </div>
             </form>
           </div>
         </div>
+        <dialog id="modal-1" className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Forgot your password?</h3>  
+            <input
+              type="email"
+              placeholder="email"
+              className="input input-bordered mt-3 w-full"
+              required
+              onChange={handleEmailRecChange}
+            />
+            <div className="modal-action">
+              <form method="dialog">
+                <button
+                  className="btn btn-primary mr-2"
+                  onClick={handleForgotPass}
+                >
+                  Send
+                </button>
+                <button className="btn">Close</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
+       
       </div>
       <Footer />
     </div>
