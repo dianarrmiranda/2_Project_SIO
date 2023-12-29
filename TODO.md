@@ -21,8 +21,23 @@ Para analisar a app com a OWASP ASVS Checklist:
 - Ir tirando screenshots de cada issue a comprovar que foi resolvido e colocar na pasta analysis/screenshots.
 
 Coisas a melhorer v2:
+ - CWE 434 de url parameters na webservices
+ - As cenas de data protection de certeza que certeza que são boas para o frontend fazer
+ - Session management é parecido à linha antes desta
+ - Tbm em session management, dar logout e após algum tempo devia expirar o token
 
-- CWE 434 de url parameters na webservices
-- As cenas de data protection de certeza que certeza que são boas para o frontend fazer
-- Session management é parecido à linha antes desta
-- Tbm em session management, dar logout e após algum tempo devia expirar o token
+
+DONE | Num     | Description
+-----------------------------------------
+| Done | Num           | Descriptio |
+| ---- | ------------- | ---------- |
+|  [ x ]  | 2.7.4  | TOKENS: Expiram depois de 10 minutos ou 1h para os de JWT da google |
+|  []  | 3.1.1  | RESPONSES: Remove all request parameters from the URI to the bodies or params |
+|  []  | 8.3.1  | RESPONSES: Same as above mostly |
+|  []  | 9.1.1, 2 and 3  | RESPONSES: Implementar TLS one or two way (secure sockets) |
+|  []  | 13.2.3  | RESPONSES: Origin header checks for a small improvement in request/response trust (CSRF attacks) |
+|  []  | 3.7.1  | AUTH: Reauth on sensitive transactions |
+|  []  | 14.4.3, 4, 5 and 7  | RESPONSES: Set the CSP, Content Type Options, Transport Security, Referrer and Security headers |
+|  []  | 7.1.1  | MISC: Stop saving payment information, instead request it on every transaction |
+|  []  | 12.4.2  | MISC: Check submited files for virus with a anti-virus |
+|  []  | 14.5.3  | MISC: Finally fix the CORS implementation |  

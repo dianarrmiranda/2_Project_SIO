@@ -7,6 +7,7 @@ import RegisterUserPage from './components/pages/RegisterUserPage';
 import UserPage from './components/pages/UserPage';
 import CartPage from './components/pages/CartPage';
 import CheckoutPage from './components/pages/CheckoutPage'; 
+import ResetPassPage from './components/pages/ResetPassPage';
 
 const App = () => {
   return (
@@ -43,6 +44,10 @@ const App = () => {
         <Route
           path="/user/checkout"
           element={<CheckoutPage />}
+        />
+        <Route
+          path="/resetPassword"
+          element={<ResetPassPage />}
         />
       </Routes>
     </BrowserRouter>

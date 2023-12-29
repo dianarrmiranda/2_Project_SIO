@@ -19,6 +19,8 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [value, setItem] = useSessionStorage('auth');
 
+  const [emailRec, setEmailRec] = useState('');
+
   function handleGoogleResponse(response) {
     console.log('google response -> ', response.credential);
     axios
@@ -38,7 +40,6 @@ const LoginPage = () => {
       const response = await fetchData(
         `/user/checkLogin?email=${email}&password=${password}`
       );
-      console.log('res - ', response);
       if (response.length != 0) {
         console.log('Login successful');
         setEmail('');
@@ -63,6 +64,28 @@ const LoginPage = () => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value.replace(/\s+/g, ' '));
   };
+
+
+  const handleEmailRecChange = (e) => {
+    setEmailRec(e.target.value);
+  };
+
+  const handleForgotPass = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetchData(
+        `/user/forgotPassword?email=${emailRec}`
+      );
+      if (response === 'Email sent') {
+        setEmailRec('');
+        document.getElementById('modal-1').close();
+      } else {
+        console.error('Send failed');
+      }
+    } catch (error) {
+      console.error('Error during API call', error);
+    }
+  }
 
   return (
     <div>
@@ -127,11 +150,36 @@ const LoginPage = () => {
                 >
                   Login
                 </button>
+                <button className='mt-3 mb-3' onClick={()=>document.getElementById('modal-1').showModal()}>Forgot your password?</button>
                 <GoogleLogin onSuccess={handleGoogleResponse} />
               </div>
             </form>
           </div>
         </div>
+        <dialog id="modal-1" className="modal">
+          <div className="modal-box">
+            <h3 className="text-lg font-bold">Forgot your password?</h3>  
+            <input
+              type="email"
+              placeholder="email"
+              className="w-full mt-3 input input-bordered"
+              required
+              onChange={handleEmailRecChange}
+            />
+            <div className="modal-action">
+              <form method="dialog">
+                <button
+                  className="mr-2 btn btn-primary"
+                  onClick={handleForgotPass}
+                >
+                  Send
+                </button>
+                <button className="btn">Close</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
+       
       </div>
       <Footer />
     </div>

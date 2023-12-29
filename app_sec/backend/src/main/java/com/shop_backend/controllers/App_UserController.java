@@ -1,6 +1,26 @@
 package com.shop_backend.controllers;
 
+import com.shop_backend.models.entities.*;
+import com.shop_backend.models.repos.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import java.io.ByteArrayOutputStream;
+
+import java.util.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -11,6 +31,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+
+import org.json.JSONObject;
+
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
@@ -26,7 +49,7 @@ import java.util.regex.Pattern;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
-
+import java.util.regex.Pattern;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -73,6 +96,10 @@ public class App_UserController {
   private ShoppingCartItemRepo itemRepository;
   @Autowired
   private ProductRepo productRepository;
+  @Autowired
+  private PasswordResetTokenRepo passwordTokenRepository;
+  @Autowired
+  private JavaMailSender mailSender;
 
   //  Create and save a new app_user object to the repository (database)
   @PostMapping(path = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -729,7 +756,7 @@ public class App_UserController {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The provided JWT token does not belong to a verified email!");
     }
 
-    Long currentTimestamp = System.currentTimeMillis() / 1000;
+    long currentTimestamp = System.currentTimeMillis() / 1000;
 
     //  Check the provided JWT token was created in a epoch time higher than the system one
     if (currentTimestamp < (Integer) jwtVals.get("nbf")) {
@@ -794,7 +821,6 @@ public class App_UserController {
 
       return out.toString(1);
     } catch (Exception e) {
-      e.printStackTrace();
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal processing error!");
     }
   }
@@ -843,5 +869,101 @@ public class App_UserController {
 
     return out.toString(1);
   }
+
+
+  @GetMapping(path = "/forgotPassword")
+  public @ResponseBody String forgotPassword(@RequestParam String email) {
+    App_User user;
+
+    // Check if a User with this login information exists or nor
+    try {
+      user = app_userRepository.findapp_userByEmail(email);
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal processing error!");
+    }
+
+    if (user == null) {
+      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "User email has no account associated!");
+    }
+
+    removeExpiredTokens();
+    PasswordResetToken token = new PasswordResetToken();
+    token.setToken(UUID.randomUUID().toString());
+    token.setUser(user);
+    token.setExpiryDate(30);
+    passwordTokenRepository.save(token);
+
+    mailSender.send(constructResetTokenEmail(token.getToken(), user));
+
+    return "Email sent";
+  }
+
+  private SimpleMailMessage constructResetTokenEmail(String token, App_User user) {
+    String url = "http://localhost:5173/resetPassword?token=" + token;
+    return constructEmail("Reset Password", "Dear, " + user.getName() + "\n" +
+            "\n" +
+            "To reset your password, please click the link below and follow the instructions. Please note that this link is valid for 30 minutes:\n" +
+            "\n" +
+            url +
+            "\r\n" +
+            "If you didn't request this reset, please ignore.\n" +
+            "\n" +
+            "Best regards,\n" +
+            "Deti Merch Store" + " \r\n", user);
+  }
+
+  private SimpleMailMessage constructEmail(String subject, String body, App_User user) {
+    SimpleMailMessage email = new SimpleMailMessage();
+    email.setSubject(subject);
+    email.setText(body);
+    email.setTo(user.getEmail());
+    email.setFrom("detistore.sio@outlook.com");
+    return email;
+  }
+
+  @PostMapping(path = "/resetPassword")
+  public @ResponseBody String resetPassword(@RequestParam String token, @RequestParam String password) {
+
+    removeExpiredTokens();
+    try {
+      PasswordResetToken passToken = passwordTokenRepository.findByToken(token);
+      if (passToken == null) {
+        throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Invalid token!");
+      }
+
+      App_User user = passToken.getUser();
+      if (user == null) {
+        throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Invalid token!");
+      }
+
+      if (check_password(password)) {
+        throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The password was found in a data breach! Please choose a different password.");
+      }
+
+      Encoder encoder = Base64.getUrlEncoder().withoutPadding();
+      KeySpec spec = new PBEKeySpec(password.toCharArray(), user.getSalt().getBytes(), 65536, 128);
+      try {
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        byte[] hash = factory.generateSecret(spec).getEncoded();
+        String newHashedPass = encoder.encodeToString(hash);
+        user.setPassword(newHashedPass);
+        app_userRepository.save(user);
+      } catch (Exception e) {
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal processing error!");
+      }
+
+    } catch (Exception e) {
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal processing error!");
+    }
+
+    return "Password changed";
+  }
+
+  public void removeExpiredTokens() {
+    Date now = new Date();
+    List<PasswordResetToken> expiredTokens = passwordTokenRepository.findAllByExpiryDateBefore(now);
+    passwordTokenRepository.deleteAll(expiredTokens);
+  }
+
 
 }
