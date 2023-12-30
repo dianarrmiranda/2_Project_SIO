@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 
 import com.shop_backend.models.repos.ProductRepo;
 import com.shop_backend.models.repos.ReviewRepo;
@@ -53,16 +51,11 @@ public class ProductController {
 
   // Create and save a new Product object to the repository (database)
   @PostMapping(path = "/add")
-  public @ResponseBody String addProduct(@RequestParam MultipartFile img, @RequestBody Map<String, String> json) {
-
-    String name = json.get("name");
-    String description = json.get("description");
-    String origin = json.get("origin");
-    Double price = json.get("price");
-    Integer in_stock = json.get("in_stock");
-    Category category = json.get("category");
-    Integer userID = json.get("userID");
-    String token = json.get("token");
+  public @ResponseBody String addProduct(@RequestParam String name, @RequestParam String description,
+      @RequestParam String origin, @RequestParam Double price,
+      @RequestParam Integer in_stock, @RequestParam Category category,
+      @RequestParam MultipartFile img,
+      @RequestParam Integer userID, @RequestParam String token) {
 
     // Check if any required value is empty
     if (name == null || name.equals("") || description == null || description.equals("")
@@ -172,9 +165,8 @@ public class ProductController {
   }
 
   // List produtos from the repository by Category (database)
-  @PostMapping(path = "/listByCategory")
-  public @ResponseBody LinkedList<HashMap<String, String>> listProductByCategory(@RequestBody Map<String, String> json) {
-    String categoryID = json.get("categoryID");
+  @GetMapping(path = "/listByCategory")
+  public @ResponseBody LinkedList<HashMap<String, String>> listProductByCategory(@RequestParam String categoryID) {
 
     // Check if any required value is empty
     if (categoryID == null || categoryID.equals("")) {
