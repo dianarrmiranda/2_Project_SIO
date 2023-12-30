@@ -7,10 +7,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.MediaType;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
@@ -51,17 +52,15 @@ public class ProductController {
   @Autowired
   private ReviewRepo reviewRepository;
 
-  // Create and save a new Product object to the repository (database)
-  @PostMapping(path = "/add")
-  public @ResponseBody String addProduct(@RequestParam MultipartFile img, @RequestBody Map<String, String> json) {
 
-    String name = json.get("name");
-    String description = json.get("description");
-    String origin = json.get("origin");
-    Double price = json.get("price");
-    Integer in_stock = json.get("in_stock");
-    Category category = json.get("category");
-    Integer userID = json.get("userID");
+  // Create and save a new Product object to the repository (database)
+  @PostMapping(path = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public @ResponseBody String addProduct(@RequestParam String name, @RequestParam String description,
+      @RequestParam String origin, @RequestParam Double price,
+      @RequestParam Integer in_stock, @RequestParam Category category,
+      @RequestPart MultipartFile img, @RequestPart Map<String, String> json) {
+        
+    Integer userID = Integer.parseInt(json.get("userID"));
     String token = json.get("token");
 
     // Check if any required value is empty
@@ -173,8 +172,7 @@ public class ProductController {
 
   // List produtos from the repository by Category (database)
   @PostMapping(path = "/listByCategory")
-  public @ResponseBody LinkedList<HashMap<String, String>> listProductByCategory(@RequestBody Map<String, String> json) {
-    String categoryID = json.get("categoryID");
+  public @ResponseBody LinkedList<HashMap<String, String>> listProductByCategory(@RequestParam String categoryID) {
 
     // Check if any required value is empty
     if (categoryID == null || categoryID.equals("")) {
@@ -316,9 +314,13 @@ public class ProductController {
   }
 
   // Update the in_stock of a specific object based on ID
-  @PostMapping(path = "/updateStock")
+  @PostMapping(path = "/updateStock", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public @ResponseBody String updateStock(@RequestParam Integer id, @RequestParam Integer stock,
-      @RequestParam Integer userID, @RequestParam String token) {
+         @RequestPart Map<String, String> json) {
+
+    Integer userID = Integer.parseInt(json.get("userID"));
+    String token = json.get("token");
+
     Product prod;
     App_User user;
 
@@ -355,10 +357,14 @@ public class ProductController {
   }
 
   // Update the in_stock of a specific object based on ID
-  @PostMapping(path = "/addReview")
-  public @ResponseBody String addReview(@RequestParam Integer productID, @RequestParam Integer userID,
+  @PostMapping(path = "/addReview", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public @ResponseBody String addReview(@RequestParam Integer productID,
       @RequestParam String header, @RequestParam String description,
-      @RequestParam Double stars, @RequestParam String token) {
+      @RequestParam Double stars, @RequestPart Map<String, String> json) {
+
+    Integer userID = Integer.parseInt(json.get("userID"));
+    String token = json.get("token");
+
     Product prod;
     App_User user;
 
@@ -408,9 +414,12 @@ public class ProductController {
   }
 
   // Add and List methods for any Category Object
-  @PostMapping(path = "/category/add")
+  @PostMapping(path = "/category/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public @ResponseBody String addCategory(@RequestParam String name, @RequestParam(required = false) String description,
-      @RequestParam Integer userID, @RequestParam String token) {
+         @RequestPart Map<String, String> json) {
+
+    Integer userID = Integer.parseInt(json.get("userID"));
+    String token = json.get("token");
 
     App_User user;
 

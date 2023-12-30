@@ -4,6 +4,11 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpEntity;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.LinkedMultiValueMap;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +26,7 @@ public class StartupRequest {
         // that are simply to dificult to replicate just by altering the database manually (in the data.sql file) 
 
         // Create a RestTemplate to make the HTTP request
-        RestTemplate restTemplate = new RestTemplate();
+/*         RestTemplate restTemplate = new RestTemplate();
         String token = "";
 
         ResponseEntity<String> response = restTemplate.exchange("http://localhost:8080/user/checkLogin?email=jose@fino.com&password=123", HttpMethod.GET, null, String.class);
@@ -43,8 +48,15 @@ public class StartupRequest {
         restTemplate.exchange("http://localhost:8080/user/requestCurrentCart?userID=2&token=" + token, HttpMethod.POST, null, String.class);
 
         //  Add a Review by user 1 to product 11
-        restTemplate.exchange("http://localhost:8080/product/addReview?productID=11&userID=2&token=" + token + "&header=Adorei o Produto&description=Completamente mudou a minha vida!&stars=4", HttpMethod.POST, null, String.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA_VALUE);
+        // Form data
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        formData.add("json", "{\"token\": \"" + token + "\", \"userID\":\"2\"}");
 
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(formData, headers);
+        restTemplate.exchange("http://localhost:8080/product/addReview?productID=11&header=Adorei o Produto&description=Completamente mudou a minha vida!&stars=4", HttpMethod.POST, requestEntity, String.class);
+ */
         return;
     }
 }

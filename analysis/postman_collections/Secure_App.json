@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "17248004-13aa-4923-8698-4aecf0a56de1",
+		"_postman_id": "cb648d29-071b-4bc9-a46b-ff4d9262acf6",
 		"name": "Proj2_SIO",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "28375958"
@@ -20,12 +20,18 @@
 								{
 									"key": "img",
 									"type": "file",
-									"src": "/home/frostywolf/Pictures/unknown.png"
+									"src": "/home/frostywolf/Pictures/images.jpg"
+								},
+								{
+									"key": "json",
+									"value": "{ \n    \"email\": \"jo@ana.com\",\n    \"password\": \"Mysecretpass123_\"\n}",
+									"contentType": "application/json",
+									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "localhost:8080/user/add?name=Joana Jacinto&email=jo@ana.com&password=Mysecretpass123_&cartao=123212331233&role=user",
+							"raw": "localhost:8080/user/add?name=Joana Jacinto&cartao=123212331233&role=user",
 							"host": [
 								"localhost"
 							],
@@ -38,14 +44,6 @@
 								{
 									"key": "name",
 									"value": "Joana Jacinto"
-								},
-								{
-									"key": "email",
-									"value": "jo@ana.com"
-								},
-								{
-									"key": "password",
-									"value": "Mysecretpass123_"
 								},
 								{
 									"key": "cartao",
@@ -72,11 +70,17 @@
 									"key": "img",
 									"type": "file",
 									"src": "/home/frostywolf/Pictures/unknown.png"
+								},
+								{
+									"key": "json",
+									"value": "{\"jwtToken\": \"eyJhbGciOiJSUzI1NiIsImtpZCI6IjQ1NmI1MmM4MWUzNmZlYWQyNTkyMzFhNjk0N2UwNDBlMDNlYTEyNjIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI2ODE1NTE0ODg3NTYtY3E3dmVwczE3b2todmE5NGRjN2FscGRydWRtdjBiYnQuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI2ODE1NTE0ODg3NTYtY3E3dmVwczE3b2todmE5NGRjN2FscGRydWRtdjBiYnQuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDIyNjg1MjEwMzcwMTk5MzY1MTEiLCJlbWFpbCI6InhwZWRybzkwLjFAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5iZiI6MTcwMzg2ODYyMCwibmFtZSI6IkRhbmsgTWVtZXMiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jS1VabzJuUmpOb1A4TDlIZl9STjdtR1AwREdlMEotMGptN2I0OUVrMURPPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkRhbmsiLCJmYW1pbHlfbmFtZSI6Ik1lbWVzIiwibG9jYWxlIjoicHQtUFQiLCJpYXQiOjE3MDM4Njg5MjAsImV4cCI6MTcwMzg3MjUyMCwianRpIjoiMDY2NGVjYmZlZTVlY2RhMDNiNTc2NmFlYTQ4NzliMTg3NzNlN2M2ZCJ9.fAjNxNtjVeDFIgeEVzdA6TCrIWM_JKzgD9GNbY5QIaA5gZN6mTosr_jEPtdmQTJhtlDgEnzXx7RuLYTZup5ful7OP1fbTHtp3vnKWO9lhE_FjDyvTBpKe0c4i-lfCujfvt8X_ozt0Hy20mxXVWdChDaSMqsTNw3jfgM3CbXRzYt4il39cfy4zn-hTGiajVJu2i6UHJdMq55qb_83H895_zTATZNTZVCkfErav56EoomPlxmx7osMXNLsfFhs07qRYM9w15YkhAvDuF-vlXM6qWJMRjeG2vM1RZ_fiQsNQi4QmE0JDq_UQKvgOPflN1t2yabxpxuVlAwjfDtESvjabw\"}",
+									"contentType": "application/json",
+									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "localhost:8080/user/addByJWT?jwtToken=eyJhbGciOiJSUzI1NiIsImtpZCI6IjQ1NmI1MmM4MWUzNmZlYWQyNTkyMzFhNjk0N2UwNDBlMDNlYTEyNjIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI2ODE1NTE0ODg3NTYtY3E3dmVwczE3b2todmE5NGRjN2FscGRydWRtdjBiYnQuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI2ODE1NTE0ODg3NTYtY3E3dmVwczE3b2todmE5NGRjN2FscGRydWRtdjBiYnQuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDIyNjg1MjEwMzcwMTk5MzY1MTEiLCJlbWFpbCI6InhwZWRybzkwLjFAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5iZiI6MTcwMzc5MDA1OCwibmFtZSI6IkRhbmsgTWVtZXMiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jS1VabzJuUmpOb1A4TDlIZl9STjdtR1AwREdlMEotMGptN2I0OUVrMURPPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkRhbmsiLCJmYW1pbHlfbmFtZSI6Ik1lbWVzIiwibG9jYWxlIjoicHQtUFQiLCJpYXQiOjE3MDM3OTAzNTgsImV4cCI6MTcwMzc5Mzk1OCwianRpIjoiZGEzYTFmMTk0MjJiYjYzMTUwNTIwZDlkMWM5N2U2ODcwOWEzNTEzNSJ9.pOQ2UmTg8A65jZKNeJXhTQ9P_-Kn6or9x3bqxgpohUP_GGVC4TCD0oWJomsrPJV9LD1JGiBt1wFzq8x9pUx7unitwFtecV4najTbl_y0tynT-7hkv1yKal4YJKgy7y6tVF-xsDeqYve764kAqsSGJzgxpqfrfBLfeWRy-YNDZzg8nHVY80dNIg0FKU9fALEUdf2wGFXalENsK7-EOYN4mk330u2WdzqzgW-EF9StypU-RKlku7qT6oUMPg9dGaANppneRiZsPjTihuipyV0m9dCsmpruTHE5etebmHNWrFXcumzOAi35xxno8BATr21uNDByjl-joEEo3JRiwo9zjQ",
+							"raw": "localhost:8080/user/addByJWT",
 							"host": [
 								"localhost"
 							],
@@ -84,12 +88,6 @@
 							"path": [
 								"user",
 								"addByJWT"
-							],
-							"query": [
-								{
-									"key": "jwtToken",
-									"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjQ1NmI1MmM4MWUzNmZlYWQyNTkyMzFhNjk0N2UwNDBlMDNlYTEyNjIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI2ODE1NTE0ODg3NTYtY3E3dmVwczE3b2todmE5NGRjN2FscGRydWRtdjBiYnQuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI2ODE1NTE0ODg3NTYtY3E3dmVwczE3b2todmE5NGRjN2FscGRydWRtdjBiYnQuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDIyNjg1MjEwMzcwMTk5MzY1MTEiLCJlbWFpbCI6InhwZWRybzkwLjFAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5iZiI6MTcwMzc5MDA1OCwibmFtZSI6IkRhbmsgTWVtZXMiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUNnOG9jS1VabzJuUmpOb1A4TDlIZl9STjdtR1AwREdlMEotMGptN2I0OUVrMURPPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkRhbmsiLCJmYW1pbHlfbmFtZSI6Ik1lbWVzIiwibG9jYWxlIjoicHQtUFQiLCJpYXQiOjE3MDM3OTAzNTgsImV4cCI6MTcwMzc5Mzk1OCwianRpIjoiZGEzYTFmMTk0MjJiYjYzMTUwNTIwZDlkMWM5N2U2ODcwOWEzNTEzNSJ9.pOQ2UmTg8A65jZKNeJXhTQ9P_-Kn6or9x3bqxgpohUP_GGVC4TCD0oWJomsrPJV9LD1JGiBt1wFzq8x9pUx7unitwFtecV4najTbl_y0tynT-7hkv1yKal4YJKgy7y6tVF-xsDeqYve764kAqsSGJzgxpqfrfBLfeWRy-YNDZzg8nHVY80dNIg0FKU9fALEUdf2wGFXalENsK7-EOYN4mk330u2WdzqzgW-EF9StypU-RKlku7qT6oUMPg9dGaANppneRiZsPjTihuipyV0m9dCsmpruTHE5etebmHNWrFXcumzOAi35xxno8BATr21uNDByjl-joEEo3JRiwo9zjQ"
-								}
 							]
 						}
 					},
@@ -97,11 +95,25 @@
 				},
 				{
 					"name": "View User By ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "json",
+									"value": "{ \n    \"id\": 7,\n    \"token\": \"XT51fUPFL2DNfpgwhY6iVovFHqdYO0zOScmFU1gOlXZWUOZz6pcEWLGLKPtiqqMgs-i58x5TbKlopfw8OxDLvA\"\n}",
+									"contentType": "application/json",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "localhost:8080/user/view?id=2&token=rC1E6u4neNhzQjBiZc3Dl4hVB0Wr9hsd2F7w0SjKGD8ouDxeJigp3u6xYbM1OS3W3SqEWenVgle3xddM5EwWBA",
+							"raw": "localhost:8080/user/view",
 							"host": [
 								"localhost"
 							],
@@ -109,16 +121,6 @@
 							"path": [
 								"user",
 								"view"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "2"
-								},
-								{
-									"key": "token",
-									"value": "rC1E6u4neNhzQjBiZc3Dl4hVB0Wr9hsd2F7w0SjKGD8ouDxeJigp3u6xYbM1OS3W3SqEWenVgle3xddM5EwWBA"
-								}
 							]
 						}
 					},
@@ -189,11 +191,25 @@
 				},
 				{
 					"name": "Check User Login",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "json",
+									"value": "{ \n    \"email\": \"admin@deti_store.com\",\n    \"password\": \"adminPass\"\n}",
+									"contentType": "application/json",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "localhost:8080/user/checkLogin?email=jose@fino.com&password=123",
+							"raw": "localhost:8080/user/checkLogin",
 							"host": [
 								"localhost"
 							],
@@ -201,21 +217,6 @@
 							"path": [
 								"user",
 								"checkLogin"
-							],
-							"query": [
-								{
-									"key": "email",
-									"value": "jose@fino.com"
-								},
-								{
-									"key": "password",
-									"value": "123"
-								},
-								{
-									"key": "",
-									"value": " ",
-									"disabled": true
-								}
 							]
 						}
 					},
@@ -223,9 +224,23 @@
 				},
 				{
 					"name": "Reload Token",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "json",
+									"value": "{ \n    \"email\": \"jo@ana.com\",\n    \"oldToken\": \"XT51fUPFL2DNfpgwhY6iVovFHqdYO0zOScmFU1gOlXZWUOZz6pcEWLGLKPtiqqMgs-i58x5TbKlopfw8OxDLvA\"\n}",
+									"contentType": "application/json",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
 							"raw": "localhost:8080/user/reloadToken?email=jo@ana.com&oldToken=hTCThm-f99Pmx02EHqsFOT7C2ZWvg2K28QYRKyt7E1ARsig2Fi_WgmSCWqbdu9LQF0LnBHxKCyygK-lZNQh4_w",
 							"host": [
@@ -260,8 +275,19 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "json",
+									"value": "{ \n    \"id\": 2,\n    \"token\": \"AlU2UDEy6Bsjb7Xek7MKz1x4yT1rWqDkr7FE68xZeErL6FUoYl14PYb4qIX7qDcdJp0y0QNlW8RrjnA2snHiPg\",\n    \"newPassword\":  \"newpass\",\n    \"oldPassword\": \"123\"\n}",
+									"contentType": "application/json",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "localhost:8080/user/updatePassword?id=2&token=AlU2UDEy6Bsjb7Xek7MKz1x4yT1rWqDkr7FE68xZeErL6FUoYl14PYb4qIX7qDcdJp0y0QNlW8RrjnA2snHiPg&newPassword=newpass&oldPassword=123",
+							"raw": "localhost:8080/user/updatePassword",
 							"host": [
 								"localhost"
 							],
@@ -269,24 +295,6 @@
 							"path": [
 								"user",
 								"updatePassword"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "2"
-								},
-								{
-									"key": "token",
-									"value": "AlU2UDEy6Bsjb7Xek7MKz1x4yT1rWqDkr7FE68xZeErL6FUoYl14PYb4qIX7qDcdJp0y0QNlW8RrjnA2snHiPg"
-								},
-								{
-									"key": "newPassword",
-									"value": "newpass"
-								},
-								{
-									"key": "oldPassword",
-									"value": "123"
-								}
 							]
 						}
 					},
@@ -297,8 +305,19 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "json",
+									"value": "{ \n    \"userID\": 7,\n    \"token\": \"XT51fUPFL2DNfpgwhY6iVovFHqdYO0zOScmFU1gOlXZWUOZz6pcEWLGLKPtiqqMgs-i58x5TbKlopfw8OxDLvA\"\n}",
+									"contentType": "application/json",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "localhost:8080/user/addToCart?prod=12&userID=2&quantity=7&token=FqCtfHP7zmbUP8SwKb9hk-I3jLya1l179dxURun0-BxxxYAKZjBaKsc9VI5agZnc1f6YF1-Qy2bmBGlkvSHQkQ",
+							"raw": "localhost:8080/user/addToCart?prod=12&quantity=2",
 							"host": [
 								"localhost"
 							],
@@ -313,16 +332,8 @@
 									"value": "12"
 								},
 								{
-									"key": "userID",
-									"value": "2"
-								},
-								{
 									"key": "quantity",
-									"value": "7"
-								},
-								{
-									"key": "token",
-									"value": "FqCtfHP7zmbUP8SwKb9hk-I3jLya1l179dxURun0-BxxxYAKZjBaKsc9VI5agZnc1f6YF1-Qy2bmBGlkvSHQkQ"
+									"value": "2"
 								}
 							]
 						}
@@ -334,8 +345,19 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "json",
+									"value": "{ \n    \"userID\": 7,\n    \"token\": \"XT51fUPFL2DNfpgwhY6iVovFHqdYO0zOScmFU1gOlXZWUOZz6pcEWLGLKPtiqqMgs-i58x5TbKlopfw8OxDLvA\"\n}",
+									"contentType": "application/json",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "localhost:8080/user/removeFromCart?userID=2&token=_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA&prod=11",
+							"raw": "localhost:8080/user/removeFromCart?prod=11",
 							"host": [
 								"localhost"
 							],
@@ -345,14 +367,6 @@
 								"removeFromCart"
 							],
 							"query": [
-								{
-									"key": "userID",
-									"value": "2"
-								},
-								{
-									"key": "token",
-									"value": "_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA"
-								},
 								{
 									"key": "prod",
 									"value": "11"
@@ -367,8 +381,19 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "json",
+									"value": "{ \n    \"userID\": 7,\n    \"token\": \"XT51fUPFL2DNfpgwhY6iVovFHqdYO0zOScmFU1gOlXZWUOZz6pcEWLGLKPtiqqMgs-i58x5TbKlopfw8OxDLvA\"\n}",
+									"contentType": "application/json",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "localhost:8080/user/requestCurrentCart?userID=2&token=FqCtfHP7zmbUP8SwKb9hk-I3jLya1l179dxURun0-BxxxYAKZjBaKsc9VI5agZnc1f6YF1-Qy2bmBGlkvSHQkQ",
+							"raw": "localhost:8080/user/requestCurrentCart",
 							"host": [
 								"localhost"
 							],
@@ -376,16 +401,39 @@
 							"path": [
 								"user",
 								"requestCurrentCart"
-							],
-							"query": [
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Export User Data",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
 								{
-									"key": "userID",
-									"value": "2"
-								},
-								{
-									"key": "token",
-									"value": "FqCtfHP7zmbUP8SwKb9hk-I3jLya1l179dxURun0-BxxxYAKZjBaKsc9VI5agZnc1f6YF1-Qy2bmBGlkvSHQkQ"
+									"key": "json",
+									"value": "{ \n    \"id\": 7,\n    \"token\": \"XT51fUPFL2DNfpgwhY6iVovFHqdYO0zOScmFU1gOlXZWUOZz6pcEWLGLKPtiqqMgs-i58x5TbKlopfw8OxDLvA\"\n}",
+									"contentType": "application/json",
+									"type": "text"
 								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/user/exportUserData",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"exportUserData"
 							]
 						}
 					},
@@ -416,8 +464,19 @@
 					"request": {
 						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "json",
+									"value": "{ \n    \"id\": 7,\n    \"token\": \"XT51fUPFL2DNfpgwhY6iVovFHqdYO0zOScmFU1gOlXZWUOZz6pcEWLGLKPtiqqMgs-i58x5TbKlopfw8OxDLvA\"\n}",
+									"contentType": "application/json",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "localhost:8080/user/deleteUserData?id=2&token=6E8MKrUDJ4MLf7dNhwQduzUcai22U_IMChddkjEOoQXwqeGlsSKU7xRm1R1naQ3ll4ICgjoLChB9VKqlr7rG9w",
+							"raw": "localhost:8080/user/deleteUserData",
 							"host": [
 								"localhost"
 							],
@@ -425,45 +484,6 @@
 							"path": [
 								"user",
 								"deleteUserData"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "2"
-								},
-								{
-									"key": "token",
-									"value": "6E8MKrUDJ4MLf7dNhwQduzUcai22U_IMChddkjEOoQXwqeGlsSKU7xRm1R1naQ3ll4ICgjoLChB9VKqlr7rG9w"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Export User Data",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "localhost:8080/user/exportUserData?id=2&token=b7Iel8gqTfLzQUuBmKLsa2x0jTymqLrzdoIeg1_csp5p179sVEuA-aBnLaZPhKqLe3b2LP-XLB7lHgLvaOJSpQ",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"user",
-								"exportUserData"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "2"
-								},
-								{
-									"key": "token",
-									"value": "b7Iel8gqTfLzQUuBmKLsa2x0jTymqLrzdoIeg1_csp5p179sVEuA-aBnLaZPhKqLe3b2LP-XLB7lHgLvaOJSpQ"
-								}
 							]
 						}
 					},
@@ -479,8 +499,24 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "img",
+									"type": "file",
+									"src": "/home/frostywolf/Documents/Volvo480_TwoTone.JPG"
+								},
+								{
+									"key": "json",
+									"value": "{ \n    \"userID\": 1,\n    \"token\": \"F_dOdw_EEpwxBVg1wQtensv_cojjBSNfNVwH42LOccsD4-Hm6Ftj4u1d1IXqx7I4h3oYc9UNm4VpfxxQIH7WjA\"\n}",
+									"contentType": "application/json",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "localhost:8080/product/add?name=TestProd1&description=produto de testes&img=../resources/images/test.png&origin=Portugal&price=123.99&in_stock=3&category=1&userID=2&token=_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA",
+							"raw": "localhost:8080/product/add?name=TestProd1&description=produto de testes&origin=Portugal&price=123.99&in_stock=3&category=1",
 							"host": [
 								"localhost"
 							],
@@ -499,10 +535,6 @@
 									"value": "produto de testes"
 								},
 								{
-									"key": "img",
-									"value": "../resources/images/test.png"
-								},
-								{
 									"key": "origin",
 									"value": "Portugal"
 								},
@@ -517,14 +549,6 @@
 								{
 									"key": "category",
 									"value": "1"
-								},
-								{
-									"key": "userID",
-									"value": "2"
-								},
-								{
-									"key": "token",
-									"value": "_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA"
 								}
 							]
 						}
@@ -649,8 +673,19 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "json",
+									"value": "{ \n    \"userID\": 1,\n    \"token\": \"9IvDW6HVc_4NISpagORWqM3yxbc_Wv4TaHWtrwX5cEz-ZDCzeMFWd5-kG1NbvrHVm6e5rAVN5_9NMpeGtT_4-A\"\n}",
+									"contentType": "application/json",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "localhost:8080/product/updateStock?id=11&stock=25&userID=1&token=_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA",
+							"raw": "localhost:8080/product/updateStock?id=11&stock=25",
 							"host": [
 								"localhost"
 							],
@@ -667,14 +702,6 @@
 								{
 									"key": "stock",
 									"value": "25"
-								},
-								{
-									"key": "userID",
-									"value": "1"
-								},
-								{
-									"key": "token",
-									"value": "_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA"
 								}
 							]
 						}
@@ -686,8 +713,19 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "json",
+									"value": "{ \n    \"userID\": 1,\n    \"token\": \"AHES4EVsN8pOb9J8nkqCoMmkFatafISWk4ZiKCASz7dU2SN5Akj3p-kYnL8JXAQGzclHxaBYVUP7ymq23bWKxQ\"\n}",
+									"contentType": "application/json",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "localhost:8080/product/addReview?productID=11&userID=2&token=_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA&header=Adorei o Produto&description=Completamente mudou a minha vida!&stars=4.5",
+							"raw": "localhost:8080/product/addReview?productID=11&header=Adorei o Produto&description=Completamente mudou a minha vida!&stars=4.5",
 							"host": [
 								"localhost"
 							],
@@ -700,14 +738,6 @@
 								{
 									"key": "productID",
 									"value": "11"
-								},
-								{
-									"key": "userID",
-									"value": "2"
-								},
-								{
-									"key": "token",
-									"value": "_xkuEWrz1Ld4xMox1ySJpk8Fbtn8yEE183XerTQ_PSgrk2a6xl3_qWSr2ILlaI8nk-6QI3v9_EGRqghfwvVzuA"
 								},
 								{
 									"key": "header",
@@ -736,6 +766,17 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "json",
+									"value": "{ \n    \"userID\": 1,\n    \"token\": \"4IOl8da8BOv10Cs_j23k5a7Slr54cWBhNB_gUabiV7ZWQZil0CvvOj-sEjVIpWyjoCkO-YnBZuvbcb5wdslM4g\"\n}",
+									"contentType": "application/json",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
 							"raw": "localhost:8080/product/category/add?name=Portateis&description=PCs portateis&userID=2&token=j-i6SxyNr-HWIShpqpaZazWZ7C0GVLoOLDMisy2Zpcppu8D4m5viH-te61T_VcSCFhOv6Hs0421v8HOhnnKsWg",
 							"host": [

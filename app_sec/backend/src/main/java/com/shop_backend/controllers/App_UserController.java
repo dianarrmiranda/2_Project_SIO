@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -65,7 +66,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -104,9 +104,11 @@ public class App_UserController {
 
   //  Create and save a new app_user object to the repository (database)
   @PostMapping(path = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public @ResponseBody String addapp_user(@RequestParam String name, @RequestParam String email,
-      @RequestParam String password, @RequestParam String cartao,
-      @RequestParam String role, @RequestParam(required = false) MultipartFile img) {
+  public @ResponseBody String addapp_user(@RequestParam String name, @RequestParam String cartao, @RequestParam String role, 
+      @RequestPart(required = false) MultipartFile img, @RequestPart Map<String, String> json) {
+
+    String email = json.get("email");
+    String password = json.get("password");
 
     //  Check if any required value is empty
     if (name == null || name.equals("") || email == null || email.equals("")
@@ -331,8 +333,11 @@ public class App_UserController {
   }
 
   //  View all information of a specific object based on ID
-  @GetMapping(path = "/view")
-  public @ResponseBody String viewapp_userByID(@RequestParam Integer id, @RequestParam String token) {
+  @GetMapping(path = "/view", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public @ResponseBody String viewapp_userByID(@RequestPart Map<String, String> json) {
+    Integer id = Integer.parseInt(json.get("id"));
+    String token = json.get("token");
+
     App_User user;
 
     //  Check if a User with this ID exists
@@ -370,8 +375,12 @@ public class App_UserController {
 
   //  View all app_user info IF email and password check out, else return bad login
   //  info
-  @GetMapping(path = "/checkLogin")
-  public @ResponseBody String checkLoginInfo(@RequestParam String email, @RequestParam String password) {
+  @GetMapping(path = "/checkLogin", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public @ResponseBody String checkLoginInfo(@RequestPart Map<String, String> json) {
+
+    String email = json.get("email");
+    String password = json.get("password");
+
     App_User user;
 
     //  Check if a User with this login information exists or nor
@@ -426,9 +435,14 @@ public class App_UserController {
   }
 
   //  Update the password of a specific object based on ID
-  @PostMapping(path = "/updatePassword")
-  public @ResponseBody String updatePassword(@RequestParam Integer id, @RequestParam String token,
-      @RequestParam String oldPassword, @RequestParam String newPassword) {
+  @PostMapping(path = "/updatePassword", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public @ResponseBody String updatePassword(@RequestPart Map<String, String> json) {
+
+    Integer id = Integer.parseInt(json.get("id"));
+    String token = json.get("token");
+    String oldPassword = json.get("oldPassword");
+    String newPassword = json.get("newPassword");
+
     App_User user;
 
     //  Check if a User with this ID exists
@@ -491,9 +505,13 @@ public class App_UserController {
   }
 
   //  Add a product to this app_user's cart
-  @PostMapping(path = "/addToCart")
-  public @ResponseBody List<ShoppingCartItem> addProdToCart(@RequestParam Integer userID, @RequestParam String token,
-      @RequestParam Product prod, @RequestParam Integer quantity) {
+  @PostMapping(path = "/addToCart", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public @ResponseBody List<ShoppingCartItem> addProdToCart(@RequestPart Map<String, String> json,
+              @RequestParam Product prod, @RequestParam Integer quantity) {
+
+    Integer userID = Integer.parseInt(json.get("userID"));
+    String token = json.get("token");
+
     App_User usr;
 
     //  Check if a User with this ID exists
@@ -533,9 +551,12 @@ public class App_UserController {
   }
 
   //  Remove a product from this app_user's cart
-  @PostMapping(path = "/removeFromCart")
-  public @ResponseBody List<ShoppingCartItem> removeProdFromCart(@RequestParam Integer userID,
-      @RequestParam String token, @RequestParam Product prod) {
+  @PostMapping(path = "/removeFromCart", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public @ResponseBody List<ShoppingCartItem> removeProdFromCart(@RequestPart Map<String, String> json, @RequestParam Product prod) {
+
+    Integer userID = Integer.parseInt(json.get("userID"));
+    String token = json.get("token");
+
     App_User usr;
 
     //  Check if a User with this ID exists
@@ -569,8 +590,12 @@ public class App_UserController {
   }
 
   //  Request the current cart as an order
-  @PostMapping(path = "/requestCurrentCart")
-  public @ResponseBody String RequestCart(@RequestParam Integer userID, @RequestParam String token) {
+  @PostMapping(path = "/requestCurrentCart", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public @ResponseBody String RequestCart(@RequestPart Map<String, String> json) {
+
+    Integer userID = Integer.parseInt(json.get("userID"));
+    String token = json.get("token");
+
     App_User usr;
     String receipt = "";
 
@@ -653,8 +678,12 @@ public class App_UserController {
 
   //Mark user for deletion by ID
   @Transactional
-  @PutMapping(path = "/deleteUserData")
-  public @ResponseBody String deleteUserData(@RequestParam Integer id, @RequestParam String token) {
+  @PutMapping(path = "/deleteUserData", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public @ResponseBody String deleteUserData(@RequestPart Map<String, String> json) {
+
+    Integer id = Integer.parseInt(json.get("id"));
+    String token = json.get("token");
+
     App_User usr;
 
     // Check if a User with this ID exists
@@ -684,8 +713,12 @@ public class App_UserController {
   }
 
   // Export all user data to a file
-  @GetMapping(path = "/exportUserData", produces = MediaType.APPLICATION_PDF_VALUE)
-  public @ResponseBody ResponseEntity<byte[]> exportUserData (@RequestParam Integer id, @RequestParam String token) {
+  @GetMapping(path = "/exportUserData", produces = MediaType.APPLICATION_PDF_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public @ResponseBody ResponseEntity<byte[]> exportUserData (@RequestPart Map<String, String> json) {
+
+    Integer id = Integer.parseInt(json.get("id"));
+    String token = json.get("token");
+
     App_User usr;
 
     // Check if a User with this ID exists
@@ -742,8 +775,10 @@ public class App_UserController {
     }
 
   //  Create and save a new app_user object to the repository (database)
-  @PostMapping(path = "/addByJWT")
-  public @ResponseBody String addUserByJWT(@RequestParam String jwtToken) {
+  @PostMapping(path = "/addByJWT", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public @ResponseBody String addUserByJWT(@RequestPart Map<String, String> json) {
+
+    String jwtToken = json.get("jwtToken");
 
     //  Check if any required value is empty
     if (jwtToken == null || jwtToken.equals("")) {
@@ -834,8 +869,12 @@ public class App_UserController {
 
   //  View all app_user info IF email and password check out, else return bad login
   //  info
-  @GetMapping(path = "/reloadToken")
-  public @ResponseBody String reloadToken(@RequestParam String email, @RequestParam String oldToken) {
+  @GetMapping(path = "/reloadToken", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public @ResponseBody String reloadToken(@RequestPart Map<String, String> json) {
+    
+    String email = json.get("email");
+    String oldToken = json.get("oldToken");
+
     App_User user;
 
     //  Check if a User with this login information exists or nor
@@ -877,8 +916,11 @@ public class App_UserController {
   }
 
 
-  @GetMapping(path = "/forgotPassword")
-  public @ResponseBody String forgotPassword(@RequestParam String email) {
+  @GetMapping(path = "/forgotPassword", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public @ResponseBody String forgotPassword(@RequestPart Map<String, String> json) {
+
+    String email = json.get("email");
+    
     App_User user;
 
     // Check if a User with this login information exists or nor
@@ -927,8 +969,11 @@ public class App_UserController {
     return email;
   }
 
-  @PostMapping(path = "/resetPassword")
-  public @ResponseBody String resetPassword(@RequestParam String token, @RequestParam String password) {
+  @PostMapping(path = "/resetPassword", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public @ResponseBody String resetPassword(@RequestPart Map<String, String> json) {
+
+    String token = json.get("token");
+    String password = json.get("password");
 
     removeExpiredTokens();
     try {
