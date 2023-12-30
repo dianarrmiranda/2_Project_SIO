@@ -1,13 +1,13 @@
 TODO da segunda entrega do projeto:
 
-- [ ] Analisar a app segura anterior (pasta app aqui);
-- [ ] Comparar os nossos resultados;
+- [x] Analisar a app segura anterior (pasta app aqui);
+- [x] Comparar os nossos resultados;
 - [ ] Escolher 8 dos issues não implementados até agora;
 - [ ] Dividir os issues em partes do frontend e backend;
 - [ ] Escrever a parte destes issues no relatório;
-- [ ] Escolher duas das trẽs funcionalidades extra;
-- [ ] Dividir em partes frontend e backend;
-- [ ] Implementar a feature 1;
+- [x] Escolher duas das trẽs funcionalidades extra;
+- [x] Dividir em partes frontend e backend;
+- [x] Implementar a feature 1;
 - [ ] Implementar a feature 2;
 - [ ] Atualizar o relatório com as duas features implementadas.
 
@@ -31,13 +31,13 @@ DONE | Num     | Description
 -----------------------------------------
 | Done | Num           | Descriptio |
 | ---- | ------------- | ---------- |
-|  [ x ]  | 2.7.4  | TOKENS: Expiram depois de 10 minutos ou 1h para os de JWT da google |
+|  [ x ]  | 2.7.2  | TOKENS: Expiram depois de 10 minutos ou 1h para os de JWT da google |
 |  [ ]  | 3.1.1  | RESPONSES: Remove all request parameters from the URI to the bodies or params |
 |  [ ]  | 8.3.1  | RESPONSES: Same as above mostly |
 |  [ ]  | 9.1.1, 2 and 3  | RESPONSES: Implementar TLS one or two way (secure sockets) |
 |  [ ]  | 13.2.3  | RESPONSES: Origin header checks for a small improvement in request/response trust (CSRF attacks) |
 |  [ ]  | 3.7.1  | AUTH: Reauth on sensitive transactions |
-|  [ ]  | 14.4.3, 4, 5 and 7  | RESPONSES: Set the CSP, Content Type Options, Transport Security, Referrer and Security headers |
+|  [ ]  | 14.4.3, 4, 5 and 7  | Headers: Set the CSP, Content Type Options, Transport Security, Referrer and Security headers |
 |  [ +/- ]  | 7.1.1  | MISC: Stop saving payment information, instead request it on every transaction |
 |  [ ]  | 12.4.2  | MISC: Check submited files for virus with a anti-virus |
 |  [ ]  | 14.5.3  | MISC: Finally fix the CORS implementation |  
