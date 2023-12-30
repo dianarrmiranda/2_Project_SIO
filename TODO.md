@@ -31,7 +31,7 @@ DONE | Num     | Description
 -----------------------------------------
 | Done | Num           | Descriptio |
 | ---- | ------------- | ---------- |
-|  [ x ]  | 2.7.4  | TOKENS: Expiram depois de 10 minutos ou 1h para os de JWT da google |
+|  [ x ]  | 2.7.2  | TOKENS: Expiram depois de 10 minutos ou 1h para os de JWT da google |
 |  [ ]  | 3.1.1  | RESPONSES: Remove all request parameters from the URI to the bodies or params |
 |  [ ]  | 8.3.1  | RESPONSES: Same as above mostly |
 |  [ ]  | 9.1.1, 2 and 3  | RESPONSES: Implementar TLS one or two way (secure sockets) |
