@@ -1,0 +1,20 @@
+Parameters removed from the URI vars and passed to the request body
+
+CHANGED REQUESTS:
+Users:
+ Add: Password and Email
+ Add by JWT: JWTToken
+ View: ID and Token
+ Check Login: Email and Password
+ Update Pass: ID and token
+ Add to Cart: UserID and token
+ Remove from the Cart: UserID and token
+ Request Current Cart: UserID and token
+ Delete User Data: UserID and token
+ Export User Data: UserID and token
+
+Products:
+ Add: UserID e Token   (Notas: A img e o json estão os dois no body, contam como duas entradas diferentes e o json tem de ser especificado como application/json) 
+ Update Stock: UserID e Token
+ Add Review: UserID e Token (tive de tirar o default user review)
+ Category Add: UserID e Token
