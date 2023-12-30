@@ -113,7 +113,7 @@ const CheckoutPage = () => {
   };
 
   const handleAddress = (e) => {
-    const addressRegex = /^[A-Za-z0-9'\.\-\s\,]+$/;
+    const addressRegex = /^[\s\S]*$/u;
     const poBoxRegex = /^PO Box \d+$/;
 
     if (
@@ -193,7 +193,8 @@ const CheckoutPage = () => {
     }
     const cit = form.city;
     const c = form.country;
-    const address = `${zc} ${cit} ${c}`;
+    const add = form.address;
+    const address = `${zc} ${cit} ${add} ${c}`;
     const apiKey = 'AIzaSyBFkLDRwb7tal8NXKkU397FDRFQFtXTaM0';
 
     let control = [];
@@ -209,8 +210,16 @@ const CheckoutPage = () => {
           if (
             data.results[0].address_components[i].types.includes('postal_code')
           ) {
-            if (data.results[0].address_components[i].long_name != zc) {
-              valid = false;
+            const postalCode = data.results[0].address_components[i].long_name;
+            if (postalCode.includes('-')) {
+              if (postalCode.split('-')[0] != zc) {
+                valid = false;
+              }
+            } else
+            {
+              if (postalCode != zc) {
+                valid = false;
+              }
             }
           }
           if (data.results[0].address_components[i].types.includes('country')) {
