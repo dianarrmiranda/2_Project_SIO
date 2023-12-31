@@ -36,7 +36,7 @@ import com.shop_backend.models.entities.App_User;
 import com.shop_backend.models.entities.Review;
 
 @Controller
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:5173")
 @RestController
 @RequestMapping(path = "/product")
 public class ProductController {

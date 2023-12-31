@@ -21,7 +21,7 @@ public class StartupRequest {
         // that are simply to dificult to replicate just by altering the database manually (in the data.sql file) 
 
         // Create a RestTemplate to make the HTTP request
-        RestTemplate restTemplate = new RestTemplate();
+/*         RestTemplate restTemplate = new RestTemplate();
         String token = "";
 
         ResponseEntity<String> response = restTemplate.exchange("http://localhost:8080/user/checkLogin?email=jose@fino.com&password=123", HttpMethod.GET, null, String.class);
@@ -44,7 +44,7 @@ public class StartupRequest {
 
         //  Add a Review by user 1 to product 11
         restTemplate.exchange("http://localhost:8080/product/addReview?productID=11&userID=2&token=" + token + "&header=Adorei o Produto&description=Completamente mudou a minha vida!&stars=4", HttpMethod.POST, null, String.class);
-
+ */
         return;
     }
 }
