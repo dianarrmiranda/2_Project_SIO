@@ -391,7 +391,7 @@ public class App_UserController {
 
     user.setActive_Token(encoder.encodeToString(bytes));
     //  Set token to expire after 10 minutes
-    user.10_Expiration((int)(System.currentTimeMillis() / 1000) + 600);
+    user.setToken_Expiration((int)(System.currentTimeMillis() / 1000) + 600);
     app_userRepository.save(user);
 
     //  Generate the output user object for the frontend
@@ -794,7 +794,7 @@ public class App_UserController {
         usr.setPassword("");
 
         usr.setActive_Token(jwtToken);
-        usr.10_Expiration(jwtExpiration);
+        usr.setToken_Expiration(jwtExpiration);
         app_userRepository.save(usr);  
       }
       //  Generate the output user object for the frontend
@@ -849,7 +849,7 @@ public class App_UserController {
 
     user.setActive_Token(token);
     //  Set token to expire after 10 minutes
-    user.10_Expiration((int)(System.currentTimeMillis() / 1000) + 600);
+    user.setToken_Expiration((int)(System.currentTimeMillis() / 1000) + 600);
     app_userRepository.save(user);
 
     //  Generate the output object for the frontend
