@@ -6,10 +6,7 @@ const useRefreshToken = () => {
 
   const refreshToken = async () => {
     const res = await axios
-      .post('/user/reloadToken', {
-        oldToken: user.token,
-        email: user.email,
-      })
+      .get(`/user/reloadToken?email=${user.email}&oldToken=${user.token}`)
       .then((res) => {
         console.log(res);
         return res.data;
