@@ -21,9 +21,9 @@ const useRefreshToken = () => {
 
       setUser({
         ...user,
-        token: data.token,
+        token: res.new_token,
       });
-      return data.token;
+      return res.new_tokenn;
     } else {
       return null;
     }

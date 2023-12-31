@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSessionStorage from '../../hooks/useSessionStorage';
 import useRefreshToken from '../../hooks/useRefreshToken';
-
-import axios from '../../api/axios';
+import useAxios from '../../hooks/useAxios';
 
 import Navbar from '../layout/Navbar';
 import Footer from '../layout/Footer';
@@ -41,6 +40,8 @@ const ProductPage = () => {
 
   const [score, setScore] = useState(0);
 
+  const axios = useAxios();
+
   useEffect(() => {
     const initialize = async () => {
       if (!item) {
@@ -53,7 +54,8 @@ const ProductPage = () => {
           .then((res) => {
             console.log('res -> ', res.data);
             return res.data;
-          });
+          })
+            
         console.log('data -> ', data);
 
         setUser(data);
