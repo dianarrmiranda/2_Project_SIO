@@ -657,7 +657,15 @@ public class App_UserController {
 
     // Mark user data as deleted
     try {
-      app_userRepository.delapp_user(id);
+      usr.setSalt("");
+      usr.setName("");
+      usr.setEmail("");
+      usr.setPassword("");
+      usr.setCredit_Card("");
+      usr.setActive_Token("");
+      usr.setDeleted(true);
+      app_userRepository.save(usr);
+      
     } catch (Exception e) {
       e.printStackTrace();
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal processing error!");
