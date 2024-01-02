@@ -36,14 +36,7 @@ import org.json.JSONObject;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
 import java.util.Base64.Encoder;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.crypto.SecretKeyFactory;
@@ -56,11 +49,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.Element;
+
 import com.shop_backend.models.entities.App_User;
 import com.shop_backend.models.entities.Product;
 import com.shop_backend.models.entities.Request;
 import com.shop_backend.models.entities.ShoppingCartItem;
-import com.shop_backend.models.repos.App_UserRepo;
 import com.shop_backend.models.repos.ProductRepo;
 import com.shop_backend.models.repos.RequestRepo;
 import com.shop_backend.models.repos.ShoppingCartItemRepo;
@@ -695,13 +689,13 @@ public class App_UserController {
       doc.open();
 
       //Add all user data to the PDF
-      doc.add(new Paragraph("------------ My DETI Store Data ----------"));
-      doc.add(new Paragraph("\nGenerated on: " + java.time.LocalDate.now() + "\n\n"));
+      Paragraph title = new Paragraph("------------ My DETI Store Data ----------");
+      title.setAlignment(Element.ALIGN_CENTER);
+      doc.add(title);
+      doc.add(new Paragraph("\nGenerated on: [" + new Date().toString() + "]\n"));
       doc.add(new Paragraph("\n\n------------ Account Data ----------"));
       doc.add(new Paragraph("\nUsername: " + usr.getName()));
       doc.add(new Paragraph("\nEmail: " + usr.getEmail()));
-      doc.add(new Paragraph("\n\n------------ Payment Information ----------"));
-      doc.add(new Paragraph("\nCredit Card Number: " + usr.getCredit_Card()));
       doc.add(new Paragraph("\n\n------------ Shopping Cart ----------"));
       doc.add(new Paragraph("\n" + usr.printCart()));
       doc.add(new Paragraph("\n\n------------ Request History ----------"));
