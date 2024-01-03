@@ -89,6 +89,9 @@ Our repository is organized as follows:
 .
 ├── analysis
 |   ├── postman_collections
+|   ├── screenshots
+|   ├── ASVS-checklist-finished.xlsx
+|   ├── dependency-check-report.html
 |   └── report.pdf
 |   
 ├── app
