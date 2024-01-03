@@ -9,7 +9,6 @@ const useRefreshToken = () => {
     const res = await axios
       .get(`/user/reloadToken?email=${user.email}&oldToken=${user.token}`)
       .then((res) => {
-        console.log("res ->>", res);
         return res.data;
       })
       .catch((err) => {
@@ -17,8 +16,6 @@ const useRefreshToken = () => {
       });
 
     if (res) {
-      console.log('Old Token ->', user.token);
-      console.log('Refresh Token ->', res);
 
       setUser({
         ...user,

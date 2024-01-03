@@ -27,11 +27,9 @@ const HomePage = () => {
   useEffect(() => {
     const initialize = async () => {
       const data_products = await axios.get("/product/list").then((res) => {
-        console.log("res -> ", res.data);
         return res.data;
       });
       const data_hot = await axios.get("/product/listHotDeals").then((res) => {
-        console.log("res -> ", res.data);
         return res.data;
       });
       setProducts(data_products);
@@ -41,8 +39,6 @@ const HomePage = () => {
       }
     };
     initialize();
-    console.log("products -> ", products);
-    console.log("value -> ", value)
   }, []);
 
   

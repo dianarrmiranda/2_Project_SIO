@@ -35,7 +35,6 @@ const ProductComments = ({ comments, user_id, product, setComments }) => {
       axios
         .post(`product/addReview?token=${username.token}`, formData)
         .then((res) => {
-          console.log('res -> ', res);
           if (res.status === 200) {
             console.log('Review sucessfully added');
             setNewHeader('');

@@ -55,7 +55,6 @@ const ProductPage = () => {
         const data = await axios
           .get(`/user/view?id=${id}&token=${token}`)
           .then((res) => {
-            console.log('res -> ', res.data);
             return res.data;
           }).catch((err) => {
             console.error('ERROR -> ', err);
@@ -65,11 +64,7 @@ const ProductPage = () => {
             }
           });
 
-        console.log('data -> ', data);
-
         setUser(data);
-
-        console.log('User ->', item);
       } catch (error) {
         console.error('Failed to fetch data: ', error);
       }

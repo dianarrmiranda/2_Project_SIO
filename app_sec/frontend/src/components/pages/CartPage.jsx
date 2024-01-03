@@ -28,7 +28,6 @@ const CartPage = () => {
       if (!item) {
         navigate('/login');
       } else {
-        console.log('Username ->', username.id);
 
         const user = await fetchData(
           `/user/view?id=${username.id}&token=${username.token}`
@@ -42,7 +41,6 @@ const CartPage = () => {
     };
 
     initialize();
-    console.log('Cart ->', cart);
   }, []);
 
   useEffect(() => {

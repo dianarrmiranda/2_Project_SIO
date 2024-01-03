@@ -23,11 +23,9 @@ const LoginPage = () => {
   const [emailRec, setEmailRec] = useState('');
 
   function handleGoogleResponse(response) {
-    console.log('google response -> ', response.credential);
     axios
       .post(`user/addByJWT?jwtToken=${response.credential}`)
       .then((res) => {
-        console.log('res -> ', res);
         setItem(res.data);
         setTime(new Date());
       })
@@ -42,7 +40,6 @@ const LoginPage = () => {
       axios
         .get(`/user/checkLogin?email=${email}&password=${password}`)
         .then((res) => {
-          console.log('res -> ', res);
           console.log('Login successful');
           setEmail('');
           setPassword('');

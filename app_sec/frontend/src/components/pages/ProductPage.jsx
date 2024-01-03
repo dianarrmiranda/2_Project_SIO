@@ -51,7 +51,6 @@ const ProductPage = () => {
       }
     };
     initialize();
-    console.log('Product ->', product);
   }, []);
 
   const handleAddToCart = () => {
@@ -62,7 +61,6 @@ const ProductPage = () => {
         }&token=${user.token}`
       )
       .then((res) => {
-        console.log(res.data);
         console.log('Added to cart');
         setUser({
           ...user,

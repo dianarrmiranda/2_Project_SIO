@@ -75,9 +75,6 @@ const CheckoutPage = () => {
           const countries = data.map((country) => country.name.common);
           setCountries(countries);
         });
-
-      console.log('User ->', user);
-      console.log('Cart -> ', cart);
     };
     initialize();
   }, []);
@@ -421,7 +418,6 @@ const CheckoutPage = () => {
           .then((res) => {
             if (res.status === 200) {
               console.log('Order placed successfully');
-              console.log(res.data);
             }
           });
 

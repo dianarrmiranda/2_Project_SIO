@@ -235,7 +235,6 @@ const StorePage = () => {
       axios
         .post('/product/add', formData2)
         .then((res) => {
-          console.log(res);
           setShowSuccess(true);
           document.getElementById('modal_AddProduct').close();
           const initialize = async () => {
@@ -256,11 +255,6 @@ const StorePage = () => {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    console.log('Products -> ', products);
-    console.log('Categories -> ', categories);
-  }, []);
 
   return (
     <div>
