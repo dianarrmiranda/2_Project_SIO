@@ -838,7 +838,7 @@ public class App_UserController {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Token does not match the given user ID!");
     }
 
-    if (user.getToken_Expiration() < (System.currentTimeMillis() / 1000)) {
+    if (user.getToken_Expiration() + 60 < (System.currentTimeMillis() / 1000)) {
       throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The provided token has expired! Please log in again.");
     }     
 
