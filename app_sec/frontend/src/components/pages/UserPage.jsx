@@ -145,6 +145,7 @@ const ProductPage = () => {
 
     try {
       const formData = new FormData();
+      const { id, token } = item;
       formData.append('id', id);
       formData.append('token', token);
       formData.append('newPassword', password);
@@ -179,6 +180,7 @@ const ProductPage = () => {
   const handleDeleteAccount = async () => {
     try {
       const formData = new FormData();
+      const { id, token } = item;
       formData.append('id', id);
       formData.append('token', token);
 
