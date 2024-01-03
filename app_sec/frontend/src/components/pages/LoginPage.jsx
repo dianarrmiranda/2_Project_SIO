@@ -18,6 +18,7 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
   const [value, setItem] = useSessionStorage('auth');
+  const [time, setTime] = useSessionStorage('time');
 
   const [emailRec, setEmailRec] = useState('');
 
@@ -28,6 +29,7 @@ const LoginPage = () => {
       .then((res) => {
         console.log('res -> ', res);
         setItem(res.data);
+        setTime(new Date());
       })
       .then(() => {
         navigate('/');
@@ -47,6 +49,7 @@ const LoginPage = () => {
         setFailed(false);
         console.log('response -> ', response);
         setItem(response);
+        setTime(new Date());
         navigate('/');
       } else {
         console.error('Login failed');
@@ -151,7 +154,7 @@ const LoginPage = () => {
                   Login
                 </button>
                 <button className='mt-3 mb-3' onClick={()=>document.getElementById('modal-1').showModal()}>Forgot your password?</button>
-                <GoogleLogin onSuccess={handleGoogleResponse} />
+                <GoogleLogin size='large' onSuccess={handleGoogleResponse} />
               </div>
             </form>
           </div>

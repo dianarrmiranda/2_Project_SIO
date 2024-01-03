@@ -3,12 +3,13 @@ import useSessionStorage from './useSessionStorage';
 
 const useRefreshToken = () => {
   const [user, setUser] = useSessionStorage('auth');
+  const [ time, setTime] = useSessionStorage('time');
 
   const refreshToken = async () => {
     const res = await axios
       .get(`/user/reloadToken?email=${user.email}&oldToken=${user.token}`)
       .then((res) => {
-        console.log(res);
+        console.log("res ->>", res);
         return res.data;
       })
       .catch((err) => {
@@ -21,9 +22,10 @@ const useRefreshToken = () => {
 
       setUser({
         ...user,
-        token: data.token,
+        token: res.new_token,
       });
-      return data.token;
+      setTime(new Date());
+      return res.new_tokenn;
     } else {
       return null;
     }

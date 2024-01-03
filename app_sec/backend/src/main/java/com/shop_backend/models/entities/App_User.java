@@ -20,7 +20,6 @@ public class App_User {
     private String Image;
     private String Password;
     private String Salt;
-    private String Credit_Card;
     private String Role;
     private boolean Deleted = false;
 
@@ -72,14 +71,6 @@ public class App_User {
 
     public void setPassword(String password) {
         Password = password;
-    }
-
-    public String getCredit_Card() {
-        return Credit_Card;
-    }
-
-    public void setCredit_Card(String credit_Card) {
-        Credit_Card = credit_Card;
     }
 
     public String getRole() {

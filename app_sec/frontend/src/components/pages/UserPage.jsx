@@ -17,9 +17,12 @@ import {
   RiFilePdf2Line,
 } from 'react-icons/ri';
 
+import { formatTime } from '../../utils';
+
 const ProductPage = () => {
   const [item, setItem, removeItem] = useSessionStorage('auth');
-  
+  const [time] = useSessionStorage('time');
+
   const refreshToken = useRefreshToken();
   const navigate = useNavigate();
 
@@ -40,6 +43,7 @@ const ProductPage = () => {
   const [messageChangePassFailed, setMessageChangePassFailed] = useState(false);
 
   const [score, setScore] = useState(0);
+  const [timer, setTimer] = useState(15);
 
   useEffect(() => {
     const initialize = async () => {
@@ -53,7 +57,14 @@ const ProductPage = () => {
           .then((res) => {
             console.log('res -> ', res.data);
             return res.data;
+          }).catch((err) => {
+            console.error('ERROR -> ', err);
+            if (err.response.status === 401) {
+              setItem(null);
+              navigate('/login');
+            }
           });
+
         console.log('data -> ', data);
 
         setUser(data);
@@ -66,6 +77,19 @@ const ProductPage = () => {
 
     initialize();
   }, []);
+
+  useEffect(() => {
+    setInterval(() => {
+      let timeLimit = new Date(time).getTime() / 1000 + 15 * 60;
+      let timeNow = new Date().getTime() / 1000;
+      let timeDiff = timeLimit - timeNow;
+      if (timeDiff <= 0) {
+        setUser(null);
+        navigate('/login');
+      }
+      setTimer(formatTime(timeDiff));
+    }, 1000);
+  }, [time, setTimer]);
 
   const handleLogout = () => {
     removeItem();
@@ -158,10 +182,7 @@ const ProductPage = () => {
       formData.append('id', id);
       formData.append('token', token);
 
-      const response = await axios.put(
-        '/user/deleteUserData',
-        formData
-      );
+      const response = await axios.put('/user/deleteUserData', formData);
       if (response.status === 200) {
         handleLogout();
       }
@@ -172,16 +193,13 @@ const ProductPage = () => {
 
   const handleExportData = async () => {
     try {
-      const response = await axios.get(
-        '/user/exportUserData',
-        {
-          params: {
-            id: user.id,
-            token: item.token,
-          },
-          responseType: 'arraybuffer',
-        }
-      );
+      const response = await axios.get('/user/exportUserData', {
+        params: {
+          id: user.id,
+          token: item.token,
+        },
+        responseType: 'arraybuffer',
+      });
 
       if (response.status === 200) {
         // Create a Blob from the PDF data
@@ -206,21 +224,31 @@ const ProductPage = () => {
     <div className="bg-base-200">
       <Navbar />
 
-      <div
-        id="body"
-        className="flex flex-wrap mx-[5%]"
-      >
+      <div className="flex flex-wrap mx-[5%]">
         <div className="flex flex-row w-full p-4 m-4 shadow-lg bg-base-100 rounded-xl">
           <div className="w-40 avatar">
             <img
-              //src={'../../' + user.image}
               src={user.image}
               alt="User Image"
               className="object-cover w-full h-full rounded-xl"
             />
           </div>
           <span className="mx-4">
-            <h1 className="mb-2 text-2xl font-bold">{user.name}</h1>
+            <div className="flex flex-row justify-between">
+              <h1 className="mb-2 text-2xl font-bold">{user.name}</h1>
+              <div className="flex flex-row items-center justify-between px-4 py-1 pr-1 font-bold text-center rounded-full bg-secondary">
+                <h1 className="text-2xl font-bold ">{timer}</h1>
+                <button
+                  className="ml-4 rounded-full btn btn-accent"
+                  onClick={() => {
+                    refreshToken();
+                    window.location.reload();
+                  }}
+                >
+                  Extend Session
+                </button>
+              </div>
+            </div>
             <p className="mb-2 text-lg">{user.email}</p>
 
             <div className="flex">
@@ -259,10 +287,6 @@ const ProductPage = () => {
             </div>
           </span>
         </div>
-
-        <button className="btn btn-accent" onClick={refreshToken}>
-          Refresh Token
-        </button>
 
         <div className="w-full h-full p-4 m-4 shadow-lg rounded-xl bg-base-100">
           <h2 className="mt-4 mb-2 text-2xl font-bold">My orders</h2>

@@ -19,13 +19,16 @@ const postData = async (endpoint, data) => {
   }
 }
 
+const formatTime = (seconds) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}:${
+    remainingSeconds.toFixed(0) < 10 ? '0' : ''
+  }${remainingSeconds.toFixed(0)}`;
+};
+
 const getUrlParams = () => {
   return new URLSearchParams(window.location.search);
 };
 
-const maskCreditCard = (creditCard) => {
-  const maskedCreditCard = creditCard.replace(/\d(?=\d{4})/g, '*');
-  return maskedCreditCard;
-};
-
-export { fetchData, getUrlParams, postData, maskCreditCard };
+export { fetchData, getUrlParams, postData, formatTime };
