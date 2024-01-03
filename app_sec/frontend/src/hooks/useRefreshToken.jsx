@@ -13,7 +13,7 @@ const useRefreshToken = () => {
         return res.data;
       })
       .catch((err) => {
-        console.error('ERROR -> ', err);
+        console.error('ERROR ->> ', JSON.stringify(err));
       });
 
     if (res) {

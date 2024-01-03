@@ -240,8 +240,8 @@ const ProductPage = () => {
                 <h1 className="text-2xl font-bold ">{timer}</h1>
                 <button
                   className="ml-4 rounded-full btn btn-accent"
-                  onClick={() => {
-                    refreshToken();
+                  onClick={async () => {
+                    await refreshToken();
                     window.location.reload();
                   }}
                 >

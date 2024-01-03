@@ -39,22 +39,23 @@ const LoginPage = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetchData(
-        `/user/checkLogin?email=${email}&password=${password}`
-      );
-      if (response.length != 0) {
-        console.log('Login successful');
-        setEmail('');
-        setPassword('');
-        setFailed(false);
-        console.log('response -> ', response);
-        setItem(response);
-        setTime(new Date());
-        navigate('/');
-      } else {
-        console.error('Login failed');
-        setFailed(true);
-      }
+      axios
+        .get(`/user/checkLogin?email=${email}&password=${password}`)
+        .then((res) => {
+          console.log('res -> ', res);
+          console.log('Login successful');
+          setEmail('');
+          setPassword('');
+          setFailed(false);
+          setItem(res.data);
+          setTime(new Date());
+          navigate('/');
+        })
+        .catch((err) => {
+          console.error('Login failed');
+          console.error(err);
+          setFailed(true);
+        });
     } catch (error) {
       console.error('Error during API call', error);
     }
@@ -67,7 +68,6 @@ const LoginPage = () => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value.replace(/\s+/g, ' '));
   };
-
 
   const handleEmailRecChange = (e) => {
     setEmailRec(e.target.value);
@@ -88,7 +88,7 @@ const LoginPage = () => {
     } catch (error) {
       console.error('Error during API call', error);
     }
-  }
+  };
 
   return (
     <div>
@@ -153,15 +153,26 @@ const LoginPage = () => {
                 >
                   Login
                 </button>
-                <button className='mt-3 mb-3' onClick={()=>document.getElementById('modal-1').showModal()}>Forgot your password?</button>
-                <GoogleLogin size='large' onSuccess={handleGoogleResponse} />
+                <button
+                  className="mt-3 mb-3"
+                  onClick={() => document.getElementById('modal-1').showModal()}
+                >
+                  Forgot your password?
+                </button>
+                <GoogleLogin
+                  size="large"
+                  onSuccess={handleGoogleResponse}
+                />
               </div>
             </form>
           </div>
         </div>
-        <dialog id="modal-1" className="modal">
+        <dialog
+          id="modal-1"
+          className="modal"
+        >
           <div className="modal-box">
-            <h3 className="text-lg font-bold">Forgot your password?</h3>  
+            <h3 className="text-lg font-bold">Forgot your password?</h3>
             <input
               type="email"
               placeholder="email"
@@ -182,7 +193,6 @@ const LoginPage = () => {
             </div>
           </div>
         </dialog>
-       
       </div>
       <Footer />
     </div>
