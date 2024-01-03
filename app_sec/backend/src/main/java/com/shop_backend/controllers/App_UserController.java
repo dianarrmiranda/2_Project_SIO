@@ -197,8 +197,8 @@ public class App_UserController {
       String token = encoder.encodeToString(bytes);
 
       usr.setActive_Token(token);
-      //  Set token to expire after 10 minutes
-      usr.setToken_Expiration((int)(System.currentTimeMillis() / 1000) + 600);
+      //  Set token to expire after 15 minutes
+      usr.setToken_Expiration((int)(System.currentTimeMillis() / 1000) + 900);
       app_userRepository.save(usr);
 
       //  Generate the output user object for the frontend
@@ -384,8 +384,8 @@ public class App_UserController {
     rng.nextBytes(bytes);
 
     user.setActive_Token(encoder.encodeToString(bytes));
-    //  Set token to expire after 10 minutes
-    user.setToken_Expiration((int)(System.currentTimeMillis() / 1000) + 600);
+    //  Set token to expire after 15 minutes
+    user.setToken_Expiration((int)(System.currentTimeMillis() / 1000) + 900);
     app_userRepository.save(user);
 
     //  Generate the output user object for the frontend
@@ -850,8 +850,8 @@ public class App_UserController {
     String token = encoder.encodeToString(bytes);
 
     user.setActive_Token(token);
-    //  Set token to expire after 10 minutes
-    user.setToken_Expiration((int)(System.currentTimeMillis() / 1000) + 600);
+    //  Set token to expire after 15 minutes
+    user.setToken_Expiration((int)(System.currentTimeMillis() / 1000) + 900);
     app_userRepository.save(user);
 
     //  Generate the output object for the frontend

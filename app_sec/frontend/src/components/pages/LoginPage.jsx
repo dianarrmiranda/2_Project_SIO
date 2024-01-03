@@ -18,6 +18,7 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
   const [value, setItem] = useSessionStorage('auth');
+  const [time, setTime] = useSessionStorage('time');
 
   const [emailRec, setEmailRec] = useState('');
 
@@ -47,6 +48,7 @@ const LoginPage = () => {
         setFailed(false);
         console.log('response -> ', response);
         setItem(response);
+        setTime(new Date());
         navigate('/');
       } else {
         console.error('Login failed');
