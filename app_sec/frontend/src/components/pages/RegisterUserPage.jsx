@@ -139,7 +139,6 @@ function RegisterUserPage() {
             setEmail('');
             setPassword('');
             setImage('');
-            console.log('response -> ', res);
 
             setItem({
               id: res.data.id,

@@ -36,6 +36,7 @@ const Navbar = () => {
           .get(`/user/view?id=${user.id}&token=${user.token}`)
           .then((res) => {
             setUserInfo(res);
+            console.log(res);
           }).catch((err) => {
             console.error(err);
             if (err.response.status === 401) {
@@ -59,7 +60,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (user) {
-      setNoItems(user.shopping_Cart.length);
+      setNoItems(user.shopping_Cart?.length);
     }
   }, [user?.shopping_Cart]);
 
@@ -134,7 +135,7 @@ const Navbar = () => {
         {user && (
           <div className="indicator">
             <span className="m-4 text-sm rounded-full indicator-item badge-accent badge-sm">
-              {user ? user.shopping_Cart.length : 0}
+              {user ? user.shopping_Cart?.length : 0}
             </span>
             <button
               className="flex items-center p-2 m-2"
