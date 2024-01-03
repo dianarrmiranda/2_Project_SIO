@@ -12,13 +12,11 @@ function RegisterUserPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [newPassword, setnewPassword] = useState('');
-  const [cardNumber, setCardNumber] = useState('');
   const [image, setImage] = useState('');
   const [showAlertPass, setShowAlertPass] = useState(false);
   const [showAlertName, setShowAlertName] = useState(false);
   const [showAlertSamePass, setShowAlertSamePass] = useState(false);
   const [showAlertEmail, setShowAlertEmail] = useState(false);
-  const [showAlertNumberCard, setShowAlertNumberCard] = useState(false);
   const [showAlertImage, setShowAlertImage] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -66,10 +64,6 @@ function RegisterUserPage() {
     setnewPassword(event.target.value.replace(/\s+/g, ' '));
   };
 
-  const handleCardNumberChange = (event) => {
-    setCardNumber(event.target.value);
-  };
-
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file.type.startsWith('image/')) {
@@ -87,8 +81,6 @@ function RegisterUserPage() {
     const charRegex = /^[\p{L}\p{N}\p{S}\p{P} ]+$/u;
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-
-    const cardNumberRegex = /^[0-9]{12}$/;
 
     const imageRegex = /\.(jpe?g|tiff?|png|webp)$/i;
 
@@ -112,11 +104,7 @@ function RegisterUserPage() {
     } else {
       setShowAlertEmail(false);
     }
-    if (!cardNumberRegex.test(cardNumber)) {
-      setShowAlertNumberCard(true);
-    } else {
-      setShowAlertNumberCard(false);
-    }
+
     if (!imageRegex.test(image.name) || image.size > 5000000) {
       setShowAlertImage(true);
     } else {
@@ -129,7 +117,6 @@ function RegisterUserPage() {
       username.length < 3 ||
       password !== newPassword ||
       !emailRegex.test(email) ||
-      !cardNumberRegex.test(cardNumber) ||
       !imageRegex.test(image.name) ||
       image.size > 5000000
     ) {
@@ -141,7 +128,6 @@ function RegisterUserPage() {
       formData.append('name', username);
       formData.append('email', email);
       formData.append('password', password);
-      formData.append('cartao', cardNumber);
       formData.append('role', 'user');
       formData.append('img', image);
       axios
@@ -152,7 +138,6 @@ function RegisterUserPage() {
             setUsername('');
             setEmail('');
             setPassword('');
-            setCardNumber('');
             setImage('');
             console.log('response -> ', res);
 
@@ -355,36 +340,6 @@ function RegisterUserPage() {
                     />
                   </svg>
                   <span>Error! The passwords are not the same!</span>
-                </div>
-              )}
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Card Number</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Card Number"
-                  className="input input-bordered"
-                  required
-                  value={cardNumber}
-                  onChange={handleCardNumberChange}
-                />
-              </div>
-              {showAlertNumberCard && (
-                <div className="alert alert-warning">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-6 h-6 stroke-current shrink-0"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeWidth="2"
-                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                    />
-                  </svg>
-                  <span>Warning: Card Number must have 12 numbers!</span>
                 </div>
               )}
               <div className="form-control">

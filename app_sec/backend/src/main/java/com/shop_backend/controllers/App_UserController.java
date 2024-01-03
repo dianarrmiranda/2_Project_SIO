@@ -82,12 +82,12 @@ public class App_UserController {
   //  Create and save a new app_user object to the repository (database)
   @PostMapping(path = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public @ResponseBody String addapp_user(@RequestParam String name, @RequestParam String email,
-      @RequestParam String password, @RequestParam String cartao,
+      @RequestParam String password,
       @RequestParam String role, @RequestParam(required = false) MultipartFile img) {
 
     //  Check if any required value is empty
     if (name == null || name.equals("") || email == null || email.equals("")
-        || password == null || password.equals("") || cartao == null || cartao.equals("") || role == null
+        || password == null || password.equals("") || role == null
         || role.equals("")) {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Provide all the required data fields!");
     }
@@ -107,13 +107,6 @@ public class App_UserController {
       throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
           "The provided Email must be valid!");
     }
-
-    //  Check if the card number has 12 characters in lenght
-    if (cartao.length() != 12) {
-      throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
-          "The Card number must have twelve digits!");
-    }
-
     
     if (img != null) {
       String OGfileName = img.getOriginalFilename();
@@ -144,7 +137,6 @@ public class App_UserController {
       usr.setName(name);
       usr.setEmail(email);
       usr.setPassword(password);
-      usr.setCredit_Card(cartao);
       usr.setRole(role);
 
       String folder = "../frontend/src/assets/prod_images/";
@@ -339,7 +331,6 @@ public class App_UserController {
     out.put("token", user.getActive_Token());
     out.put("shopping_Cart", user.getShopping_Cart());
     out.put("request_History", user.getRequest_History());
-    out.put("credit_Card", user.getCredit_Card());
     
 
     return out.toString(1);
@@ -574,7 +565,6 @@ public class App_UserController {
     receipt += "------------ Client ----------\n";
     receipt += "Client Name: " + usr.getName() + "\n";
     receipt += "Client Email: " + usr.getEmail() + "\n";
-    receipt += "Payment Information: " + usr.getCredit_Card() + "\n\n";
 
     List<ShoppingCartItem> currentCart = usr.getShopping_Cart();
     List<ShoppingCartItem> orderCart = new ArrayList<>();
@@ -655,7 +645,6 @@ public class App_UserController {
       usr.setName("");
       usr.setEmail("");
       usr.setPassword("");
-      usr.setCredit_Card("");
       usr.setActive_Token("");
       usr.setDeleted(true);
       app_userRepository.save(usr);
@@ -781,7 +770,6 @@ public class App_UserController {
         usr.setName((String) jwtVals.get("name"));
         usr.setEmail(email);
         usr.setPassword(password);
-        usr.setCredit_Card((String) jwtVals.get("1"));
         usr.setRole("user");
   
         String img = (String) jwtVals.get("picture");
