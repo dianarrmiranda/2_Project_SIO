@@ -25,7 +25,7 @@ const Navbar = () => {
   );
   const [userInfo, setUserInfo] = useState([]);
   const [noItems, setNoItems] = useState(0);
-  const [user] = useSessionStorage('auth');
+  const [user, setUser] = useSessionStorage('auth');
   const [time] = useSessionStorage('time');
   const [timer, setTimer] = useState(15);
 
@@ -36,6 +36,12 @@ const Navbar = () => {
           .get(`/user/view?id=${user.id}&token=${user.token}`)
           .then((res) => {
             setUserInfo(res);
+          }).catch((err) => {
+            console.error(err);
+            if (err.response.status === 401) {
+              setUser(null);
+              navigate('/login');
+            }
           });
     };
     initialize();
@@ -46,6 +52,7 @@ const Navbar = () => {
       let timeLimit = new Date(time).getTime() / 1000 + 15 * 60;
       let timeNow = new Date().getTime() / 1000;
       let timeDiff = timeLimit - timeNow;
+
       setTimer(formatTime(timeDiff));
     }, 1000);
   }, [time, setTimer]);
@@ -101,7 +108,7 @@ const Navbar = () => {
         </button>
       </form>
       {user && (
-        <div className='flex flex-row justify-between'>
+        <div className='flex flex-row items-center justify-between'>
           <p
             onClick={() => navigate(`/user`)}
             className="mr-2 cursor-grab"

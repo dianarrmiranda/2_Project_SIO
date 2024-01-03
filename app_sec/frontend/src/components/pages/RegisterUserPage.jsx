@@ -28,6 +28,7 @@ function RegisterUserPage() {
   const [score, setScore] = useState(0);
 
   const [value, setItem] = useSessionStorage('auth');
+  const [time, setTime] = useSessionStorage('time');
 
   const navigate = useNavigate();
 
@@ -154,18 +155,16 @@ function RegisterUserPage() {
             setCardNumber('');
             setImage('');
             console.log('response -> ', res);
-            setAuth({
-              isAuthenticated: true,
-              user: {
-                id: res.data.id,
-                email: res.data.email,
-                name: res.data.name,
-                image: res.data.picture,
-                shopping_Cart: [],
-                request_History: [],
-              },
-              acessToken: res.data.token,
+
+            setItem({
+              id: res.data.id,
+              name: res.data.name,
+              email: res.data.email,
+              role: res.data.role,
+              token: res.data.token,
             });
+
+            setTime(new Date());
             navigate('/');
           } else {
             console.error('Register failed');

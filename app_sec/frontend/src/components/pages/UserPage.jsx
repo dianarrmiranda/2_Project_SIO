@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSessionStorage from '../../hooks/useSessionStorage';
 import useRefreshToken from '../../hooks/useRefreshToken';
-// import useAxios from '../../hooks/useAxios';
 
 import axios from '../../api/axios';
 
@@ -58,6 +57,12 @@ const ProductPage = () => {
           .then((res) => {
             console.log('res -> ', res.data);
             return res.data;
+          }).catch((err) => {
+            console.error('ERROR -> ', err);
+            if (err.response.status === 401) {
+              setItem(null);
+              navigate('/login');
+            }
           });
 
         console.log('data -> ', data);
@@ -78,6 +83,10 @@ const ProductPage = () => {
       let timeLimit = new Date(time).getTime() / 1000 + 15 * 60;
       let timeNow = new Date().getTime() / 1000;
       let timeDiff = timeLimit - timeNow;
+      if (timeDiff <= 0) {
+        setUser(null);
+        navigate('/login');
+      }
       setTimer(formatTime(timeDiff));
     }, 1000);
   }, [time, setTimer]);

@@ -29,6 +29,7 @@ const LoginPage = () => {
       .then((res) => {
         console.log('res -> ', res);
         setItem(res.data);
+        setTime(new Date());
       })
       .then(() => {
         navigate('/');
@@ -153,7 +154,7 @@ const LoginPage = () => {
                   Login
                 </button>
                 <button className='mt-3 mb-3' onClick={()=>document.getElementById('modal-1').showModal()}>Forgot your password?</button>
-                <GoogleLogin onSuccess={handleGoogleResponse} />
+                <GoogleLogin size='large' onSuccess={handleGoogleResponse} />
               </div>
             </form>
           </div>
