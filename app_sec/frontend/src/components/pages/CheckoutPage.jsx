@@ -192,7 +192,7 @@ const CheckoutPage = () => {
     const c = form.country;
     const add = form.address;
     const address = `${zc} ${cit} ${add} ${c}`;
-    const apiKey = 'AIzaSyBFkLDRwb7tal8NXKkU397FDRFQFtXTaM0';
+    const apiKey = '';
 
     let control = [];
     let valid = true;
